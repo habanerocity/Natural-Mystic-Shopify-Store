@@ -1,18 +1,43 @@
-{% paginate collection.products by 2 %}
-  <h1>{{ collection.title }}</h1>
-  {% for product in collection.products %}
-    <div>
-      <a href="{{ product.url | within: collection }}">{{ product.title }}</a>
-      {{ product.price | money }}
-      {% unless product.available %}<br><strong>sold out</strong>{% endunless %}
-      <a href="{{ product.url | within: collection }}">
-        <img src="{{ product.featured_image.src | img_url: 'large' }}" alt="{{ product.featured_image.alt | escape }}">
-      </a>
-    </div>
-  {% else %}
-    <p>no matches</p>
-  {% endfor %}
-  {% if paginate.pages > 1 %}
-    {{ paginate | default_pagination }}
-  {% endif %}
-{% endpaginate %}
+<div class="container">
+    {% paginate collection.products by 2 %}
+        <div class="row my-5">
+            <h1 class="text-center">{{ collection.title }}</h1>
+        </div>
+        <div class="row justify-content-center">
+            <select class="form-select form-select-sm w-25" id="sort_by" name="sorting">
+                {% for option in collection.sort_options %}
+                    <option value="{{ option.value }}" {% if option.value == collection.sort_by %} selected {% endif %}>{{ option.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="row justify-content-center my-5">
+            {% for product in collection.products %}
+                {% assign image = product.featured_media.preview_image %}
+
+                <div class="col-3 g-2">
+                    <div class="card" style="width: 18rem;">
+                        <div class="card-body">
+                            {% if image != blank %}
+                                <img class="card-img-top" src="{{ image | img_url: 'medium' }}" alt="{{ product.title }}">
+                            {% else %}
+                                {{ 'product-1' | placeholder_svg_tag: 'card-img-top'}}
+                            {% endif %}
+                            <h3>
+                                <a href="{{ product.url }}">{{ product.title }}</a>
+                            </h3>
+                            <p>{{ product.price | | money_without_trailing_zeros }}</p>
+                        </div>
+                    </div>
+                </div>
+
+            {% else %}
+                <p>no matches</p>
+            {% endfor %}
+        </div>
+
+        <!-- creating a parameter and passing paginate variable here -->
+        {% render 'pagination', paginate: paginate %}
+
+    {% endpaginate %}
+</div>

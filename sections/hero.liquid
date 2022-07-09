@@ -1,15 +1,15 @@
 <section class="inner-hero-section">
     {% if section.settings.image != blank %}
-      <img src="{{ section.settings.image | img_url }}" alt="hero pic"/>
+      <div class="hero_pic" alt="hero pic"/>
     {% else %}
       {% capture current %}{% cycle 1,2 %}{% endcapture %}    
       {{ 'lifestyle-' | append: current | placeholder_svg_tag: 'placeholder-svg' }}
     {% endif %}
     <div class="container py-5"> 
       <div class="row">
-        <class class="col-lg-6 col-md-8 mx-auto">
-          <h1>{{section.settings.title}}</h1>
-          <p>{{section.settings.description}}</p>
+        <class class="hero_text text-light col-lg-6 col-md-8 mx-auto">
+          <h1 >{{section.settings.title}}</h1>
+          <p class="hero_text">{{section.settings.description}}</p>
           <a class="btn btn-secondary" href={{section.settings.button_link}}>{{section.settings.button_label}}</a>
         </class>
       </div>
