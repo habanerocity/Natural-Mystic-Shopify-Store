@@ -1,11 +1,11 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
+    <div class="container">
         <a class="navbar-brand" href="#">Navbar</a>
         <button aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbarNav" data-bs-toggle="collapse" type="button">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
+            <ul class="navbar-nav me-auto">
                 {% for link in linklists.main-menu.links %}
                     {% assign child_list_handle
         = link.title | handleize %}
@@ -32,6 +32,13 @@
                     <a class="nav-link" href="/cart">Cart</a>
                 </li>
             </ul>
+            <form action="/search" method="GET" role="search">
+                <!-- escape filter removes quotation marks from query -->
+                <input type="text" name="q" value={{ search.terms | escape }}>
+                <button class="btn btn-primary" type="submit">
+                    <i class="fas fa-search">Search</i>
+                </button>
+            </form>
         </div>
     </div>
 </nav>
