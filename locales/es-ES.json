@@ -1,0 +1,11 @@
+{
+    "general": {
+        "404": {
+            "title": "Página No Encontrada",
+            "subtitle": "No se encontró la página"
+        },
+        "Layout": {
+            "login_text": "Login"
+        }
+    }
+}

@@ -32,6 +32,30 @@
                     <a class="nav-link" href="/cart">Cart</a>
                 </li>
             </ul>
+            <ul class="navbar-nav">
+                {% if shop.customer_accounts_enabled %}
+                    {% if customer %}
+                        <!-- <a href="/account">account</a> -->
+                                                                                                                                                                                                <!-- {{ "log out" | customer_logout_link }} -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ routes.account_url }}">Account</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ routes.account_logout_url }}">Log out</a>
+                        </li>
+                    {% else %}
+                        <!-- {{ "log in " | customer_login_link }}
+                        {{ "register" | customer_register_link }} -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ routes.account_login_url }}">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ routes.account_register_url }}">Register</a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+                <li class="nav-item"></li>
+            </ul>
             <form action="/search" method="GET" role="search">
                 <!-- escape filter removes quotation marks from query -->
                 <input type="text" name="q" value={{ search.terms | escape }}>
@@ -43,7 +67,7 @@
     </div>
 </nav>
 
-{% if shop.customer_accounts_enabled %}
+<!-- {% if shop.customer_accounts_enabled %}
     {% if customer %}
         <a href="/account">account</a>
         {{ "log out" | customer_logout_link }}
@@ -51,4 +75,4 @@
         {{ "log in " | customer_login_link }}
         {{ "register" | customer_register_link }}
     {% endif %}
-{% endif %}
+{% endif %} -->
