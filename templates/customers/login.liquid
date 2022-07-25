@@ -16,22 +16,18 @@
 
         {% endform %}
 
+        <a class="text-center" href="#recover" id="forgotPassword">Forgot Password?</a>
     </div>
-
-
-    <div class="login-form my-5">
-        <h2 class="h3">Forgot Password</h2>
+    <div class="d-none forgot-password-form my-5" id="forgot_password_form">
         {% form 'recover_customer_password' %}
-
-            {{ form.errors | default_errors }}
-
-            <label for="customer_email">Email Address</label>
-            <input class="form-control rounded-0" name="email" type="email"/>
-
-            <input class="btn btn-primary btn-lg my-3 w-100 rounded-0" type="submit" value="Submit"/>
-
+            {% include 'form-error', form: form %}
+            <div class="col-12">
+                <label class="form-label" for="resetPassword">
+                    Email Address
+                </label>
+                <input class="form-control my-2" id="resetPassword" name="email" type="email">
+            </div>
+            <input class="btn btn-secondary" type="submit" value="Reset Password">
         {% endform %}
     </div>
-
-
 </div>
