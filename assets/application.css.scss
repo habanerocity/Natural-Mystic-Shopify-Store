@@ -5,11 +5,18 @@
 //     box-sizing: border-box;
 // } 
 
+.hero-section {
+    height: 80vh;
+}
+
 .inner-hero-section {
     position: relative;
     overflow: hidden;
     width: 100%;
-    height: 40rem;
+    height:100%;
+    background-color: rgba(0, 0, 0, 0.4);
+    object-fit: cover;
+    // z-index: -1;
 }
 
 .inner-hero-section img,
@@ -22,7 +29,7 @@
 }
 
 .hero_pic {
-    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("z.JPG");
+    background-color: rgba(0, 0, 0, 0.5);
     height: 100%;
     background-position: center;
     background-repeat: no-repeat;
@@ -49,5 +56,4 @@
     max-width: 330px;
     margin: auto;
 }
-
 

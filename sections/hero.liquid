@@ -1,7 +1,6 @@
 <section class="inner-hero-section">
     {% if section.settings.image != blank %}
-        <!-- <div class="hero_pic" alt="hero pic"/> -->
-        <img src="{{ section.settings.image | img_url: 'master'}}" alt="{{ section.settings.image.alt}}">
+        <img class="hero_pic" src="{{ section.settings.image | img_url: 'master'}}" alt="{{ section.settings.image.alt}}">
     {% else %}
         {% capture current %}
             {% cycle 1,2 %}

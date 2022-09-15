@@ -19,7 +19,9 @@
                     <div class="card" style="width: 18rem;">
                         <div class="card-body">
                             {% if image != blank %}
-                                <img class="card-img-top" src="{{ image | img_url: 'medium' }}" alt="{{ product.title }}">
+                                <a href="#" id="productInfoAnchor" product-handle="{{ product.handle }}" product-price="{{ product.price | money_without_trailing_zeros}}">
+                                    <img class="card-img-top" src="{{ image | img_url: 'medium' }}" alt="{{ product.title }}">
+                                </a>
                             {% else %}
                                 {{ 'product-1' | placeholder_svg_tag: 'card-img-top'}}
                             {% endif %}
@@ -40,4 +42,33 @@
         {% render 'pagination', paginate: paginate %}
 
     {% endpaginate %}
+</div>
+
+<div aria-hidden="true" class="modal fade" id="productInfoModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button aria-label="close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-12 col-md-6">
+                        <img alt="" class="img-fluid" id="productInfoImg" src="">
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <h1 id="productInfoTitle"></h1>
+                        <h3 id="productInfoPrice"></h3>
+                        <p id="productInfoDescription"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <form action="#" class="row" id="addToCartForm">
+                    <select class="form-select col-auto" id="modalItemID" name="id"></select>
+                    <input class="col-auto mx-3" id="modalItemQuantity" min="1" name="quantity" type="number" value="1">
+                    <button class="btn btn-success col-auto" type="submit">Add to cart</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
