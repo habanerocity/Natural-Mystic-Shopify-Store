@@ -29,14 +29,16 @@
                     {% endif %}
                 {% endfor %}
                 <li class="nav-item">
-                    <a class="nav-link" href="/cart">Cart</a>
+                    <a class="nav-link" href="/cart">Cart
+                        <span class="badge bg-danger rounded-pill" id="numberOfCartItems">0</span>
+                    </a>
                 </li>
             </ul>
             <ul class="navbar-nav">
                 {% if shop.customer_accounts_enabled %}
                     {% if customer %}
                         <!-- <a href="/account">account</a> -->
-                                                                                                                                                                                                <!-- {{ "log out" | customer_logout_link }} -->
+                                                                                                                                                                                                                                                                                                                                                <!-- {{ "log out" | customer_logout_link }} -->
                         <li class="nav-item">
                             <a class="nav-link" href="{{ routes.account_url }}">Account</a>
                         </li>
@@ -58,7 +60,7 @@
             </ul>
             <form action="/search" method="GET" role="search">
                 <!-- escape filter removes quotation marks from query -->
-                <input type="text" name="q" value={{ search.terms | escape }}>
+                <input type="text" name="q" value={{ search.terms | escape }} id="searchInputField">
                 <button class="btn btn-primary" type="submit">
                     <i class="fas fa-search">Search</i>
                 </button>
@@ -66,6 +68,16 @@
         </div>
     </div>
 </nav>
+
+<div aria-labelledby="offcanvasLabel" class="offcanvas offcanvas-end" id="offCanvasSearchResult" tabindex="-1">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasLabel">Product Search Results</h5>
+        <button aria-label="Close" class="btn-close text-reset" data-bs-dismiss="offcanvas" type="button"></button>
+    </div>
+    <div class="offcanvas-body" id="search_results_body">
+        Content for the offcanvas goes here. You can place just about any Bootstrap component or custom elements here.
+    </div>
+</div>
 
 <!-- {% if shop.customer_accounts_enabled %}
     {% if customer %}

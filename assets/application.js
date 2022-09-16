@@ -24,7 +24,7 @@ if (document.getElementById('AddressCountryNew') != null) {
         let options = '';
 
         for (let i = 0; i < provinceArray.length; i++) {
-            options += '<option value="' + provinceArray[i][0] + '">' + provinceArray[i][0] + '</option>'
+            options += '<option value="' + provinceArray[i][0] + '>' + provinceArray[i][0] + '</option>'
         }
 
         provinceSelector.innerHTML = options;
@@ -55,15 +55,15 @@ if (productInfoAnchors.length > 0) {
             const url = '/products/' + item.getAttribute('product-handle') + '.js';
 
             fetch(url).then((res) => res.json()).then((data) => {
-                console.log(data);
-
                 document.getElementById("productInfoImg").src = data.images[0];
                 document.getElementById("productInfoTitle").innerHTML = data.title;
                 document.getElementById("productInfoPrice").innerHTML = item.getAttribute('product-price');
                 document.getElementById("productInfoDescription").innerHTML = data.description;
 
                 const variants = data.variants;
-                const variantSelect = document.getElementById("modalItemID");
+                let variantSelect = document.getElementById("modalItemID");
+
+                variantSelect.innerHTML = '';
 
                 variants.forEach(function (variant, index) {
                     console.log(variant);
@@ -97,8 +97,64 @@ if (modalAddToCartForm != null) {
                 "Content-Type": 'application/json'
             },
             body: JSON.stringify(formData)
-        }).then((res) => res.json()).catch((err) => {
+        }).then((res) => {
+            return res.json();
+        }).then(() => update_cart()).catch((err) => {
             console.error('Error: ' + err);
         })
     })
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    update_cart();
+})
+
+function update_cart() {
+    fetch('/cart.js').then((res) => res.json()).then((data) => {
+        document.getElementById('numberOfCartItems').innerHTML = data.item_count;
+    }).catch((err) => console.err(err));
+}
+
+let predictiveSearchInput = document.getElementById('searchInputField');
+let timer;
+
+const offcanvasSearch = document.getElementById('offCanvasSearchResult');
+const bsOffcanvas = new bootstrap.Offcanvas(offcanvasSearch);
+if (predictiveSearchInput != null) {
+    predictiveSearchInput.addEventListener('input', function (e) {
+
+        clearTimeout(timer);
+
+        if (predictiveSearchInput.value) {
+            timer = setTimeout(fetchPredictiveSearch, 3000);
+        }
+
+    })
+}
+
+function fetchPredictiveSearch() {
+    fetch(`/search/suggest.json?q=${predictiveSearchInput.value}&resources[type]=product`)
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data);
+
+            let products = data.resources.results.products;
+
+            document.getElementById('search_results_body').innerHTML = '';
+
+            products.forEach(function (product, index) {
+                document.getElementById('search_results_body').innerHTML += `
+                    <div class="card" style="width: 19rem;">
+                        <img src="${product.image}" class="card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title">${product.title}</h5>
+                            <p class="card-text">$${product.price}</p>
+                        </div>
+                    </div>
+                `
+            })
+
+            bsOffcanvas.show();
+        });
+
 }
