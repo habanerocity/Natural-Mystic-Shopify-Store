@@ -38,7 +38,7 @@
                 {% if shop.customer_accounts_enabled %}
                     {% if customer %}
                         <!-- <a href="/account">account</a> -->
-                                                                                                                                                                                                                                                                                                                                                <!-- {{ "log out" | customer_logout_link }} -->
+                                                                                                                                                                                                                                                                                                                                                                        <!-- {{ "log out" | customer_logout_link }} -->
                         <li class="nav-item">
                             <a class="nav-link" href="{{ routes.account_url }}">Account</a>
                         </li>
@@ -60,7 +60,7 @@
             </ul>
             <form action="/search" method="GET" role="search">
                 <!-- escape filter removes quotation marks from query -->
-                <input type="text" name="q" value={{ search.terms | escape }} id="searchInputField">
+                <input id="searchInputField" name="q" type="text">
                 <button class="btn btn-primary" type="submit">
                     <i class="fas fa-search">Search</i>
                 </button>
