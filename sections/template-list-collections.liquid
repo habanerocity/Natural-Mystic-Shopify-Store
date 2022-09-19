@@ -10,7 +10,7 @@
                     {% assign image = product.featured_media.preview_image %}
                     <div class="col-3 g-2">
                         <div class="card" style="width: 18rem;">
-                            <img src="{{ image | img_url: 'medium'}}" alt="{{ product.title }}" class="card-img-top">
+                            <img class="card-img-top" src="{{ image | img_url: 'medium'}}" alt="{{ product.title }}">
                             <div class="card-body">
                                 <h3>
                                     <a href="{{ product.url }}">{{ product.title }}</a>
