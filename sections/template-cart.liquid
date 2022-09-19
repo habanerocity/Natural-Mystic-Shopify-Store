@@ -1,5 +1,5 @@
-{% if cart.item_count > 0 %}
-    <div class="container">
+<div class="container my-5">
+    {% if cart.item_count > 0 %}
         <div class="row">
             <p class="h2 my-5 text-center">
                 Your Cart
@@ -49,31 +49,59 @@
                             </table>
                         </div>
                     </div>
-
                 </div>
                 <div class="col-12 col-md-4">
+
                     <div class="card shadow">
                         <div class="card-body">
-                            <p class="h3">The total amount is
-                            </p>
-                            <p>{{ cart.total_price | money }}</p>
-                            <div class="d-grid gap-2">
-                                <button class="btn btn-primary" name="update" type="submit">Update</button>
-                                <button class="btn btn-primary" name="checkout" type="submit">Checkout</button>
-                            </div>
+                            {% for block in section.blocks %}
+                                {% case block.type %}
+                                    {% when "cart_total" %}
+                                        <div class="cart-total-block">
+                                            <p class="h3">The total amount is
+                                            </p>
+                                            <p>{{ cart.total_price | money }}</p>
+                                        </div>
+                                    {% when "cart_checkout_button" %}
+                                        <div class="cart-checkout-buttons d-grid gap-2">
+                                            <button class="btn btn-primary" name="update" type="submit">Update</button>
+                                            <button class="btn btn-primary" name="checkout" type="submit">Checkout</button>
+                                        </div>
+                                    {% else %}
+
+                                {% endcase %}
+                            {% endfor %}
+
                         </div>
                     </div>
                 </div>
             </form>
         </div>
-    </div>
-{% else %}
-    <div class="container">
+    {% else %}
         <div class="row">
             <h2 class="text-center">
                 Your Cart
             </h2>
-            <p>Cart is empty</p>
+            <p class="text-center">Cart is empty</p>
         </div>
-    </div>
-{% endif %}
+    {% endif %}
+</div>
+
+{% schema %}
+{
+        "name": "Template Cart",
+        "tag": "section",
+        "blocks": [
+        {
+            "type": "cart_total",
+            "name": "Cart Total",
+            "limit": 1
+        },
+        {
+            "type": "cart_checkout_button",
+            "name": "Cart Buttons",
+            "limit": 1
+        }
+    ]
+    }
+{% endschema %}

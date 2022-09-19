@@ -1,0 +1,25 @@
+{
+    "sections": {
+        "hero": {
+            "type": "hero",
+            "settings": {
+                "image": "",
+                "title": "Welcome to Natural Mystic",
+                "description": "Welcome!",
+                "button_label": "learn more",
+                "button_link": "https:\/\/google.com\/"
+            }
+        },
+        "featured-collection": {
+            "type": "featured-collection",
+            "settings": {
+                "featured_collection": "all",
+                "title": "Featured Collection"
+            }
+        }
+    },
+    "order": [
+        "hero",
+        "featured-collection"
+    ]
+}

@@ -1,4 +1,5 @@
 {
+    "layout": "theme-blog-with-sidebar",
     "sections": {
         "template": {
             "type": "template-article",
@@ -22,9 +23,13 @@
                 "article_meta",
                 "content"
             ]
+        },
+        "sidebar": {
+            "type": "sidebar"
         }
     },
     "order": [
-        "template"
+        "template",
+        "sidebar"
     ]
 }

@@ -8,7 +8,6 @@
                 <h2 class="accordion-header" id="collapse-header-{{ block.id }}">
                     <button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#collapse-{{ block.id }}" aria-expanded="false" aria-controls="{{ block.id }}" type="button">
                         {{ block.settings.title }}</button>
-
                 </h2>
                 <div aria-labelledby="collapse-header-{{ block.id }}" class="accordion-collapse collapse p-3" data-bs-parent="#accordionFAQ" id="collapse-{{ block.id }}">
                     {{ block.settings.answer }}
@@ -30,7 +29,7 @@
                 "type": "text",
                 "id": "title",
                 "label": "Title",
-                "default": "FAQ Title"
+                "default": "FAQ Title Example"
             },
             {
                 "type": "richtext",
