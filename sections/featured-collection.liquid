@@ -1,20 +1,30 @@
 <section class="container py-4">
     <h2 class="text-center my-3">{{ section.settings.title }}</h2>
-    <div class="row g-3 row-cols-md-3 row-cols-1">
+    <div class="row g-3 row-cols-md-4 row-cols-1">
         {% for product in collections[section.settings.featured_collection].products %}
             {% assign image = product.featured_media.preview_image %}
             <div class="col">
-                <div class="card">
+                <div class="card my-3 product_item">
+                    {% if image != blank %}
+                        <img class="card-img-top pic" src="{{ image | img_url: 'large' }}" alt="{{ product.title }}">
+                    {% else %}
+                        {{ 'product-1' | placeholder_svg_tag: 'card-img-top'}}
+                    {% endif %}
                     <div class="card-body">
-                        {% if image != blank %}
-                            <img class="card-img-top" src="{{ image | img_url: 'medium' }}" alt="{{ product.title }}">
-                        {% else %}
-                            {{ 'product-1' | placeholder_svg_tag: 'card-img-top'}}
-                        {% endif %}
-                        <h3>
-                            <a href="{{ product.url }}">{{ product.title }}</a>
-                        </h3>
+                        <div class="heart__beat"></div>
+                        <h4 class="available">In Stock</h4>
+                        <h5>
+                            <a class="product-link" href="{{ product.url }}">{{ product.title }}</a>
+                        </h5>
                         <p>{{ product.price | money }}</p>
+
+                        <p class="small-font">
+                            <i class="fa-solid fa-truck-fast"></i>
+                            <span class="pckg">📦&nbsp;</span>Free shipping with $25+ order
+                        </p>
+                        <!-- <form action="#" class="row" id="addToCartForm"> -->
+                        <button class="btn btn-sm rust" href="" type="submit">Add to cart</button>
+                        <!-- </form> -->
                     </div>
                 </div>
             </div>

@@ -9,7 +9,7 @@
                 {% for product in collection.products limit: 5 %}
                     {% assign image = product.featured_media.preview_image %}
                     <div class="col-3 g-2">
-                        <div class="card" style="width: 18rem;">
+                        <div class="card" style="width: 12rem;">
                             <img class="card-img-top" src="{{ image | img_url: 'medium'}}" alt="{{ product.title }}">
                             <div class="card-body">
                                 <h3>

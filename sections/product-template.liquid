@@ -16,7 +16,7 @@
                 {% when "title" %}
                 <h1>{{ product.title }}</h1>
                 {% when "price" %}
-                <p>{{ current_product.price | money_without_trailing_zeros}}</p>
+                <p id="productPrice">{{ current_product.price | money_without_trailing_zeros}}</p>
                 {% when "variant_selector" %}                                
                 <div class="mb-3">
                     <label for="productSelect" class="form-label" >Size</label>
@@ -40,13 +40,14 @@
                     <input class="form-control" id="Quantity" name="quantity" type="number" value="1" min="1">
                 </div>
                 {% when "checkout_buttons" %}
-                <button class="btn btn-secondary btn-large w-100 rounded-0" id="AddToCart" name="add" type="submit">Add To Cart</button>
+                <button class="btn btn-secondary btn-large w-100 rounded-0 mb-3" id="AddToCart" name="add" type="submit">Add To Cart</button>
                 {% if section.settings.dynamic_buttons_checkbox == true %}
                 {{ form | payment_button }}
                 {% endif %}     
                 {% when "description" %}
                 <p>{{ product.description }}</p>           
-                
+                {% else %}
+                    
             {% endcase %}
             {% endfor %}
 

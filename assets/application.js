@@ -158,3 +158,18 @@ function fetchPredictiveSearch() {
         });
 
 }
+
+//wishlist animation
+
+const hearts = document.querySelectorAll('.heart__beat');
+
+for (const heart of hearts) {
+    heart.addEventListener("click", () => {
+        if (heart.classList.contains("liked")) {
+            heart.classList.remove("liked");
+        } else {
+            heart.classList.add("liked");
+        }
+    });
+
+}
