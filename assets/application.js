@@ -43,6 +43,7 @@ if (document.getElementById('forgotPassword') != null) {
 
 const productInfoAnchors = document.querySelectorAll("#productInfoAnchor");
 
+
 //product modal
 
 let productModal;
@@ -68,8 +69,6 @@ if (productInfoAnchors.length > 0) {
                 variantSelect.innerHTML = '';
 
                 variants.forEach(function (variant, index) {
-                    console.log(variant);
-
                     variantSelect.options[variantSelect.options.length] = new Option(variant.option1, variant.id);
                 })
                 productModal.show();
@@ -81,8 +80,43 @@ if (productInfoAnchors.length > 0) {
 //modal add to cart functionality
 
 const modalAddToCartForm = document.querySelector('#addToCartForm');
+let modalItemID = document.querySelectorAll('#modalItemID');
+let handle;
+
+productInfoAnchors.forEach((item) => {
+    item.addEventListener('click', (e) => {
+        handle = item.getAttribute('product-handle');
+    })
+})
 
 if (modalAddToCartForm != null) {
+    let productInfoPrice = document.querySelector('#productInfoPrice');
+
+    //update modal price
+    modalItemID.forEach((item) => {
+        // console.log(item);
+        item.addEventListener('change', (e) => {
+
+            const url = '/products/' + handle + '.js';
+
+            fetch(url).then((res) => res.json()).then((data) => {
+                for (let i = 0; i < data.variants.length; i++) {
+                    const variantIdNumber = parseInt(e.target.value);
+                    //match data variant id
+                    if (data.variants[i].id === variantIdNumber) {
+                        const price = (data.variants[i].price / 100);
+
+                        productInfoPrice.innerHTML = `$${price}`;
+                    }
+                }
+            }
+            ).catch((err) => {
+                console.log(err);
+            });
+        })
+    })
+
+    //add to cart modal
     modalAddToCartForm.addEventListener('submit', (e) => {
         e.preventDefault();
 
@@ -182,21 +216,39 @@ for (const heart of hearts) {
 
 }
 
-//update price on product page
+//update variant price on product page
 
+const quantityNode = document.querySelectorAll('#Quantity');
 const selectVariants = document.querySelectorAll('#productSelect');
+const productPrice = document.getElementById("productPrice");
+const total = document.getElementById("totalPrice");
+
+let quantity = 1;
+
+quantityNode.forEach((item) => {
+    item.addEventListener('change', (e) => {
+        quantity = parseInt(e.target.value);
+        const sliced = productPrice.innerHTML.slice(1);
+
+        total.innerHTML = `Total price before tax and shipping is: <br> $${Number((sliced) * quantity).toFixed(2)}`;
+    })
+})
 
 selectVariants.forEach((item) => {
     item.addEventListener('change', (e) => {
         const url = '/products/' + item.getAttribute('product-handle') + '.js';
-        const productPrice = document.querySelector('#productPrice');
 
         fetch(url).then((res) => res.json()).then((data) => {
-            const variantId = parseInt(e.target.value);
-
             for (let i = 0; i < data.variants.length; i++) {
-                if (data.variants[i].id === variantId) {
-                    productPrice.innerHTML = `$${data.variants[i].price / 100}`;
+                const variantIdNumber = parseInt(e.target.value);
+                //match data variant id
+                if (data.variants[i].id === variantIdNumber) {
+                    const price = Number(data.variants[i].price / 100).toFixed(2);
+
+                    //set product price
+                    productPrice.innerHTML = `$${price}`;
+                    //set total price before shipping and tax
+                    total.innerHTML = `Total price before tax and shipping: <br> $${(Number(price) * quantity).toFixed(2)}`;
                 }
             }
         }

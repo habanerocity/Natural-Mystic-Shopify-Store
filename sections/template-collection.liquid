@@ -63,7 +63,19 @@
             </div>
             <div class="modal-footer">
                 <form action="#" class="row" id="addToCartForm">
-                    <select class="form-select col-auto productSelect" id="modalItemID" name="id"></select>
+                    <select class="form-select col-auto" product-handle="{{ product.handle }}" id="modalItemID" name="id">
+                        {% for variant in product.variants %}
+                            {% if variant.available %}
+                                <option value="{{ variant.id }}">
+                                    {{ variant.title }}
+                                </option>
+                            {% else %}
+                                <option value="{{ variant.id }}" disabled="disabled">
+                                    {{ variant.title }}
+                                </option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
                     <input class="col-auto mx-3" id="modalItemQuantity" min="1" name="quantity" type="number" value="1">
                     <!-- <button class="btn btn-success col-auto" type="submit">Add to cart</button> -->
                     <button class="btn btn-sm rust col-auto" type="submit">Add to cart</button>
