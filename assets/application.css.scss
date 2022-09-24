@@ -18,6 +18,10 @@ html, body {
     border-radius: 2px;
   }
 
+  .dot {
+      color: #C52C03;
+  }
+
 .hero-section {
     height: 90vh;
 }
@@ -80,11 +84,30 @@ html, body {
     color: black !important;
 }
 
+#productInfoAnchor{
+    cursor: pointer;
+}
+
 .rust {
     background-color: transparent;
     border-color: #C52C03;
     border-width: 2px;
     color: #000;
+    transition: .5s all;
+}
+
+.hero__button{
+    background-color: transparent;
+    border-color: #C52C03;
+    border-width: 2px;
+    color: #fff !important; 
+    transition: .5s all;
+}
+
+.hero__button:hover {
+    background-color: #FEC016 !important;
+    border-color: none !important;
+    color: #000 !important;
 }
 
 .rust:hover {
@@ -101,6 +124,7 @@ html, body {
 .small-font {
     font-size: 12px !important;
 }
+
 
 .login-form, .forgot-password-form {
     width: 100%;

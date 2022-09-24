@@ -1,6 +1,7 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
     <div class="container">
-        <a class="navbar-brand" href="#">NM</a>
+        <a class="navbar-brand" href="#">NM<span class="dot">.</span>
+        </a>
         <button aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbarNav" data-bs-toggle="collapse" type="button">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -39,7 +40,7 @@
                 {% if shop.customer_accounts_enabled %}
                     {% if customer %}
                         <!-- <a href="/account">account</a> -->
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <!-- {{ "log out" | customer_logout_link }} -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <!-- {{ "log out" | customer_logout_link }} -->
                         <li class="nav-item">
                             <a class="nav-link" href="{{ routes.account_url }}">Account</a>
                         </li>

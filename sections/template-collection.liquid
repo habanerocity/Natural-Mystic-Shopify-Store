@@ -17,7 +17,7 @@
                 <div class="col-3 g-2">
                     <div class="card my-3 product_item">
                         {% if image != blank %}
-                            <a href="#" id="productInfoAnchor" product-handle="{{ product.handle }}" product-price="{{ product.price | money_without_trailing_zeros}}">
+                            <a id="productInfoAnchor" product-handle="{{ product.handle }}" product-price="{{ product.price | money_without_trailing_zeros}}">
                                 <img class="pic card-img-top" src="{{ image | img_url: 'medium' }}" alt="{{ product.title }}">
                             </a>
                         {% else %}
@@ -63,7 +63,7 @@
             </div>
             <div class="modal-footer">
                 <form action="#" class="row" id="addToCartForm">
-                    <select class="form-select col-auto" id="modalItemID" name="id"></select>
+                    <select class="form-select col-auto productSelect" id="modalItemID" name="id"></select>
                     <input class="col-auto mx-3" id="modalItemQuantity" min="1" name="quantity" type="number" value="1">
                     <!-- <button class="btn btn-success col-auto" type="submit">Add to cart</button> -->
                     <button class="btn btn-sm rust col-auto" type="submit">Add to cart</button>

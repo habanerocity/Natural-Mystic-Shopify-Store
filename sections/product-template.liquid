@@ -20,7 +20,7 @@
                 {% when "variant_selector" %}                                
                 <div class="mb-3">
                     <label for="productSelect" class="form-label" >Size</label>
-                    <select class="form-select" id="productSelect" name="id">
+                    <select class="form-select" id="productSelect" product-handle="{{ product.handle }}" name="id">
                         {% for variant in product.variants %}
                             {% if variant.available %}
                                 <option value="{{ variant.id }}">

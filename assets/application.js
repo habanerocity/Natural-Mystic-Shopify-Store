@@ -1,4 +1,4 @@
-// Put your application javascript here
+// sort products 
 if (document.getElementById('sort_by') != null) {
     document.querySelector('#sort_by').addEventListener('change', (e) => {
         const url = new URL(window.location.href);
@@ -43,6 +43,8 @@ if (document.getElementById('forgotPassword') != null) {
 
 const productInfoAnchors = document.querySelectorAll("#productInfoAnchor");
 
+//product modal
+
 let productModal;
 
 if (document.getElementById('productInfoModal') != null) {
@@ -76,6 +78,8 @@ if (productInfoAnchors.length > 0) {
     })
 }
 
+//modal add to cart functionality
+
 const modalAddToCartForm = document.querySelector('#addToCartForm');
 
 if (modalAddToCartForm != null) {
@@ -105,6 +109,8 @@ if (modalAddToCartForm != null) {
     })
 }
 
+//update cart
+
 document.addEventListener('DOMContentLoaded', function () {
     update_cart();
 })
@@ -114,6 +120,8 @@ function update_cart() {
         document.getElementById('numberOfCartItems').innerHTML = data.item_count;
     }).catch((err) => console.err(err));
 }
+
+//initialize predictive search
 
 let predictiveSearchInput = document.getElementById('searchInputField');
 let timer;
@@ -173,3 +181,28 @@ for (const heart of hearts) {
     });
 
 }
+
+//update price on product page
+
+const selectVariants = document.querySelectorAll('#productSelect');
+
+selectVariants.forEach((item) => {
+    item.addEventListener('change', (e) => {
+        const url = '/products/' + item.getAttribute('product-handle') + '.js';
+        const productPrice = document.querySelector('#productPrice');
+
+        fetch(url).then((res) => res.json()).then((data) => {
+            const variantId = parseInt(e.target.value);
+
+            for (let i = 0; i < data.variants.length; i++) {
+                if (data.variants[i].id === variantId) {
+                    productPrice.innerHTML = `$${data.variants[i].price / 100}`;
+                }
+            }
+        }
+        ).catch((err) => {
+            console.log(err);
+        });
+    })
+});
+
