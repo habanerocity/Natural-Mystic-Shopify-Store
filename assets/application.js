@@ -83,6 +83,7 @@ const modalAddToCartForm = document.querySelector('#addToCartForm');
 let modalItemID = document.querySelectorAll('#modalItemID');
 let handle;
 
+//add click event listener to access product handle
 productInfoAnchors.forEach((item) => {
     item.addEventListener('click', (e) => {
         handle = item.getAttribute('product-handle');
@@ -94,7 +95,6 @@ if (modalAddToCartForm != null) {
 
     //update modal price
     modalItemID.forEach((item) => {
-        // console.log(item);
         item.addEventListener('change', (e) => {
 
             const url = '/products/' + handle + '.js';
@@ -225,18 +225,23 @@ const total = document.getElementById("totalPrice");
 
 let quantity = 1;
 
-quantityNode.forEach((item) => {
-    item.addEventListener('change', (e) => {
-        quantity = parseInt(e.target.value);
-        const sliced = productPrice.innerHTML.slice(1);
+// quantityNode.forEach((item) => {
+//     item.addEventListener('change', (e) => {
+//         quantity = parseInt(e.target.value);
+//         let sliced = productPrice.innerHTML.slice(1);
 
-        total.innerHTML = `Total price before tax and shipping is: <br> $${Number((sliced) * quantity).toFixed(2)}`;
-    })
-})
+//         console.log(quantity);
+//         console.log(sliced);
+
+//         total.innerHTML = `Total price before tax and shipping is: <br> $${Number((sliced) * quantity).toFixed(2)}`;
+//     })
+// })
 
 selectVariants.forEach((item) => {
     item.addEventListener('change', (e) => {
         const url = '/products/' + item.getAttribute('product-handle') + '.js';
+        // let sliced = productPrice.innerHTML.slice(1);
+
 
         fetch(url).then((res) => res.json()).then((data) => {
             for (let i = 0; i < data.variants.length; i++) {
@@ -248,7 +253,7 @@ selectVariants.forEach((item) => {
                     //set product price
                     productPrice.innerHTML = `$${price}`;
                     //set total price before shipping and tax
-                    total.innerHTML = `Total price before tax and shipping: <br> $${(Number(price) * quantity).toFixed(2)}`;
+                    // total.innerHTML = `Total price before tax and shipping: <br> $${(Number(price) * quantity).toFixed(2)}`;
                 }
             }
         }

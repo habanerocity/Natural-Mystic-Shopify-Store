@@ -63,7 +63,7 @@
             </div>
             <div class="modal-footer">
                 <form action="#" class="row" id="addToCartForm">
-                    <select class="form-select col-auto" product-handle="{{ product.handle }}" id="modalItemID" name="id">
+                    <select class="form-select col-auto" id="modalItemID" name="id">
                         {% for variant in product.variants %}
                             {% if variant.available %}
                                 <option value="{{ variant.id }}">

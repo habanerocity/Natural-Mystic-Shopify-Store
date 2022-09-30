@@ -14,9 +14,9 @@
             {% for block in section.blocks %}
                 {% case block.type %}
                 {% when "title" %}
-                <h1>{{ product.title }}</h1>
+                <h2>{{ product.title }}</h2>
                 {% when "price" %}
-                <p id="productPrice">{{ current_product.price | money}}</p>
+                <h1 id="productPrice">{{ current_product.price | money}}</h1>
                 {% when "variant_selector" %}                                
                 <div class="mb-3">
                     <label for="productSelect" class="form-label" >Size</label>
@@ -43,7 +43,7 @@
                         
                 </div>
                 {% when "checkout_buttons" %}
-                <button class="btn btn-secondary btn-large w-100 rounded-0 mb-3" id="AddToCart" name="add" type="submit">Add To Cart</button>
+                <button class="btn btn-large w-100 rust mb-3"id="AddToCart" name="add" type="submit">Add To Cart</button>
                 {% if section.settings.dynamic_buttons_checkbox == true %}
                 {{ form | payment_button }}
                 {% endif %}     
