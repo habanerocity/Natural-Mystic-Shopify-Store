@@ -1,16 +1,16 @@
 {%- capture flickity_options -%}
     {
-                                                                                                                                      "prevNextButtons": true,
-                                                                                                                                      "autoPlay": 5000,
-                                                                                                                                      "contain": true,
-                                                                                                                                      "pageDots": false,
-                                                                                                                                      "contain": true,
-                                                                                                                                      "cellAlign": "left",
-                                                                                                                                      "groupCells": false,
-                                                                                                                                      "arrowShape": {"x0": 20, "x1": 60, "y1": 40, "x2": 60, "y2": 35, "x3": 25}
-                                                                                                                                    }
+                                                                                                                                                                      "prevNextButtons": true,
+                                                                                                                                                                      "autoPlay": 5000,
+                                                                                                                                                                      "contain": true,
+                                                                                                                                                                      "pageDots": false,
+                                                                                                                                                                      "contain": true,
+                                                                                                                                                                      "cellAlign": "left",
+                                                                                                                                                                      "groupCells": false,
+                                                                                                                                                                      "arrowShape": {"x0": 20, "x1": 60, "y1": 40, "x2": 60, "y2": 35, "x3": 25}
+                                                                                                                                                                    }
 {%- endcapture -%}
-<section class="container py-4">
+<section class="container py-5">
     <div class="featured-collection-slider page-width">
         {% if section.settings.title != blank %}
             <div class="section-header text-center">
@@ -51,7 +51,7 @@
                             <!-- <i class="fa-solid fa-truck-fast"></i> -->
                             <span class="pckg">📦&nbsp;</span>Free shipping with $25+ order
                         </p>
-                        <a href="{{ product.url }}" class="btn btn-sm rust">Shop now</a>
+                        <a href="{{ product.url }}" class="btn btn-sm rust">Shop Now</a>
                     </div>
                 </div>
             {% endfor %}

@@ -1,7 +1,68 @@
-<div class="spice_banner"></div>
+<div class="spice_banner ">
+    <div class="container py-3 d-flex flex-column justify-content-center h-100">
+        <h3 class="font-weight-boldest rust">
+            {{section.settings.title}}
+        </h3>
+        <h1 class="py-3 w-50">{{section.settings.subheading_title}}</h1>
+        <h6 class="w-50">{{section.settings.description}}</h6>
+        <a class="btn btn-md hero__button w-25 my-2 text-dark" href={{section.settings.button_link}}>{{section.settings.button_label}}</a>
+    </div>
+</div>
+
+<style>
+        .spice_banner {
+        background: rgba(0, 0, 0, 0.4) url({{ section.settings.image | img_url: 'master'}});
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 35rem;
+        }
+        </style>
 
 {% schema %}
 {
-    "name": "banner"
-}
+    "name": "banner",
+    "class": "Banner section",
+    "settings": [
+        {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Banner Background Image"
+        },
+        {
+            "type": "text",
+            "id": "title",
+            "default": "Example Heading",
+            "label": "Heading Title"
+        },
+        {
+            "type": "text",
+            "id": "subheading_title",
+            "default": "Example Subheading",
+            "label": "Subheading Title"
+        },
+        {
+            "type": "richtext",
+            "id": "description",
+            "default": "<p>Example Paragraph</p>",
+                                                                                                                                                                                                                                                                            "label": "Heading Content"
+                                                                                                                                                                                                                                                                        },
+                                                                                                                                                                                                                                                                        {
+                                                                                                                                                                                                                                                                            "type": "text",
+                                                                                                                                                                                                                                                                            "id": "button_label",
+                                                                                                                                                                                                                                                                            "default": "Button",
+                                                                                                                                                                                                                                                                            "label": "Heading Button Label"
+                                                                                                                                                                                                                                                                        },
+                                                                                                                                                                                                                                                                        {
+                                                                                                                                                                                                                                                                            "type": "url",
+                                                                                                                                                                                                                                                                            "id": "button_link",
+                                                                                                                                                                                                                                                                            "label": "Button Link"
+                                                                                                                                                                                                                                                                        }
+                                                                                                                                                                                                                                                                        ],
+                                                                                                                                                                                                                                                                            "presets": [
+                                                                                                                                                                                                                                                                                {
+                                                                                                                                                                                                                                                                                 "category": "Banner",
+                                                                                                                                                                                                                                                                                 "name": "Spice Banner"
+                                                                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                                                                            ]
+                                                                                                                                                                                                                                                                                    }
 {% endschema %}

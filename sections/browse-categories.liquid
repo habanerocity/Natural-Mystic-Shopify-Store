@@ -1,0 +1,84 @@
+<div class="container py-5">
+    <h6 class="discover text-center py-2 display-6">{{section.settings.subheading_title}}
+    </h6>
+    <h1 class="text-center display-1 font-weight-light our_collections">{{section.settings.heading_title}}</h1>
+    <ul class="d-flex justify-content-center py-2 list-unstyled">
+        <a href="{{section.settings.category_link_a}}" class="category d-flex align-items-center justify-content-center">{{section.settings.category_label_a}}</a>
+        <a href="{{section.settings.category_link_b}}" class="category d-flex align-items-center justify-content-center">{{section.settings.category_label_b}}</a>
+        <a href="{{section.settings.category_link_c}}" class="category d-flex align-items-center justify-content-center">{{section.settings.category_label_c}}</a>
+        <a href="{{section.settings.category_link_d}}" class="category d-flex align-items-center justify-content-center" id="last_category">{{section.settings.category_label_d}}</a>
+    </ul>
+</div>
+
+{% schema %}
+{
+    "name": "browse",
+    "class": "Browse Categories section",
+    "settings": [
+        {
+            "type": "text",
+            "id": "heading_title",
+            "default": "Our Collections",
+            "label": "Heading Title"
+        },
+        {
+            "type": "text",
+            "id": "subheading_title",
+            "default": "Discover & Browse",
+            "label": "Subheading Title"
+        },
+        {
+            "type": "text",
+            "id": "category_label_a",
+            "default": "Link",
+            "label": "First Category Link Label"
+        },
+        {
+            "type": "text",
+            "id": "category_label_b",
+            "default": "Link",
+            "label": "Second Category Link Label"
+        },
+        {
+            "type": "text",
+            "id": "category_label_c",
+            "default": "Link",
+            "label": "Third Category Link Label"
+        },
+        {
+            "type": "text",
+            "id": "category_label_d",
+            "default": "Link",
+            "label": "Fourth Category Link Label"
+        },
+        {
+            "type": "url",
+            "id": "category_link_a",
+            "label": "First Category Link"
+        },
+        {
+            "type": "url",
+            "id": "category_link_b",
+            "label": "Second Category Link"
+        },
+        {
+            "type": "url",
+            "id": "category_link_c",
+            "label": "Third Category Link"
+        },
+        {
+            "type": "url",
+            "id": "category_link_d",
+            "label": "Fourth Category Link"
+        }
+        ],
+            "presets": [
+        {
+            "category": "Browse",
+            "name": "Browse Categories"
+        }
+    
+        ]
+    
+        }
+{% endschema %}
