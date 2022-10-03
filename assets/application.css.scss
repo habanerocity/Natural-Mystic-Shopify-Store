@@ -31,14 +31,22 @@ html, body {
     transition: all .4s;
   }
 
+  // .category_list:first-child {
+  //   border-left: black solid 2px;
+  // }
+
   .category:hover {
     background-color: #FEC016;
     color: 	#FFFAFA;
     cursor: pointer;
   }
 
+  #first_category {
+    border-left: black solid 2px;
+  }
+
   #last_category {
-    border-right: none!important;
+    // border-right: none!important;
     width: 20%;
   }
 
