@@ -5,7 +5,7 @@
         {% when 'blog_title' %}
             <div class="position-relative text-center bg-light p-3 p-md-5">
                     <div class="col-md-5 p-lg-5 mx-auto my-5">
-                        <h1 class="display-4">{{blog.title}}</h1>
+                        <h1 class="display-4 dot">{{blog.title}}</h1>
                         <p class="lead">Read our latest articles</p>
                     </div>
             </div>
@@ -22,11 +22,12 @@
                                 {% endif %}
                                 <div class="card-body">
                                     <h2>
-                                        <a href="{{ article.url }}">{{ article.title }}</a>
+                                        <a class="text-decoration-none dot" href="{{ article.url }}">{{ article.title }}</a>
                                     </h2>
-                                   By: {{ article.author }}
-                                    |
-                                    {{ article.created_at }}
+                                    <h5> By: {{ article.author }}
+                                            |
+                                            {{ article.created_at | date: "%b %d, %Y" }}</h5>
+                                  
                                     <p class="card-text">
                                         {% if article.excerpt.size > 0 %}
                                             {{ article.excerpt }}

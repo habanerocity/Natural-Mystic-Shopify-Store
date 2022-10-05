@@ -47,7 +47,7 @@ html, body {
 
   #last_category {
     // border-right: none!important;
-    width: 20%;
+    width: 30%;
   }
 
   .dot {
@@ -90,8 +90,19 @@ html, body {
     // z-index: -1;
 }
 
-.overlay {
-    background-color: rgba(0, 0, 0, 0.4);
+// .overlay {
+//     background-color: rgba(0, 0, 0, 0.4);
+//     z-index: 100;
+// }
+
+.grid_img{
+  cursor: pointer;
+  transition: all .2s ease-in;
+}
+
+.grid_img:hover {
+  transform: scale(1.01);
+  opacity: 0.8;
 }
 
 .inner-hero-section img,
