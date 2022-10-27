@@ -4,17 +4,18 @@
         {% for article in blog.articles %}{% endfor %}
         <div class="pic1">
             {% if section.settings.image_1 != blank %}
-                <figure class="snip0015 rounded grid_img">
-                    <!-- <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample38.jpg" alt="sample38"/> -->
-                    <img class=" grid_img" src="{{ section.settings.image_1 | img_url: '750x700', crop: 'left' }}" alt="{{ section.settings.image.alt}}">
-                    <figcaption>
-                        <h2>I don't know
-                            <span>which</span>
-                            is worse</h2>
-                        <p>That everyone has his price, or that the price is always so low.</p>
-                        <a href="#"></a>
-                    </figcaption>
-                </figure>
+                <a href="{{ section.settings.hover_link_1}}">
+                    <figure class="snip0015 rounded grid_img">
+                        <!-- <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample38.jpg" alt="sample38"/> -->
+                        <img class=" grid_img" src="{{ section.settings.image_1 | img_url: '750x700', crop: 'left' }}" alt="{{ section.settings.image.alt}}">
+                        <figcaption class="d-flex flex-column justify-content-center align-items-center">
+                            <h2>{{ section.settings.hover_title_1}}</h2>
+                            <p>{{ section.settings.hover_paragraph_1}}</p>
+
+                            <p class="p-1-half rounded bg-danger text-light mt-2">View Here</p>
+                        </figcaption>
+                    </figure>
+                </a>
             {% else %}
                 {% assign placeholder = 'lifestyle-2' %}
                 {{ placeholder | placeholder_svg_tag: 'placeholder-svg' }}
@@ -22,7 +23,19 @@
         </div>
         <div class="pic2">
             {% if section.settings.image_2 != blank %}
-                <img class="rounded grid_img" src="{{ section.settings.image_2 | img_url: '550x434', crop: 'right' }}" alt="{{ section.settings.image.alt}}">
+                <a href="{{ section.settings.hover_link_2}}">
+                    <figure class="snip0015 rounded grid_img">
+                        <!-- <img class="rounded grid_img" src="{{ section.settings.image_3 | img_url: '550x232', crop: 'center' }}" alt="{{ section.settings.image.alt}}"> -->
+                        <img class="rounded grid_img" src="{{ section.settings.image_2 | img_url: '550x435', crop: 'right' }}" alt="{{ section.settings.image.alt}}">
+                        <figcaption class="d-flex flex-column justify-content-center align-items-center">
+                            <h2>{{ section.settings.hover_title_2}}</h2>
+                            <p>{{ section.settings.hover_paragraph_2}}</p>
+
+                            <p class="p-1-half rounded bg-danger text-light mt-2 font-weight-boldest">View Here</p>
+
+                        </figcaption>
+                    </figure>
+                </a>
             {% else %}
                 {% assign placeholder = 'lifestyle-2' %}
                 {{ placeholder | placeholder_svg_tag: 'placeholder-svg' }}
@@ -30,7 +43,20 @@
         </div>
         <div class="pic3">
             {% if section.settings.image_3 != blank %}
-                <img class="rounded grid_img" src="{{ section.settings.image_3 | img_url: '550x234', crop: 'center' }}" alt="{{ section.settings.image.alt}}">
+                <a href="{{ section.settings.hover_link_3}}">
+                    <figure class="snip0015 rounded grid_img">
+                        <!-- <img class=" grid_img" src="{{ section.settings.image_3 | img_url: '750x700', crop: 'left' }}" alt="{{ section.settings.image.alt}}"> -->
+                        <img class="rounded grid_img" src="{{ section.settings.image_3 | img_url: '550x216', crop: 'center' }}" alt="{{ section.settings.image.alt}}">
+                        <figcaption class="py-2 d-flex flex-column justify-content-center align-items-center">
+                            <h2>{{ section.settings.hover_title_3}}</h2>
+                            <p>{{ section.settings.hover_paragraph_3}}</p>
+
+                            <p class="p-1-half rounded bg-danger text-light mt-1">View Here</p>
+
+
+                        </figcaption>
+                    </figure>
+                </a>
             {% else %}
                 {% assign placeholder = 'lifestyle-2' %}
                 {{ placeholder | placeholder_svg_tag: 'placeholder-svg' }}
@@ -41,12 +67,19 @@
 
 
 <style>
+
+    .p-1-half {
+        padding: .3rem;
+    }
+
+
+
     .parent {
         display: grid;
         grid-template-columns: 1.3fr 1fr;
         grid-template-rows: 1fr 0.6fr;
         grid-column-gap: 10px;
-        grid-row-gap: 10px;
+        /* grid-row-gap: 5px; */
     }
 
     .pic1 {
@@ -64,9 +97,9 @@
 
 
 
-    @import url(https://fonts.googleapis.com/css?family=Raleway:400,200,300,800);
+    /* @import url(https://fonts.googleapis.com/css?family=Raleway:400,200,300,800); */
 figure.snip0015 {
-  font-family: 'Raleway', Arial, sans-serif;
+  /* font-family: 'Raleway', Arial, sans-serif; */
   color: #fff;
   position: relative;
   overflow: hidden;
@@ -92,7 +125,7 @@ figure.snip0015 figcaption {
   position: absolute;
   bottom: 0;
   left: 0;
-  padding: 3em 3em;
+  padding: 4em 4em;
   width: 100%;
   height: 100%;
 }
@@ -107,8 +140,8 @@ figure.snip0015 figcaption::before {
   content: '';
   opacity: 0;
   background-color: #ffffff;
-  -webkit-transition: all 0.4s;
-  transition: all 0.4s;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
   -webkit-transition-delay: 0.6s;
   transition-delay: 0.6s;
 }
@@ -181,6 +214,57 @@ figure.snip0015:hover figcaption::before {
       "id": "title",
       "label": "Heading Title",
       "default": "The Latest From Our Blog"
+    },
+    {
+        "type": "text",
+        "id": "hover_title_1",
+        "label": "Image Hover Title 1",
+        "default": "Where to Find the Best Street Tacos in SGV"
+      },
+      {
+        "type": "text",
+        "id": "hover_title_2",
+        "label": "Image Hover Title 2",
+        "default": "Kare Kare"
+      },
+      {
+        "type": "text",
+        "id": "hover_title_3",
+        "label": "Image Hover Title 3",
+        "default": "El Monte, The City of Friendly Neighbors"
+      },
+      {
+        "type": "text",
+        "id": "hover_paragraph_1",
+        "label": "Image Hover Paragragh 1",
+        "default": "From a slice of pineapple in your taco, to earthy goat birria"
+      },
+      {
+        "type": "text",
+        "id": "hover_paragraph_2",
+        "label": "Image Hover Paragragh 2",
+        "default": "Peanut sauce, shrimp paste, and fried liempo"
+      },
+      {
+        "type": "text",
+        "id": "hover_paragraph_3",
+        "label": "Image Hover Paragragh 3",
+        "default": "Hidden Gems"
+      },
+      {
+        "type": "url",
+        "id": "hover_link_1",
+        "label": "Hover Image 1 Link"
+    },
+    {
+        "type": "url",
+        "id": "hover_link_2",
+        "label": "Hover Image 2 Link"
+    },
+    {
+        "type": "url",
+        "id": "hover_link_3",
+        "label": "Hover Image 3 Link"
     },
     {
         "type": "image_picker",
