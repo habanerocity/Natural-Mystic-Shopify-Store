@@ -9,21 +9,27 @@
             </div>
         </div>
         <div class="div2">
-            <div class="h-100 grid-item d-flex justify-content-start align-items-center rounded">
-                <div class="rounded-circle gray"></div>
-                <h5>{{ section.settings.grid_item_title_2 }}</</h5>
+            <div class="ml-3 h-100 grid-item d-flex justify-content-start align-items-center rounded">
+                <div class="horizontal_grid_item p-2 rounded-circle gray">
+                    <img id="feature_icon-2" alt="" src="{{ section.settings.grid_image_2 | img_url: '50x50'}}">
+                </div>
+                <h5 class="m-0">{{ section.settings.grid_item_title_2 }}</h5>
             </div>
         </div>
         <div class="div3">
             <div class="h-100 grid-item d-flex justify-content-start align-items-center rounded">
-                <div class="rounded-circle gray"></div>
-                <h5>{{ section.settings.grid_item_title_3 }}</</h5>
+                <div class="horizontal_grid_item p-2 rounded-circle gray">
+                    <img id="feature_icon-3" alt="" src="{{ section.settings.grid_image_3 | img_url: '50x50'}}">
+                </div>
+                <h5 class="m-0">{{ section.settings.grid_item_title_3 }}</h5>
             </div>
         </div>
         <div class="div4">
-            <div class="h-100 grid-item d-flex justify-content-center align-items-center rounded">
-                <div class="rounded-circle gray"></div>
-                <h5>{{ section.settings.grid_item_title_4 }}</</h5>
+            <div class="h-100 grid-item d-flex flex-column justify-content-center align-items-center rounded">
+                <div class="ico p-3 rounded-circle gray">
+                    <img alt="" src="{{ section.settings.grid_image_4 | img_url: '50x50'}}">
+                </div>
+                <h5 class="mt-3">{{ section.settings.grid_item_title_4 }}</</h5>
             </div>
         </div>
     </div>
@@ -36,6 +42,19 @@
         grid-template-rows: repeat(2, 1fr);
         grid-column-gap: 7px;
         grid-row-gap: 7px;
+    }
+
+    .horizontal_grid_item{
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    #feature_icon-2 {
+        height: 30px;
+    }
+
+    #feature_icon-3 {
+        height: 30px;
     }
 
     .grid-item {
@@ -95,7 +114,22 @@
         "type": "image_picker",
         "id": "grid_image_1",
         "label": "Image 1"
-    }
+      },
+      {
+        "type": "image_picker",
+        "id": "grid_image_2",
+        "label": "Image 2"
+      },
+      {
+        "type": "image_picker",
+        "id": "grid_image_3",
+        "label": "Image 3"
+      },
+      {
+        "type": "image_picker",
+        "id": "grid_image_4",
+        "label": "Image 4"
+      }
   ],
   "presets": [
     {

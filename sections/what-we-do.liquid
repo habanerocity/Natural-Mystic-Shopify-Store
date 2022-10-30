@@ -1,0 +1,45 @@
+<div class="container d-flex flex-column justify-content-center align-items-center">
+    <div class="w-50 text-center py-5 d-flex flex-column justify-content-center align-items-center">
+        <h1>{{ section.settings.title}}</h1>
+        <div>{{ section.settings.content}}</div>
+        <a class=" btn btn-md hero__button w-25 my-4 text-dark" href={{section.settings.button_link}}>{{section.settings.button_label}}</a>
+    </div>
+</div>
+
+{% schema %}
+{
+  "name": "What We Do",
+  "class": "What We Do Section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading Title",
+      "default": "What We Do"
+    },
+   { 
+    "type": "text",
+    "id": "content",
+    "label": "Section Content",
+    "default": "Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quasi mollitia numquam at! Quas quidem ipsum voluptatum fugiat, facilis voluptas quaerat quisquam ea suscipit libero veritatis molestias cum adipisci magni consequuntur!"
+   },
+   {
+    "type": "text",
+    "id": "button_label",
+    "default": "Button",
+    "label": "Heading Button Label"
+    },
+    {
+        "type": "url",
+        "id": "button_link",
+        "label": "Button Link"
+    }
+   ],
+   "presets": [
+    {
+      "category": "About",
+      "name": "What We Do"
+    }
+  ]
+}
+{% endschema %}
