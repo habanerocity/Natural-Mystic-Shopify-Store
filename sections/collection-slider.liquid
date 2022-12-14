@@ -1,20 +1,20 @@
 {%- capture flickity_options -%}
     {
-                                                                                                                                                                          "prevNextButtons": true,
-                                                                                                                                                                          "autoPlay": 5000,
-                                                                                                                                                                          "contain": true,
-                                                                                                                                                                          "pageDots": false,
-                                                                                                                                                                          "contain": true,
-                                                                                                                                                                          "cellAlign": "left",
-                                                                                                                                                                          "groupCells": false,
-                                                                                                                                                                          "arrowShape": {"x0": 20, "x1": 60, "y1": 40, "x2": 60, "y2": 35, "x3": 25}
-                                                                                                                                                                        }
+                                                                                                                                                                              "prevNextButtons": true,
+                                                                                                                                                                              "autoPlay": 5000,
+                                                                                                                                                                              "contain": true,
+                                                                                                                                                                              "pageDots": false,
+                                                                                                                                                                              "contain": true,
+                                                                                                                                                                              "cellAlign": "left",
+                                                                                                                                                                              "groupCells": false,
+                                                                                                                                                                              "arrowShape": {"x0": 20, "x1": 60, "y1": 40, "x2": 60, "y2": 35, "x3": 25}
+                                                                                                                                                                            }
 {%- endcapture -%}
 <section class="container py-5">
     <div class="featured-collection-slider page-width">
         {% if section.settings.title != blank %}
             <div class="section-header text-center">
-                <h1 class="display-6">{{ section.settings.title | escape }}</h1>
+                <h1 class="dot display-6">{{ section.settings.title | escape }}</h1>
             </div>
         {% endif %}
 

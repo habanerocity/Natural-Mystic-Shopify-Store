@@ -21,6 +21,41 @@
                         <h5>{{ item.title }}</h5>
                         <p>{{ item.description }}</p>
                     </div>
+                {% else if block.type == "link" %}
+                    <div class="col">
+                        <ul class="list-unstyled text-small">
+                            <li>
+                                <a href="{{ item.link_url_1 }}">
+                                    <span><image src="{{ block.settings.link_icon_1 | img_url: 'small'}}"/></span>
+                                    {{ item.link_text_1 }}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ item.link_url_2 }}">
+                                    <span><image src="{{ item.link_icon_2 | img_url: 'small'}}"/></span>
+                                    {{item.link_text_2 }}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ item.link_url_3 }}">
+                                    <span><image src="{{ item.link_icon_3 | img_url: 'small'}}"/></span>
+                                    {{item.link_text_3 }}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ item.link_url_4}}">
+                                    <span><image src="{{ item.link_icon_4 | img_url: 'small'}}"/></span>
+                                    {{item.link_text_4 }}
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{ item.link_url_5 }}">
+                                    <span><image src="{{ item.link_icon_5 | img_url: 'small'}}"/></span>
+                                    {{item.link_text_5 }}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 {% endif %}
             {% endfor %}
         </div>
@@ -39,66 +74,139 @@
 {{ 'application.js' | asset_url | script_tag }}
 
 {% schema %}
+
 {
-        "name": "Footer",
-        "settings": [
-            {
-                "type": "range",
-                "id": "col_num",
-                "default": 3,
-                "min": 2,
-                "max": 4,
-                "label": "Number of Columns"
-            },
-            {
-                "type": "checkbox",
-                "id": "enable_payment_type_icons",
-                "label": "Enable Payment Type Icons",
-                "default": true
-            }
-        ],
-        "max_blocks": 4,
-        "blocks": [
-            {
-                "type": "link_list",
-                "name": "Navigation",
-                "settings": [
-                    {
-                        "type": "text",
-                        "id": "title",
-                        "label": "Title",
-                        "default": "Quick Links"
-                    },
-                    {
-                        "type": "link_list",
-                        "id": "menu",
-                        "label": "Menu"
-                    }
-                    
-                ]
-            },
-            {
-                "type": "text",
-                "name": "Store details",
-                "settings": [
-                    {
-                        "type": "image_picker",
-                        "id": "logo",
-                        "label": "Store Logo"
-                    },
-                    {
-                        "type": "text",
-                        "id": "title",
-                        "label": "Heading",
-                        "default": "Store information"
-                    },
-                    {
-                        "type": "richtext",
-                        "id": "description",
-                        "label": "Text"
-                    }
-                ]
-            }
-        ]
-    }
+    "name": "Footer",
+    "settings": [
+        {
+            "type": "range",
+            "id": "col_num",
+            "default": 3,
+            "min": 2,
+            "max": 4,
+            "label": "Number of Columns"
+        }, {
+            "type": "checkbox",
+            "id": "enable_payment_type_icons",
+            "label": "Enable Payment Type Icons",
+            "default": true
+        }
+    ],
+    "max_blocks": 4,
+    "blocks": [
+        {
+            "type": "link_list",
+            "name": "Navigation",
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "title",
+                    "label": "Title",
+                    "default": "Quick Links"
+                }, {
+                    "type": "link_list",
+                    "id": "menu",
+                    "label": "Menu"
+                }
+            ]
+        }, {
+            "type": "text",
+            "name": "Store details",
+            "settings": [
+                {
+                    "type": "image_picker",
+                    "id": "logo",
+                    "label": "Store Logo"
+                }, {
+                    "type": "text",
+                    "id": "title",
+                    "label": "Heading",
+                    "default": "Store information"
+                }, {
+                    "type": "richtext",
+                    "id": "description",
+                    "label": "Text"
+                }
+            ]
+        }, {
+            "type": "link",
+            "name": "Social Media Links",
+            "settings": [
+                {
+                    "id": "link_url_1",
+                    "type": "url",
+                    "label": "URL link 1"
+                }, {
+                    "id": "link_url_2",
+                    "type": "url",
+                    "label": "URL link 2"
+                }, {
+                    "id": "link_url_3",
+                    "type": "url",
+                    "label": "URL link 3"
+                }, {
+                    "id": "link_url_4",
+                    "type": "url",
+                    "label": "URL link 4"
+                }, {
+                    "id": "link_url_5",
+                    "type": "url",
+                    "label": "URL link 5"
+                }, {
+                    "id": "link_icon_1",
+                    "type": "image_picker",
+                    "label": "Link icon 1"
+                }, {
+                    "id": "link_icon_2",
+                    "type": "image_picker",
+                    "label": "Link icon 2"
+                }, {
+                    "id": "link_icon_3",
+                    "type": "image_picker",
+                    "label": "Link icon 3"
+                }, {
+                    "id": "link_icon_4",
+                    "type": "image_picker",
+                    "label": "Link icon 4"
+                }, {
+                    "id": "link_icon_5",
+                    "type": "image_picker",
+                    "label": "Link icon 5"
+                }, {
+                    "type": "text",
+                    "id": "link_text_1",
+                    "label": "Link Text",
+                    "default": "Social Media Platform 1"
+                }, {
+                    "type": "text",
+                    "id": "link_text_2",
+                    "label": "Link Text",
+                    "default": "Social Media Platform 2"
+                }, {
+                    "type": "text",
+                    "id": "link_text_3",
+                    "label": "Link Text",
+                    "default": "Social Media Platform 3"
+                }, {
+                    "type": "text",
+                    "id": "link_text_4",
+                    "label": "Link Text",
+                    "default": "Social Media Platform 4"
+                }, {
+                    "type": "text",
+                    "id": "link_text_5",
+                    "label": "Link Text",
+                    "default": "Social Media Platform 5"
+                }
+            ]
+        }
+    ],
+    "presets": [
+        {
+            "category": "Links",
+            "name": "Links"
+        }
+    ]
+}
+
 {% endschema %}
