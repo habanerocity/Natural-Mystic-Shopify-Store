@@ -10,19 +10,19 @@
 </div>
 
 <script>
-    var productRecommendationBody = document.getElementById("product_recommendation_body");
+    let productRecommendationBody = document.getElementById("product_recommendation_body");
 
     fetch("/recommendations/products.json?product_id={{ product.id }}").then((res) => res.json()).then(({products}) => {
         console.log(products);
 
         if (products.length > 0) {
             products.forEach(function (product, index) {
-                var card;
+                let card;
 
-                card = "<div class=\"col-3 g-2\">";
+                card = "<div class=\"flex_container col-auto col-sm-12 col-md-3 g-3\">";
                 card += "<div class=\"card\" style=\"width: 18rem;\">";
                 if (product.images.length > 0) {
-                    card += "<img class=\"card-img-top\" src=\"" + product.images[0] + "\">";
+                    card += "<img class=\"card-img-top card-img-size\" src=\"" + product.images[0] + "\">";
                 }
                 card += "<div class=\"card-body\">";
                 card += "<h3><a href=\"" + product.url + "\">" + product.title + "</h3>";
