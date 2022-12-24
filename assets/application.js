@@ -93,7 +93,7 @@ productInfoAnchors.forEach((item) => {
 if (modalAddToCartForm != null) {
     let productInfoPrice = document.querySelector('#productInfoPrice');
 
-    //update modal price
+    //update modal variant price
     modalItemID.forEach((item) => {
         item.addEventListener('change', (e) => {
 

@@ -15,7 +15,7 @@
             {% for product in collection.products %}
                 {% assign image = product.featured_media.preview_image %}
                 <div class="col-auto g-3">
-                    <div class="card my-3 product_item">
+                    <div class="card my-1 product_item">
                         {% if image != blank %}
                             <a id="productInfoAnchor" product-handle="{{ product.handle }}" product-price="{{ product.price | money_without_trailing_zeros}}">
                                 <img class="pic card-img-top" src="{{ image | img_url: 'medium' }}" alt="{{ product.title }}">
