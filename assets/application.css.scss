@@ -191,7 +191,6 @@ html, body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: white;
 }
 
 .product-link {
@@ -215,12 +214,24 @@ html, body {
     transition: .5s all;
 }
 
+.color-white {
+  color: #fff;
+}
+
+.rusty {
+  background-color: #C52C03;
+}
+
 .hero__button{
     background-color: transparent;
     border-color: #C52C03;
     border-width: 2px;
-    color: #fff ; 
+    color: #000 ; 
     transition: .5s all;
+}
+
+.transparent {
+  opacity: 90%;
 }
 
 .turmeric {
@@ -231,6 +242,16 @@ html, body {
     background-color: #FEC016 !important;
     border-color: none !important;
     color: #000 !important;
+}
+
+.search__bar {
+  height: 2.25rem;
+  padding-left: 1rem;
+  border-radius: 30px;
+  box-shadow: rgb(0 0 0 / 20%) 0px 8px 16px;
+  border: 1px solid rgba(99, 102, 106, 0.2);
+
+  text-align: left;
 }
 
 .rust:hover {

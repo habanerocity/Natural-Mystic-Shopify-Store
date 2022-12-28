@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
     <div class="container">
-        <a class="navbar-brand" href="#">NM<span class="dot">.</span>
+        <a class="navbar-brand" href="https://natural-mystic-foods.myshopify.com/">NM<span class="dot">.</span>
         </a>
         <button aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbarNav" data-bs-toggle="collapse" type="button">
             <span class="navbar-toggler-icon"></span>
@@ -40,7 +40,7 @@
                 {% if shop.customer_accounts_enabled %}
                     {% if customer %}
                         <!-- <a href="/account">account</a> -->
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <!-- {{ "log out" | customer_logout_link }} -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <!-- {{ "log out" | customer_logout_link }} -->
                         <li class="nav-item">
                             <a class="nav-link" href="{{ routes.account_url }}">Account</a>
                         </li>
@@ -59,12 +59,17 @@
                     {% endif %}
                 {% endif %}
                 <li class="nav-item"></li>
+
             </ul>
             <form action="/search" method="GET" role="search">
                 <!-- escape filter removes quotation marks from query -->
-                <input id="searchInputField" name="q" type="text">
-                <button class="btn btn-primary" type="submit">
-                    <i class="fas fa-search">Search</i>
+                <input class="search__bar" id="searchInputField" name="q" placeholder="Search..." type="text">
+                <button class="btn rusty rounded-circle" type="submit">
+                    <svg class="bi bi-search color-white" fill="currentColor" height="16" viewbox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                        Search
+                    </svg>
+
                 </button>
             </form>
         </div>
