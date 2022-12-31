@@ -14,7 +14,7 @@
                 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 py-5">
                     {% for article in blog.articles %}
                         <div class="col">
-                            <div class="card shadow">
+                            <div class="card hover-card">
                                 {% if article.image.src != null %}
                                     <img src="{{ article.image.src | img_url: 'large' }}" class="card-img-top" alt="{{ article.image.alt }}"></img>
                                 {% else %}
@@ -22,7 +22,7 @@
                                 {% endif %}
                                 <div class="card-body">
                                     <h2>
-                                        <a class="text-decoration-none dot" href="{{ article.url }}">{{ article.title }}</a>
+                                        <a class="text-decoration-none dot blog_link" href="{{ article.url }}">{{ article.title }}</a>
                                     </h2>
                                     <h5> By: {{ article.author }}
                                             |

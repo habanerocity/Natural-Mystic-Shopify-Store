@@ -20,12 +20,12 @@
                 let card;
 
                 card = "<div class=\"flex_container col-auto col-sm-12 col-md-3 g-3\">";
-                card += "<div class=\"card\" style=\"width: 18rem;\">";
+                card += "<div class=\"card \" style=\"width: 18rem;\">";
                 if (product.images.length > 0) {
                     card += "<img class=\"card-img-top card-img-size\" src=\"" + product.images[0] + "\">";
                 }
                 card += "<div class=\"card-body\">";
-                card += "<h3><a href=\"" + product.url + "\">" + product.title + "</h3>";
+                card += "<h3><a class=\"dot text-decoration-none blog_link\" href=\"" + product.url + "\">" + product.title + "</h3>";
                 card += "</div></div>";
 
                 productRecommendationBody.innerHTML += card;

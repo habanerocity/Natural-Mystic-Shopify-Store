@@ -14,7 +14,7 @@
             {% for block in section.blocks %}
                 {% case block.type %}
                 {% when "title" %}
-                <h2>{{ product.title }}</h2>
+                <h2 class="dot">{{ product.title }}</h2>
                 {% when "price" %}
                 <h1 id="productPrice">{{ current_product.price | money}}</h1>
                 {% when "variant_selector" %}                                
