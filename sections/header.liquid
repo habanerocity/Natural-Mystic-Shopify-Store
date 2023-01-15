@@ -36,11 +36,11 @@
                     </a>
                 </li>
             </ul>
-            <ul class="navbar-nav">
+            <ul class="navbar-nav login_register">
                 {% if shop.customer_accounts_enabled %}
                     {% if customer %}
                         <!-- <a href="/account">account</a> -->
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <!-- {{ "log out" | customer_logout_link }} -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <!-- {{ "log out" | customer_logout_link }} -->
                         <li class="nav-item">
                             <a class="nav-link" href="{{ routes.account_url }}">Account</a>
                         </li>
@@ -61,17 +61,16 @@
                 <li class="nav-item"></li>
 
             </ul>
-            <form action="/search" method="GET" role="search">
-                <!-- escape filter removes quotation marks from query -->
-                <input class="search__bar" id="searchInputField" name="q" placeholder="Search..." type="text">
-                <button class="btn rusty rounded-circle" type="submit">
-                    <svg class="bi bi-search color-white" fill="currentColor" height="16" viewbox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                        Search
-                    </svg>
-
-                </button>
-            </form>
+            <div class="search_box_container">
+                <form action="/search" method="GET" role="search">
+                    <div class="search-box">
+                        <input id="searchInputField" name="q" placeholder="Search..." type="text">
+                        <button class="search_btn" type="submit">
+                            <img class="mag_glass" src="https://i.postimg.cc/5yNv8tTq/magnifying-glass-white.png"/>
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </nav>
