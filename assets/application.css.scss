@@ -256,10 +256,13 @@ html, body {
   height: 2.25rem;
   padding-left: 1rem;
   border-radius: 30px;
-  box-shadow: rgb(0 0 0 / 20%) 0px 8px 16px;
+  // box-shadow: rgb(0 0 0 / 20%) 0px 8px 16px;
   border: 1px solid rgba(99, 102, 106, 0.2);
-
   text-align: left;
+}
+
+.logo {
+  height: 4rem;
 }
 
 .rust:hover {
@@ -400,7 +403,7 @@ html, body {
   width: auto;
   border-radius: 2rem;
   border: 1px solid rgba(99, 102, 106, 0.2);
-  box-shadow: rgb(0 0 0 / 5%) 0px 2px 4px;
+  box-shadow: rgb(0 0 0 / 10%) 0px 4px 8px;
   max-width: 40rem;
 }
 
