@@ -4,19 +4,24 @@
     {% assign container_class = 'container-fluid' %}
 {% endif %}
 
-<div class="{{ container_class }} my-5">
-    {% for block in section.blocks %}
-        {% case block.type %}
-            {% when 'page_title' %}
-                <h1>{{ page.title }}</h1>
-            {% when 'page_date' %}
+{% for block in section.blocks %}
+    {% case block.type %}
+        {% when 'page_title' %}
+            <div class="position-relative text-center bg-light p-3 p-md-5">
+                <div class="col-md-5 p-lg-5 mx-auto my-5">
+                    <h1 class="display-4 dot">{{ page.title}}</h1>
+                    <p class="lead">What We Do</p>
+                </div>
+            </div>
+        {% when 'page_date' %}
+            <div class="{{ container_class }} my-5">
                 {% if section.settings.show_publish_date %}
                     <small>{{ page.published_at | date: '%B %d, %Y' }}</small>
                 {% endif %}
             {% when 'page_content' %}
                 <div class="my-5">{{page.content}}</div>
-            {% else %}
-        {% endcase %}
+                {% else %}
+            {% endcase %}
     {% endfor %}
 </div>
 
