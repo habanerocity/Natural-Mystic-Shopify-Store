@@ -40,7 +40,10 @@
                 {% if shop.customer_accounts_enabled %}
                     {% if customer %}
                         <!-- <a href="/account">account</a> -->
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <!-- {{ "log out" | customer_logout_link }} -->
+                        <!-- {{ "log out" | customer_logout_link }} -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="#swym-wishlist">Wishlist</a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ routes.account_url }}">Account</a>
                         </li>
@@ -50,6 +53,9 @@
                     {% else %}
                         <!-- {{ "log in " | customer_login_link }}
                         {{ "register" | customer_register_link }} -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="#swym-wishlist">Wishlist</a>
+                        </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ routes.account_login_url }}">Login</a>
                         </li>

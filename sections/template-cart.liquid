@@ -1,7 +1,12 @@
-<div class="position-relative text-center bg-light p-3 p-md-5">
+<!-- <div class="position-relative text-center bg-light p-3 p-md-5">
     <div class="col-md-5 p-lg-5 mx-auto my-5">
         <h1 class="display-4 dot">Cart</h1>
-        <!-- <p class="lead">What We Do</p> -->
+    </div>
+</div> -->
+<div class="header_banner-cart position-relative text-center p-3 p-md-5">
+    <div class="col-md-5 p-lg-5 mx-auto my-5">
+        <h1 class="display-4 turmeric">Cart</h1>
+        <p class="lead text-light">Online Checkout</p>
     </div>
 </div>
 <div class="container my-5">
@@ -85,6 +90,17 @@
     {% endif %}
 </div>
 
+<style>
+        .header_banner-cart {
+            background: url({{ section.settings.banner_image | img_url: "master"}});
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: cover;
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+
 {% schema %}
 {
         "name": "Template Cart",
@@ -99,7 +115,19 @@
             "type": "cart_checkout_button",
             "name": "Cart Buttons",
             "limit": 1
+        },
+        {
+            "type": "title",
+            "name": "Title",
+            "limit": 1
         }
-    ]
+        ],
+        "settings": [
+        {
+            "type": "image_picker",
+            "id": "banner_image",
+            "label": "Heading Background Image"
+        }
+        ]
     }
 {% endschema %}
