@@ -7,6 +7,18 @@ html, body {
     box-sizing: border-box;
 } 
 
+.btn-post {
+  background-color: #C52C03;
+  color: white;
+  padding: 10px 30px;
+  border-radius: 4px;
+  font-family: sans-serif;
+}
+
+input::placeholder {
+  font-family: sans-serif;
+}
+
 .dark_grey {
   background-color: #b3b3b3;
 }
