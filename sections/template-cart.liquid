@@ -18,7 +18,9 @@
                         <div class="card-body">
                             <table class="table table-borderless">
                                 <thead>
-                                    <th colspan="2">Product</th>
+                                    <th></th>
+                                    <th>Product Name</th>
+                                    <th>Size</th>
                                     <th>Price</th>
                                     <th>Qty</th>
                                     <th>Total</th>
@@ -33,8 +35,10 @@
                                             </td>
                                             <td>
                                                 <a href="{{ item.url }}">{{ item.product.title }}</a>
-                                                <p class="small">{{ item.variant.title }}</p>
                                                 <a href="/cart/change?line={{ forloop.index }}&amp;quantity=0">remove</a>
+                                            </td>
+                                            <td>
+                                                <p class="small">{{ item.variant.title }}</p>
                                             </td>
                                             <td>{{ item.price | money }}</td>
                                             <td>
