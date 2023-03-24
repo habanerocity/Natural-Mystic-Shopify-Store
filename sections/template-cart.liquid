@@ -34,8 +34,8 @@
                                                 </a>
                                             </td>
                                             <td>
-                                                <a href="{{ item.url }}">{{ item.product.title }}</a>
-                                                <a href="/cart/change?line={{ forloop.index }}&amp;quantity=0">remove</a>
+                                                <a class="text-decoration-none dot" href="{{ item.url }}">{{ item.product.title }}</a>
+                                                <a href="/cart/change?line={{ forloop.index }}&amp;quantity=0"><img class="trash" src="{{ section.settings.delete_icon | img_url: "small"}}" width="15" height="15"></img></a>
                                             </td>
                                             <td>
                                                 <p class="small">{{ item.variant.title }}</p>
@@ -68,13 +68,13 @@
                                 {% case block.type %}
                                     {% when "cart_total" %}
                                         <div class="cart-total-block">
-                                            <p class="h3">The total amount is
+                                            <p class="h3">Your total:
                                             </p>
                                             <p>{{ cart.total_price | money }}</p>
                                         </div>
                                     {% when "cart_checkout_button" %}
                                         <div class="cart-checkout-buttons d-grid gap-2">
-                                            <button class="btn rust" name="update" type="submit">Update</button>
+                                            <button class="btn rust" name="update" type="submit">Update Cart</button>
                                             <button class="btn rust turmeric_border" name="checkout" type="submit">Checkout</button>
                                         </div>
                                     {% else %}
@@ -102,6 +102,10 @@
             background-size: cover;
             height: 100%;
             width: 100%;
+        }
+
+        .trash{
+            transform: translate(10px, -2px);
         }
     </style>
 
@@ -131,6 +135,11 @@
             "type": "image_picker",
             "id": "banner_image",
             "label": "Heading Background Image"
+        },
+        {
+            "type": "image_picker",
+            "id": "delete_icon",
+            "label": "Delete icon"
         }
         ]
     }
