@@ -22,7 +22,7 @@
                                     <th>Product Name</th>
                                     <th>Size</th>
                                     <th>Price</th>
-                                    <th>Qty</th>
+                                    <th>Quantity</th>
                                     <th>Total</th>
                                 </thead>
                                 <tbody>
@@ -42,7 +42,7 @@
                                             </td>
                                             <td>{{ item.price | money }}</td>
                                             <td>
-                                                <input type="number" name="updates[]" id="updates_{{ item.key }}" value="{{ item.quantity }}" min="0">
+                                                <input class="qty" type="number" name="updates[]" id="updates_{{ item.key }}" value="{{ item.quantity }}" min="0">
                                             </td>
                                             <td>
                                                 {% if item.original_line_price != item.line_price %}
