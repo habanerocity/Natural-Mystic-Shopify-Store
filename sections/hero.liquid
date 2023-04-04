@@ -1,6 +1,6 @@
 <section class="inner-hero-section overlay">
     {% if section.settings.image != blank %}
-        <img class="hero_pic object-fit-cover" src="{{ section.settings.image | img_url: 'master'}}" alt="{{ section.settings.image.alt}}">
+        <img class="hero_pic" src="{{ section.settings.image | img_url: 'master'}}" alt="{{ section.settings.image.alt}}">
     {% else %}
         {% assign placeholder = 'lifestyle-2' %}
         {{ placeholder | placeholder_svg_tag: 'placeholder-svg' }}
@@ -32,9 +32,9 @@
             "default": "Example Heading",
             "label": "Heading Title"
         }, {
-            "type": "richtext",
+            "type": "text",
             "id": "description",
-            "default": "<p>Example Paragraph</p>",
+            "default": "Example Description",
             "label": "Heading Description"
         }, {
             "type": "text",

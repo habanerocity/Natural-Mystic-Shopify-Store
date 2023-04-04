@@ -208,10 +208,8 @@ input::placeholder {
 .hero_pic {
     background-color: rgba(0, 0, 0, 0.5);
     height: 100%;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
     position: relative;
+    object-fit: cover;
 }
 
 .hero_text {
@@ -490,18 +488,48 @@ input:focus {
 
 .search_btn{
   border-radius: 50%;
-  background: linear-gradient(115deg, #C52C03, #c78686);
+  background-color: #C52C03;
   border: none;
   border: 1px solid #C52C03;
-  padding: 3px 5px 3px 5px;
+  padding: 3px 7px 3px 7px;
   transition: all .2s;
 }
 
 .search_btn:hover {
-   background: linear-gradient(to right, #C52C03, #333);
    cursor: pointer;
 }
 
 .mag_glass {
   height: 16px;
+}
+
+@media screen and (max-width: 767px){
+  .horizontal_grid_item{
+    margin-left: 8px;
+    margin-right: 8px;
+  }
+
+  .features_grid-item {
+        font-size: 16px;
+  }
+}
+
+@media screen and (max-width: 580px){
+  .hero_text {
+    width: 18rem!important;
+    height: 16rem!important;
+  }
+}
+
+@media screen and (max-width: 580px){
+  .features_grid-item {
+    font-size: 14px;
+}
+}
+
+@media screen and (max-width: 330px){
+  .hero_text {
+    width: 16rem!important;
+    height: 14rem!important;
+  }
 }
