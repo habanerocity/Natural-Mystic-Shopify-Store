@@ -503,7 +503,23 @@ input:focus {
   height: 16px;
 }
 
-@media screen and (max-width: 767px){
+@media screen and (max-width: 1150px){
+  .spice_banner{
+    background-position: right !important;
+  }
+}
+
+@media screen and (max-width: 787px){
+
+  .spice_banner{
+    background:#FEC016!important;
+  }
+
+  .spice_banner-wrapper{
+    align-items:center;
+    text-align: center;
+  }
+
   .horizontal_grid_item{
     margin-left: 8px;
     margin-right: 8px;
@@ -525,6 +541,64 @@ input:focus {
   .features_grid-item {
     font-size: 14px;
 }
+}
+
+@media screen and (max-width: 480px){
+  .features_grid{
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20rem;
+  }
+
+  .grid-item {
+    background-color: transparent!important;
+}
+
+  .mobile_button_shift:hover{
+    background-color: #C52C03!important;
+    border-color: none !important;
+    color: #fff !important;
+  }
+
+  .product_item {
+    width: 100%;
+    // height: 30rem;
+}
+
+  .grid-item {
+    padding-top: 1rem;
+  }
+
+  .contactless {
+    flex-direction: column;
+    padding-bottom: 8px;
+  }
+
+  .horizontal_grid-item {
+    margin-top: 8px!important;
+  }
+
+  .horizontal_grid_item{
+    padding: 15px!important;
+  }
+
+  .money {
+    flex-direction: column;
+    padding-top: 1rem;
+    padding-bottom: 8px;
+  }
+
+  #feature_icon-3 {
+    height: 44px;
+  }
+
+  #feature_icon-2 {
+  height: 43px;
+  }
+
+  .ico > img {
+    height: 43px;
+  }
 }
 
 @media screen and (max-width: 330px){
