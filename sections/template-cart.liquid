@@ -30,7 +30,7 @@
                                         <tr>
                                             <td>
                                                 <a href="{{ item.url | within: collections.all }}">
-                                                    <img src="{{ item | img_url: 'small' }}" alt="{{ item.title | escape }}">
+                                                    <img src="{{ item | img_url: 'small' }}" class="product_image" alt="{{ item.title | escape }}">
                                                 </a>
                                             </td>
                                             <td>
@@ -62,7 +62,7 @@
                 </div>
                 <div class="col-12 col-md-4">
 
-                    <div class="card shadow">
+                    <div class="card shadow price_card">
                         <div class="card-body">
                             {% for block in section.blocks %}
                                 {% case block.type %}
