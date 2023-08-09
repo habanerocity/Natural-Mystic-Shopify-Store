@@ -1,17 +1,16 @@
 <div class="container py-3">
     <h1 class="dot text-center mb-5">Follow Our Blog For New Recipes and Travel Stories</h1>
-    <div class="parent">
+    <div class="blog_grid">
         {% for article in blog.articles %}{% endfor %}
-        <div class="pic1">
+        <div class="blog_grid_child-1">
             {% if section.settings.image_1 != blank %}
                 <a href="{{ section.settings.hover_link_1}}">
                     <figure class="snip0015 rounded grid_img">
                         <!-- <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample38.jpg" alt="sample38"/> -->
-                        <img class=" grid_img" src="{{ section.settings.image_1 | img_url: '750x700', crop: 'left' }}" alt="{{ section.settings.image.alt}}">
+                        <img class="grid_img" src="{{ section.settings.image_1 | img_url: 'large' }}" alt="{{ section.settings.image.alt}}">
                         <figcaption class="d-flex flex-column justify-content-center align-items-center">
                             <h2>{{ section.settings.hover_title_1}}</h2>
                             <p>{{ section.settings.hover_paragraph_1}}</p>
-
                             <p class="p-1-half rounded bg-danger text-light mt-2">View Here</p>
                         </figcaption>
                     </figure>
@@ -21,12 +20,12 @@
                 {{ placeholder | placeholder_svg_tag: 'placeholder-svg' }}
             {% endif %}
         </div>
-        <div class="pic2">
+        <div class="blog_grid_child-2">
             {% if section.settings.image_2 != blank %}
                 <a href="{{ section.settings.hover_link_2}}">
                     <figure class="snip0015 rounded grid_img">
                         <!-- <img class="rounded grid_img" src="{{ section.settings.image_3 | img_url: '550x232', crop: 'center' }}" alt="{{ section.settings.image.alt}}"> -->
-                        <img class="rounded grid_img" src="{{ section.settings.image_2 | img_url: '550x435', crop: 'right' }}" alt="{{ section.settings.image.alt}}">
+                        <img class="rounded grid_img" src="{{ section.settings.image_2 | img_url: 'large' }}" alt="{{ section.settings.image.alt}}">
                         <figcaption class="d-flex flex-column justify-content-center align-items-center">
                             <h2>{{ section.settings.hover_title_2}}</h2>
                             <p>{{ section.settings.hover_paragraph_2}}</p>
@@ -41,19 +40,16 @@
                 {{ placeholder | placeholder_svg_tag: 'placeholder-svg' }}
             {% endif %}
         </div>
-        <div class="pic3">
+        <div class="blog_grid_child-3">
             {% if section.settings.image_3 != blank %}
                 <a href="{{ section.settings.hover_link_3}}">
                     <figure class="snip0015 rounded grid_img">
                         <!-- <img class=" grid_img" src="{{ section.settings.image_3 | img_url: '750x700', crop: 'left' }}" alt="{{ section.settings.image.alt}}"> -->
-                        <img class="rounded grid_img" src="{{ section.settings.image_3 | img_url: '550x216', crop: 'center' }}" alt="{{ section.settings.image.alt}}">
+                        <img class="rounded grid_img" src="{{ section.settings.image_3 | img_url: 'large' }}" alt="{{ section.settings.image.alt}}">
                         <figcaption class="py-2 d-flex flex-column justify-content-center align-items-center">
                             <h2>{{ section.settings.hover_title_3}}</h2>
                             <p>{{ section.settings.hover_paragraph_3}}</p>
-
                             <p class="p-1-half rounded bg-danger text-light mt-1">View Here</p>
-
-
                         </figcaption>
                     </figure>
                 </a>
@@ -72,6 +68,28 @@
         padding: .3rem;
     }
 
+    .blog_grid{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      grid-column-gap: 20px;
+      grid-row-gap: 37px;
+      grid-template-areas: 
+    "pic-1 pic-2"
+    "pic-1 pic-3"; 
+    }
+
+    .blog_grid_child-1{
+      grid-area: pic-1;
+    }
+
+    .blog_grid_child-2{
+      grid-area: pic-2;
+    }
+
+    .blog_grid_child-3{
+      grid-area: pic-3;
+    }
 
 
     .parent {
@@ -79,7 +97,7 @@
         grid-template-columns: 1.3fr 1fr;
         grid-template-rows: 1fr 0.6fr;
         grid-column-gap: 10px;
-        /* grid-row-gap: 5px; */
+        /* grid-row-gap: 15px; */
     }
 
     .pic1 {
