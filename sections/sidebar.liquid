@@ -1,16 +1,16 @@
-<div class="sidebar-section">
+<div class="sidebar-section p-4">
     {% for block in section.blocks %}
         {% assign item = block.settings %}
         {% if block.type == 'image' %}
             <div class="mb-4">
-                <p>{{ item.title }}</p>
+                <h4 class="text-center">{{ item.title }}</h4>
                 <a href="{{ item.url }}">
-                    <img src="{{ item.image | img_url: 'large'}}" alt="mushroom" class="w-100"></a>
+                    <img src="{{ item.image | img_url: 'large'}}" alt="author" class="w-100 rounded"></a>
 
             </div>
         {% else %}
-            <div class="mb-4">
-                <p>{{ item.title }}</p>
+            <div class="text-center">
+                <!-- <p>{{ item.title }}</p> -->
                 <p>{{ item.description }}</p>
             </div>
         {% endif %}

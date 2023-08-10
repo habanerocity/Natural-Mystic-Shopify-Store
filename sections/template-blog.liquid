@@ -26,7 +26,7 @@
                                     </h2>
                                     <h5> By: {{ article.author }}
                                             |
-                                            {{ article.created_at | date: "%b %d, %Y" }}</h5>
+                                            {{ article.published_at | date: "%b %d, %Y" }}</h5>
                                   
                                     <p class="card-text">
                                         {% if article.excerpt.size > 0 %}
