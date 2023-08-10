@@ -134,6 +134,10 @@ input::placeholder {
       color: #C52C03;
   }
 
+  a.dot:hover{
+    color: #FEC016;
+  }
+
   .discover {
     letter-spacing: 6px;
     font-weight: 100!important;
@@ -508,9 +512,27 @@ input:focus {
   height: 16px;
 }
 
+@media screen and (max-width: 1399px){
+  .blog_grid{
+    grid-row-gap: 29px!important;
+  }
+}
+
+@media screen and (max-width: 1199px){
+  .blog_grid{
+    grid-row-gap: 22px!important;
+  }
+}
+
 @media screen and (max-width: 1150px){
   .spice_banner{
     background-position: right !important;
+  }
+}
+
+@media screen and (max-width: 991px){
+  .blog_grid{
+    grid-row-gap: 12px!important;
   }
 }
 
@@ -540,6 +562,10 @@ input:focus {
     grid-row-gap: 20px;
   }
 
+  .blog_grid{
+    grid-row-gap: 5px!important;
+  }
+
   .price_card{
     margin-top: 3rem!important;
   }
@@ -558,24 +584,24 @@ input:focus {
     width: 18rem!important;
     height: 16rem!important;
   }
-}
 
-@media screen and (max-width: 580px){
   .features_grid-item {
     font-size: 14px;
 }
+
+.category_list {
+  display: flex!important;
+  flex-direction: column;
 }
 
-@media screen and (max-width: 580px){
-  .category_list {
-    display: flex!important;
-    flex-direction: column;
+.product_image{
+  height: 50px;
 }
 }
 
-@media screen and (max-width: 580px){
-  .product_image{
-    height: 50px;
+@media screen and (max-width: 545px){
+  .blog_grid{
+    display: block!important;
   }
 }
 
