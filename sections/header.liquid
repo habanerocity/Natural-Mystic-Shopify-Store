@@ -1,7 +1,9 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
     <div class="container">
-        <a class="navbar-brand" href="https://natural-mystic-foods.myshopify.com/"><img src="https://i.postimg.cc/c1tNpGfs/king-of-spices-1-removebg-preview.png" class="logo" /></span>
+        {% for block in section.blocks %}
+            <a class="navbar-brand pt-0" href="https://natural-mystic-foods.myshopify.com/"><img src="{{ block.settings.store-logo | img_url: '40x40' }}" class="p-0"/></span>
         </a>
+        {% endfor %}
         <button aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbarNav" data-bs-toggle="collapse" type="button">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -40,7 +42,7 @@
                 {% if shop.customer_accounts_enabled %}
                     {% if customer %}
                         <!-- <a href="/account">account</a> -->
-                        <!-- {{ "log out" | customer_logout_link }} -->
+                                                <!-- {{ "log out" | customer_logout_link }} -->
                         <li class="nav-item">
                             <a class="nav-link" href="#swym-wishlist">Wishlist</a>
                         </li>
@@ -90,3 +92,25 @@
         Content for the offcanvas goes here. You can place just about any Bootstrap component or custom elements here.
     </div>
 </div>
+
+{% schema %}
+
+{
+    "name": "Navbar",
+    "blocks": [
+        {
+            "type": "image",
+            "name": "store logo",
+            "settings": [
+                {
+                    "type": "image_picker",
+                    "id": "store-logo",
+                    "label": "Logo"
+                }
+            ]
+
+        }
+    ]
+}
+
+{% endschema %}
