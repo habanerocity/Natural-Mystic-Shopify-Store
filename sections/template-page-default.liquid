@@ -10,14 +10,14 @@
             <div class="header_banner-about position-relative text-center p-3 p-md-5">
                 <div class="col-md-5 p-lg-5 mx-auto my-5">
                     <h1 class="display-4 turmeric">{{page.title}}</h1>
-                    <p class="lead text-light">What We Do</p>
+                    <p class="lead text-light">Our Story</p>
                 </div>
             </div>
         {% when 'page_date' %}
             <div class="{{ container_class }} my-5">
-                {% if section.settings.show_publish_date %}
+                <!-- {% if section.settings.show_publish_date %}
                     <small>{{ page.published_at | date: '%B %d, %Y' }}</small>
-                {% endif %}
+                {% endif %} -->
             {% when 'page_content' %}
                 <div class="my-5">{{page.content}}</div>
                 {% else %}
