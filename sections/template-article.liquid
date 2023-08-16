@@ -10,8 +10,8 @@
     <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: format: 'abbreviated_date' }}</time>
 {% endcapture %}
 
-<article itemscope itemtype="https://schema.org/BlogPosting">
 
+<article itemscope itemtype="https://schema.org/BlogPosting">
     {% for block in section.blocks %}
         {% case block.type %}
             {% when 'featured_image' %}

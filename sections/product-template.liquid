@@ -2,6 +2,11 @@
 {% assign product_image = current_product.featured_image | default: product.featured_image %}
 
 <div class="container my-5">
+    <div class="my-3">
+        {% if settings.show_breadcrumb_nav %}
+            {% include 'breadcrumbs' %}
+        {% endif %}
+    </div>
     <div class="row">
         <div class="col-md-6 col-12">
             <img class="img-fluid rounded mb-3" src="{{ product_image | img_url: 'large'}}" alt="{{ product_image.alt }}" id="ProductMainImage"/>

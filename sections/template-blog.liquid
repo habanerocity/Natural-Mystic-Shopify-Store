@@ -11,6 +11,11 @@
             </div>
         {% when 'blog_grid' %}
             <div class="container my-5 p-2">
+                <div class="my-3">
+                        {% if settings.show_breadcrumb_nav %}
+                            {% include 'breadcrumbs' %}
+                        {% endif %}
+                </div>
                 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 py-5">
                     {% for article in blog.articles %}
                         <div class="col">
