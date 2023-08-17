@@ -213,7 +213,6 @@ input::placeholder {
   color: #C52C03!important;
 }
 
-
 .inner-hero-section {
     position: relative;
     overflow: hidden;
@@ -284,11 +283,13 @@ input::placeholder {
 }
 
 .rust {
-    background-color: transparent;
+    background-color: #C52C03;
     border-color: #C52C03;
+    color: #fff!important;
     border-width: 2px;
     color: #000;
     transition: .5s all;
+    border-radius: 0!important;
 }
 
 .color-white {
@@ -304,12 +305,12 @@ input::placeholder {
     border-color: #C52C03;
     border-width: 2px;
     color: #fff ; 
-    // transition: .5s all;
+    transition: .5s all;
 }
 
 .rust__button:hover{
-  background-color: #C52C03!important;
-  border-color: #C52C03!important;
+  background-color: #9b2302!important;
+  border-color: #9b2302!important;
   border-width: 2px;
   color: #fff!important;
 }
@@ -350,9 +351,9 @@ input::placeholder {
 }
 
 .rust:hover {
-    background-color: #FEC016 !important;
-    // border-color: #C52C03 !important;
-    color: #000;
+  background-color: #9b2302!important;
+  border-color: #9b2302!important;
+    color: #fff!important;
 }
 
 .search {
