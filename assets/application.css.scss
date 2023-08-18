@@ -327,11 +327,20 @@ input::placeholder {
   border-color: #FEC016!important;
 }
 
-// .hero__button:hover {
-//     background-color: #FEC016 !important;
-//     border-color: none !important;
-//     color: #000 !important;
-// }
+.banner__button{
+  border:2px solid #C52C03!important;
+  background-color: transparent;
+}
+
+.banner__button:hover {
+    background-color: #FEC016 !important;
+    border-color: #FEC016 !important;
+    color: #000 !important;
+}
+
+.card-content_wrapper{
+  transform: translateY(7px);
+}
 
 .search__bar {
   height: 2.25rem;

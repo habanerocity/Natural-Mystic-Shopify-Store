@@ -5,7 +5,7 @@
 {% assign placeholder = 'lifestyle-2' %}
 {{ placeholder | placeholder_svg_tag: 'placeholder-svg' }}
 {% endif %} -->
-                                                    <!-- <div class="position-relative text-center bg-light p-3 p-md-5">
+                                                                    <!-- <div class="position-relative text-center bg-light p-3 p-md-5">
         <div class="col-md-5 p-lg-5 mx-auto my-5">
             <h1 class="display-4 dot">{{ collection.title}}</h1>
             <p class="lead">Browse Our Curated Selection of the World's Finest Spices</p>
@@ -53,10 +53,13 @@
                             {{ 'product-1' | placeholder_svg_tag: 'card-img-top'}}
                         {% endif %}
                         <div class="card-body">
-                            <h3>
-                                <a class="dot text-decoration-none blog_link" href="{{ product.url }}">{{ product.title }}</a>
-                            </h3>
-                            <p>{{ product.price | money_without_trailing_zeros }}</p>
+                            <div class="swym-button swym-add-to-wishlist heart__beat" data-with-epi="true" data-swaction="addToWishlist" data-product-id="{{ product.id }}" data-variant-id="{{ product.variants[0].id }}" data-product-url="{{ shop.url }}{{ product.url }}"></div>
+                            <div class="card-content_wrapper">
+                                <h3>
+                                    <a class="dot text-decoration-none blog_link" href="{{ product.url }}">{{ product.title }}</a>
+                                </h3>
+                                <p>{{ product.price | money_without_trailing_zeros }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>

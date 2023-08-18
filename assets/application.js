@@ -216,20 +216,6 @@ for (const heart of hearts) {
 
 }
 
-//add overlay to grid images
-
-// const grid_images = document.querySelectorAll('.grid_img');
-
-// for (const grid_image of grid_images) {
-
-//     grid_image.addEventListener("click")
-//     if (grid_image.classList.contains("overlay")) {
-//         grid_image.classList.remove("overlay");
-//     } else {
-//         grid_image.classList.add("overlay");
-//     }
-// }
-
 //update variant price on product page
 
 const quantityNode = document.querySelectorAll('#Quantity');
