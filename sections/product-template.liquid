@@ -53,7 +53,12 @@
                 {{ form | payment_button }}
                 {% endif %}     
                 {% when "description" %}
-                <h3>Item Description</h3>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h3>Item Description</h3>
+                    <div class="icon_wrapper">
+                        <div class="swym-button swym-add-to-wishlist heart__beat position-relative top-0" data-with-epi="true" data-swaction="addToWishlist" data-product-id="{{ product.id }}" data-variant-id="{{ product.variants[0].id }}" data-product-url="{{ shop.url }}{{ product.url }}"></div>
+                    </div>
+                </div>
                 <p>{{ product.description }}</p>           
                 {% else %}
                     

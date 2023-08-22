@@ -370,6 +370,10 @@ input::placeholder {
     height: 1.5rem;
 }
 
+.btn-add_to_cart {
+  color:#000!important;
+}
+
 .small-font {
     font-size: 12px !important;
 }
@@ -390,6 +394,7 @@ input::placeholder {
     top: 270px;
     right: 20px;
     animation: unliked .35s ease; 
+    z-index: 100;
 }
 
 .heart__beat:after {
@@ -446,6 +451,10 @@ input::placeholder {
   100% {
     transform:rotate(-45deg) scale(1);
   }
+}
+
+.icon_wrapper{
+  transform: translateY(-3px);
 }
 
 // slider
