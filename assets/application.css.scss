@@ -52,7 +52,6 @@ html, body {
   color: white;
   padding: 10px 30px;
   border-radius: 4px;
-  font-family: sans-serif;
 }
 
 input::placeholder {
@@ -61,6 +60,10 @@ input::placeholder {
 
 .dark_grey {
   background-color: #b3b3b3;
+}
+
+.btn{
+  font-family: 'Rajdhani'!important;
 }
 
 .grey {
@@ -289,7 +292,7 @@ input::placeholder {
     border-width: 2px;
     color: #000;
     transition: .5s all;
-    border-radius: 0!important;
+    // border-radius: 0!important;
 }
 
 .color-white {
@@ -368,6 +371,18 @@ input::placeholder {
 .search {
     background:url('../assets/magnifying-glass-solid.svg') no-repeat center center;
     height: 1.5rem;
+}
+
+.shopify-payment-button__button{
+  background-color: #C52C03!important;
+  border-color: #9b2302!important;
+  color: #fff!important;
+}
+
+.shopify-payment-button__button:hover{
+  background-color: #9b2302!important;
+  border-color: #9b2302!important;
+  color: #fff!important;
 }
 
 .btn-add_to_cart {
