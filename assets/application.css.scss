@@ -196,6 +196,14 @@ input::placeholder {
     height: 90vh;
 }
 
+.hero-div{
+  background-color: rgba(255, 255, 255, 0.9)!important;
+}
+
+.hero-btn_link{
+  z-index: 999;
+}
+
 .pic {
     height: 15rem;
 }
@@ -318,9 +326,9 @@ input::placeholder {
   color: #fff!important;
 }
 
-.transparent {
-  opacity: 90%;
-}
+// .transparent {
+//   opacity: 90%;
+// }
 
 .turmeric {
   color: #FEC016;
