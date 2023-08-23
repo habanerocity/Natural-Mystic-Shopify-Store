@@ -399,74 +399,8 @@ input::placeholder {
     margin: auto;
 }
 
-.heart__beat {
-    background-color: #574136;
-    position: absolute;
-    height: 17px;
-    width: 17px;
-    transform: rotate(-45deg) scale(1);
-    cursor: pointer;
-    top: 270px;
-    right: 20px;
-    animation: unliked .35s ease; 
-    z-index: 100;
-}
+//custom heart icon for wishlist
 
-.heart__beat:after {
-    background:inherit;
-    border-radius: 50%; /* To make the circle */
-    content:'';
-    position:absolute;
-    top: -50%;
-    left:0;
-    height: 17px;
-    width: 17px;
-}
-
-.heart__beat:before {
-    background:inherit; 
-    border-radius: 50%; /* To make the circle */
-    content:'';
-    position:absolute;
-    top:0; 
-    right:-50%; 
-    height: 17px;
-    width: 17px;
-}
-
-.heart__beat.liked:before,
-.heart__beat.liked:after, .heart__beat.liked {    
-    background-color: #C52C03;
-    cursor: pointer;
-}
-
-.heart__beat.liked {
-    animation: liked .35s ease;   
-}
-
-@keyframes unliked {
-  0% {
-    transform:rotate(-45deg) scale(.8); 
-  }
-  50% {
-    transform:rotate(-45deg) scale(1.25);
-  }
-  100% {
-    transform:rotate(-45deg) scale(1);
-  }
-}
-
-@keyframes liked {
-  0% {
-    transform:rotate(-45deg) scale(.8); 
-  }
-  50% {
-    transform:rotate(-45deg) scale(1.25);
-  }
-  100% {
-    transform:rotate(-45deg) scale(1);
-  }
-}
 
 .icon_wrapper{
   transform: translateY(-3px);
@@ -593,6 +527,80 @@ input:focus {
 .mag_glass {
   height: 16px;
 }
+
+.heart__beat {
+    background-color: #574136;
+    position: absolute;
+    height: 1rem;
+    width: 1rem;
+    transform: rotate(-45deg) scale(1);
+    cursor: pointer;
+    top: 270px;
+    right: 20px;
+    animation: unliked .35s ease; 
+    z-index: 100;
+}
+
+.heart__beat::after {
+    background:inherit;
+    border-radius: 50%; /* To make the circle */
+    content:'';
+    position:absolute;
+    top: -50%;
+    left:0;
+    height: 1rem;
+    width: 1rem;
+}
+
+.heart__beat::before {
+    background:inherit; 
+    border-radius: 50%; /* To make the circle */
+    content:'';
+    position:absolute;
+    top:0; 
+    right:-50%; 
+    height: 1rem;
+    width: 1rem;
+}
+
+.heart__beat.liked::before,
+.heart__beat.liked::after, .heart__beat.liked {    
+    background-color: #C52C03;
+    cursor: pointer;
+}
+
+.heart__beat.liked {
+    animation: liked .35s ease;   
+}
+
+.swym-button.swym-add-to-wishlist{
+  display: block!important;
+}
+
+@keyframes unliked {
+  0% {
+    transform:rotate(-45deg) scale(.8); 
+  }
+  50% {
+    transform:rotate(-45deg) scale(1.25);
+  }
+  100% {
+    transform:rotate(-45deg) scale(1);
+  }
+}
+
+@keyframes liked {
+  0% {
+    transform:rotate(-45deg) scale(.8); 
+  }
+  50% {
+    transform:rotate(-45deg) scale(1.25);
+  }
+  100% {
+    transform:rotate(-45deg) scale(1);
+  }
+}
+
 
 @media screen and (max-width: 1399px){
   .blog_grid{
