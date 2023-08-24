@@ -36,6 +36,11 @@
         "content": "Heading Font Styles"
       },
       {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "favicon"
+      },
+      {
         "type": "font_picker",
         "id": "header_text_font",
         "label": "Font",
