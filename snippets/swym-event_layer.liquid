@@ -1,0 +1,80 @@
+<script defer>
+    // Executed after SWYM has loaded all necessary resources.
+
+    function onSwymLoadCallback(swat) {
+        // Add any relevant code here
+
+        // Define the add to wishlist event
+        let event = "sw:addedtowishlist";
+
+        // Define the delete from wishlist event
+        let delete_event = "sw:removedfromwishlist";
+
+        // Define the add to wishlist event listener function
+        let listener = function (e) {
+            var data = e.detail.d;
+            console.log("YAY! Added the product to wishlist", data);
+        };
+
+        // Define the delete from wishlist event listener function
+        let delete_listener = function (e) {
+            var data = e
+                .detail
+                .d
+                .productData;
+            console.log("YAY! Removed the product from wishlist", data);
+            // update button state here...
+        };
+
+        // Add listener for the 'addedtowishlist' event to the Swym Event Layer
+        swat.evtLayer.addEventListener(event, listener);
+
+        // Add listener for the 'removedfromwishlist' event to the Swym Event Layer
+        swat.evtLayer.addEventListener(delete_event, delete_listener);
+
+        // Fetch the users wishlist and print it to the console.
+        swat.fetch(function (allWishlistedProducts) {
+
+            // Prints the current users wishlist -
+            // console.log("successfully retrieved the wishlist", allWishlistedProducts);
+
+
+            // Match Product Ids and conditionally render .heart__beat.liked css class if item is on wishlist
+
+            // select all store products that have an add to wishlist button
+            const storeProducts = document.querySelectorAll(".swym-button");
+
+            // create an array that will hold products that are on wishlist
+            const productsOnWishlist = [];
+
+            // create an empty array that will hold product ids that are on wishlist
+            const wishlistProductIds = [];
+
+            // add all wishlist product ids into wishlistProductIds array
+            for (let i = 0; i < allWishlistedProducts.length; i++) {
+                wishlistProductIds.push(allWishlistedProducts[i].empi);
+            }
+
+            // conditionally render .heart__beat.liked css class if user has item on their wishlist
+            for (let i = 0; i < storeProducts.length; i++) {
+                for (let j = 0; j < wishlistProductIds.length; j++) {
+                    if (Number(storeProducts[i].getAttribute("data-product-id")) === wishlistProductIds[j]) {
+                        storeProducts[i].classList.add("liked");
+                    }
+                }
+            }
+
+            // remove product from wishlist and conditionally render css class
+
+
+        }, function (error) {
+            console.log("There was an error while fetching the wishlist", error)
+        });
+
+    }
+    if (!window.SwymCallbacks) {
+        window.SwymCallbacks = [];
+    }
+    window.SwymCallbacks.push(onSwymLoadCallback);
+
+</script>

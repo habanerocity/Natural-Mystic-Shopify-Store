@@ -6,6 +6,7 @@
         <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible"/>
         <meta name="description" content="{{ page_description | escape }}"/>
         <link rel="canonical" href="{{ canonical_url }}"/>
+        <link rel="icon" type="image/png" href="{{ 'nm-icon.png' | asset_url }}">
         <link href="https://unpkg.com/flickity@2/dist/flickity.min.css" rel="stylesheet">
         <meta content="width=device-width,initial-scale=1,shrink-to-fit=no" name="viewport"/>
         {{
@@ -30,7 +31,8 @@
 
             {{ content_for_layout }}
         </main>
-
+        {% include 'swymSnippet' %}
+        {% include 'swym-event_layer' %}
         {% section 'footer-section' %}
 
         <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
