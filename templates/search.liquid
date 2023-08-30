@@ -15,14 +15,14 @@
                     <input class="form-check-input" id="product_type" name="type" type="checkbox" value="page">
                     <label class="form-check-label" for=" product_type">Page</label>
                 </div>
-                <button class="btn btn-primary" type="submit">Search</button>
+                <button class="btn btn-primary rust__button" type="submit">Search</button>
             </form>
         </div>
         <div class="row">
             <h1 class="text-center">{{ search.results_count }}
                 search results</h1>
         </div>
-        <div class="row row-cols-3 g-2 my-5">
+        <div class="row row-cols-4 g-2 my-5">
             {% if search.performed %}
                 {% for item in search.results %}
                     {% if item.object_type == 'product' %}
@@ -30,12 +30,12 @@
                             <div class="card shadow">
                                 {% if item.featured_image %}
                                     <a href="{{ item.url | within: collection }}" title="{{ item.title | escape }}">
-                                        {{ item.featured_image.src | img_url: 'medium' | img_tag: item.featured_image.alt, 'card-img-top' }}
+                                        {{ item.featured_image.src | img_url: 'medium' | img_tag: item.featured_image.alt, 'card-img-top pic' }}
                                     </a>
                                 {% endif %}
                             {% endif %}
                             <div class="card-body">
-                                <h5>{{ item.title | link_to: item.url }}</h5>
+                                <h5 class="text-decoration-none">{{ item.title | link_to: item.url | replace: '<a', '<a class="text-decoration-none text-dark"' }}</h5>
                                 <p>{{ item.content | strip_html | truncatewords: 50 }}</p>
                             </div>
                         </div>
@@ -45,7 +45,8 @@
                         <div class="card shadow">
                             {% if item.image %}
                                 <a href="{{ item.url | within: collection }}" title="{{ item.title | escape }}">
-                                    {{ item.image.src | img_url: 'medium' | img_tag: item.image.alt, 'card-img-top' }}
+                                    {{ item.image.src | img_url: 'medium' | img_tag: item.image.alt, 'card-img-top pic
+                                    ' }}
                                 </a>
                             {% endif %}
                             <div class="card-body">

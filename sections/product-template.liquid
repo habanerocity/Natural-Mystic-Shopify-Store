@@ -48,7 +48,7 @@
                         
                 </div>
                 {% when "checkout_buttons" %}
-                <button class="btn btn-large w-100 rust bg-transparent btn-add_to_cart rounded mb-3"id="AddToCart" name="add" type="submit">Add To Cart</button>
+                <button class="btn btn-large w-100 rust bg-transparent btn-add_to_cart mb-3"id="AddToCart" name="add" type="submit">Add To Cart</button>
                 {% if section.settings.dynamic_buttons_checkbox == true %}
                 {{ form | payment_button }}
                 {% endif %}     
