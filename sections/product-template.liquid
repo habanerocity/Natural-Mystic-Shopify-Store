@@ -19,9 +19,15 @@
             {% for block in section.blocks %}
                 {% case block.type %}
                 {% when "title" %}
-                <h2 class="dot">{{ product.title }}</h2>
+                <h1 class="dot">{{ product.title }}</h1>
                 {% when "price" %}
-                <h1 id="productPrice">{{ current_product.price | money}}</h1>
+                
+                {% if product.selected_or_first_available_variant.compare_at_price %}
+                <span class="h6">Was</span><h4 id="productCompareAtPrice" class="text-decoration-line-through text-decoration-red">{{ current_product.compare_at_price | money}}</h4>
+                <span class="h4">Now</span>
+                {% endif %}
+                <h2 id="productPrice">{{ current_product.price | money}}</h2>
+                
                 {% when "variant_selector" %}                                
                 <div class="mb-3">
                     <label for="productSelect" class="form-label" >Size</label>

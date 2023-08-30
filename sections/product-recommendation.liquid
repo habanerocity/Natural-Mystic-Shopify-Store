@@ -1,10 +1,24 @@
+<!-- {%- capture flickity_options -%}
+    {
+                                      "prevNextButtons": true,
+                                      "autoPlay": 5000,
+                                      "contain": true,
+                                      "pageDots": true,
+                                      "contain": true,
+                                      "cellAlign": "left",
+                                      "groupCells": false,
+                                      "arrowShape": {"x0": 20, "x1": 60, "y1": 40, "x2": 60, "y2": 35, "x3": 25}
+                                    }
+{%- endcapture -%} -->
 <div class="container">
     <section class="row justify-content-center my-5" id="product_recommendation">
         <div>
             <h1 class="text-center">
                 Related Items
             </h1>
-            <div class="row text-left" id="product_recommendation_body"></div>
+            <!-- <div class="products-carousel js-flickity" data-flickity='{{ flickity_options }}'> -->
+            <div class="row justify-content-center text-left" id="product_recommendation_body"></div>
+            <!-- </div> -->
         </div>
     </section>
 </div>
@@ -20,7 +34,7 @@
                 let card;
 
                 card = "<div class=\"flex_container col-auto col-sm-12 col-md-3 g-3\">";
-                card += "<div class=\"card product_item\" style=\"width: 18rem;\">";
+                card += "<div class=\"card product_item col\">";
                 if (product.images.length > 0) {
                     card += "<a class=\"dot text-decoration-none blog_link\" href=\"" + product.url + "\"><img class=\"card-img-top card-img-size\" src=\"" + product.images[0] + "\"></a>";
                 }

@@ -173,6 +173,11 @@ input::placeholder {
     width: 30%;
   }
 
+  .text-decoration-red {
+    text-decoration-color: #C52C03!important; /* You can choose other decoration styles (e.g., underline, overline, line-through) */
+    color: black; /* Set the text color */
+  }
+
   .dot {
       color: #C52C03;
   }

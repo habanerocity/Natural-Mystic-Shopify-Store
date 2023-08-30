@@ -201,6 +201,34 @@ function fetchPredictiveSearch() {
 
 }
 
+//product recommendation
+
+// let productRecommendationBody = document.getElementById("product_recommendation_body");
+
+// fetch("/recommendations/products.json?product_id={{ product.id }}").then((res) => res.json()).then(({ products }) => {
+//     console.log(products);
+
+//     if (products.length > 0) {
+//         products.forEach(function (product, index) {
+//             let card;
+
+//             card = "<div class=\"flex_container col-auto col-sm-12 col-md-3 g-3\">";
+//             card += "<div class=\"card product_item\" style=\"width: 18rem;\">";
+//             if (product.images.length > 0) {
+//                 card += "<a class=\"dot text-decoration-none blog_link\" href=\"" + product.url + "\"><img class=\"card-img-top card-img-size\" src=\"" + product.images[0] + "\"></a>";
+//             }
+//             card += "<div class=\"card-body\">";
+//             card += "<h3><a class=\"dot text-decoration-none blog_link\" href=\"" + product.url + "\">" + product.title + "</a>" + "</h3>";
+//             card += "<p>" + `$${
+//                 (product.price / 100).toFixed(2)
+//                 }` + "</p>";
+//             card += "</div></div>";
+
+//             productRecommendationBody.innerHTML += card;
+//         })
+//     }
+// });
+
 //wishlist animation
 
 const hearts = document.querySelectorAll('.heart__beat');
@@ -221,6 +249,7 @@ for (const heart of hearts) {
 const quantityNode = document.querySelectorAll('#Quantity');
 const selectVariants = document.querySelectorAll('#productSelect');
 const productPrice = document.getElementById("productPrice");
+const productCompareAtPrice = document.getElementById("productCompareAtPrice");
 const total = document.getElementById("totalPrice");
 
 let quantity = 1;
@@ -244,14 +273,19 @@ selectVariants.forEach((item) => {
 
 
         fetch(url).then((res) => res.json()).then((data) => {
+            console.log(data);
             for (let i = 0; i < data.variants.length; i++) {
                 const variantIdNumber = parseInt(e.target.value);
                 //match data variant id
                 if (data.variants[i].id === variantIdNumber) {
-                    const price = Number(data.variants[i].price / 100).toFixed(2);
-
                     //set product price
+                    const price = Number(data.variants[i].price / 100).toFixed(2);
                     productPrice.innerHTML = `$${price}`;
+
+                    //set compare at price
+                    const compare_at_price = Number(data.variants[i].compare_at_price / 100).toFixed(2);
+                    productCompareAtPrice.innerHTML = `$${compare_at_price}`;
+
                     //set total price before shipping and tax
                     // total.innerHTML = `Total price before tax and shipping: <br> $${(Number(price) * quantity).toFixed(2)}`;
                 }
