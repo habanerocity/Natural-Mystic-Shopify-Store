@@ -186,10 +186,10 @@ function fetchPredictiveSearch() {
 
             products.forEach(function (product, index) {
                 document.getElementById('search_results_body').innerHTML += `
-                    <div class="card" style="width: 19rem;">
-                        <img src="${product.image}" class="card-img-top">
-                        <div class="card-body">
-                            <h5 class="card-title">${product.title}</h5>
+                    <div class="card my-5" style="width: 19rem;">
+                    <a class="text-decoration-none" href="https://natural-mystic-foods.myshopify.com${product.url}"><img src="${product.image}" class="card-img-top"></a>
+                        <div class="card-body ">
+                            <a class="text-decoration-none" href="https://natural-mystic-foods.myshopify.com${product.url}"><h5 class="card-title dot">${product.title}</h5></a>
                             <p class="card-text">$${product.price}</p>
                         </div>
                     </div>

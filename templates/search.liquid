@@ -22,7 +22,7 @@
             <h1 class="text-center">{{ search.results_count }}
                 search results</h1>
         </div>
-        <div class="row row-cols-4 g-2 my-5">
+        <div class="row row-cols-1 row-cols-xl-4 row-cols-lg-3 row-cols-md-3 row-cols-sm-2 g-2 my-5">
             {% if search.performed %}
                 {% for item in search.results %}
                     {% if item.object_type == 'product' %}
@@ -35,7 +35,7 @@
                                 {% endif %}
                             {% endif %}
                             <div class="card-body">
-                                <h5 class="text-decoration-none">{{ item.title | link_to: item.url | replace: '<a', '<a class="text-decoration-none text-dark"' }}</h5>
+                                <h5 class="text-decoration-none">{{ item.title | link_to: item.url | replace: '<a', '<a class="text-decoration-none dot"' }}</h5>
                                 <p>{{ item.content | strip_html | truncatewords: 50 }}</p>
                             </div>
                         </div>
