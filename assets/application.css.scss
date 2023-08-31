@@ -141,6 +141,15 @@ input::placeholder {
     border-radius: 2px;
   }
 
+  .not_available{
+    background-color: rgb(216, 61, 82);
+    width: 30%;
+    color: #fff;
+    font-size: 12px;
+    padding: 2px 8px;
+    border-radius: 2px;
+  }
+
   .category {
     border-right: black solid 2px;
     font-weight: 100!important;
@@ -730,9 +739,9 @@ input:focus {
     background-color: transparent;
   }
   
-  .slider-container{
-    padding-top: 8rem!important;
-  }
+  // .slider-container{
+  //   padding-top: 8rem!important;
+  // }
 
   .ico{
     padding:0!important;

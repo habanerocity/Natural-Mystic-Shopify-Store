@@ -1,14 +1,14 @@
 {%- capture flickity_options -%}
     {
-                                                  "prevNextButtons": true,
-                                                  "autoPlay": 5000,
-                                                  "contain": true,
-                                                  "pageDots": false,
-                                                  "contain": true,
-                                                  "cellAlign": "left",
-                                                  "groupCells": false,
-                                                  "arrowShape": {"x0": 20, "x1": 60, "y1": 40, "x2": 60, "y2": 35, "x3": 25}
-                                                }
+                                                      "prevNextButtons": true,
+                                                      "autoPlay": 5000,
+                                                      "contain": true,
+                                                      "pageDots": false,
+                                                      "contain": true,
+                                                      "cellAlign": "left",
+                                                      "groupCells": false,
+                                                      "arrowShape": {"x0": 20, "x1": 60, "y1": 40, "x2": 60, "y2": 35, "x3": 25}
+                                                    }
 {%- endcapture -%}
 <section class="container slider-container py-5">
     <div class="featured-collection-slider page-width">
@@ -41,7 +41,11 @@
                     {% endif %}
                     <div class="card-body">
                         <div class="swym-button swym-add-to-wishlist heart__beat" data-with-epi="true" data-swaction="addToWishlist" data-product-id="{{ product.id }}" data-variant-id="{{ product.variants[0].id }}" data-product-url="{{ shop.url }}{{ product.url }}"></div>
+                        {% if product.available %}
                         <h4 class="available">In Stock</h4>
+                        {% else %}
+                        <h4 class="not_available">Out of Stock</h4>
+                        {% endif %}
                         <h5>
                             <a class="product-link" href="{{ product.url }}">{{ product.title }}</a>
                         </h5>
@@ -57,7 +61,11 @@
                             <!-- <i class="fa-solid fa-truck-fast"></i> -->
                             <span class="pckg">📦&nbsp;</span>Free shipping with $25+ order
                         </p>
-                        <a href="{{ product.url }}" class="btn btn-sm rust">Shop Now</a>
+                        {% if product.available %}
+                            <a href="{{ product.url }}"></a><button class="btn btn-sm rust">Shop Now</button></a>
+                        {% else %}
+                            <a class="btn btn-sm rust" href="{{ product.url }}">View Product</a>
+                        {% endif %}
                     </div>
                 </div>
             {% endfor %}
