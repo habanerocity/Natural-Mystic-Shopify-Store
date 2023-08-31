@@ -733,9 +733,10 @@ input:focus {
   .slider-container{
     padding-top: 8rem!important;
   }
-  // .ico{
-  //   padding:0!important;
-  // }
+
+  .ico{
+    padding:0!important;
+  }
     
   .grid-item {
     background-color: transparent!important;
@@ -753,7 +754,8 @@ input:focus {
 }
 
   .grid-item {
-    padding-top: 1rem;
+    // padding-top: 1rem;
+    border: 2px solid;
   }
 
   .contactless {
@@ -761,17 +763,25 @@ input:focus {
     padding-bottom: 8px;
   }
 
-  .horizontal_grid-item {
-    margin-top: 8px!important;
+  // .horizontal_grid-item {
+  //   margin-top: 8px!important;
+  // }
+
+  .cc{
+    margin-top:16px;
+  }
+
+  .truck{
+    margin-top: 3px;
   }
 
   .horizontal_grid_item{
-    padding: 15px!important;
+    padding: 12px!important;
   }
 
   .money {
     flex-direction: column;
-    padding-top: 1rem;
+    // padding-top: 1rem;
     padding-bottom: 8px;
   }
 

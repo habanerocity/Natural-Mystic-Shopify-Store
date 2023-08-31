@@ -101,10 +101,11 @@ if (modalAddToCartForm != null) {
 
             fetch(url).then((res) => res.json()).then((data) => {
                 for (let i = 0; i < data.variants.length; i++) {
+                    console.log(data);
                     const variantIdNumber = parseInt(e.target.value);
                     //match data variant id
                     if (data.variants[i].id === variantIdNumber) {
-                        const price = (data.variants[i].price / 100);
+                        const price = (data.variants[i].price / 100).toFixed(2);
 
                         productInfoPrice.innerHTML = `$${price}`;
                     }

@@ -1,14 +1,14 @@
 {%- capture flickity_options -%}
     {
-          "prevNextButtons": true,
-          "autoPlay": 5000,
-          "contain": true,
-          "pageDots": false,
-          "contain": true,
-          "cellAlign": "left",
-          "groupCells": false,
-          "arrowShape": {"x0": 20, "x1": 60, "y1": 40, "x2": 60, "y2": 35, "x3": 25}
-        }
+                                                  "prevNextButtons": true,
+                                                  "autoPlay": 5000,
+                                                  "contain": true,
+                                                  "pageDots": false,
+                                                  "contain": true,
+                                                  "cellAlign": "left",
+                                                  "groupCells": false,
+                                                  "arrowShape": {"x0": 20, "x1": 60, "y1": 40, "x2": 60, "y2": 35, "x3": 25}
+                                                }
 {%- endcapture -%}
 <section class="container slider-container py-5">
     <div class="featured-collection-slider page-width">
@@ -45,7 +45,13 @@
                         <h5>
                             <a class="product-link" href="{{ product.url }}">{{ product.title }}</a>
                         </h5>
-                        <p>{{ product.price | money }}</p>
+
+                        <div>
+                            {% if product.selected_or_first_available_variant.compare_at_price %}
+                                <span class="text-decoration-line-through text-decoration-red">{{ product.compare_at_price | money}}</span>
+                            {% endif %}
+                            <span>{{ product.price | money }}</span>
+                        </div>
 
                         <p class="small-font">
                             <!-- <i class="fa-solid fa-truck-fast"></i> -->
