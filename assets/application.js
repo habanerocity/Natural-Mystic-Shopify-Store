@@ -55,12 +55,13 @@ if (document.getElementById('productInfoModal') != null) {
 if (productInfoAnchors.length > 0) {
     productInfoAnchors.forEach(item => {
         item.addEventListener('click', e => {
-            const url = '/products/' + item.getAttribute('product-handle') + '.js';
+            const url = '/products/' + item.getAttribute('data-product-handle') + '.js';
 
             fetch(url).then((res) => res.json()).then((data) => {
                 document.getElementById("productInfoImg").src = data.images[0];
                 document.getElementById("productInfoTitle").innerHTML = data.title;
-                document.getElementById("productInfoPrice").innerHTML = item.getAttribute('product-price');
+                document.getElementById("productInfoComparePrice").innerHTML = item.getAttribute('data-product-compare-at-price');
+                document.getElementById("productInfoPrice").innerHTML = item.getAttribute('data-product-price');
                 document.getElementById("productInfoDescription").innerHTML = data.description;
 
                 const variants = data.variants;
@@ -80,13 +81,14 @@ if (productInfoAnchors.length > 0) {
 //modal add to cart functionality
 
 const modalAddToCartForm = document.querySelector('#addToCartForm');
+// const prevPriceComparisonDiv = document.querySelectorAll('.prevPriceComparison');
 let modalItemID = document.querySelectorAll('#modalItemID');
 let handle;
 
 //add click event listener to access product handle
 productInfoAnchors.forEach((item) => {
     item.addEventListener('click', (e) => {
-        handle = item.getAttribute('product-handle');
+        handle = item.getAttribute('data-product-handle');
     })
 })
 
@@ -101,12 +103,17 @@ if (modalAddToCartForm != null) {
 
             fetch(url).then((res) => res.json()).then((data) => {
                 for (let i = 0; i < data.variants.length; i++) {
-                    console.log(data);
+
                     const variantIdNumber = parseInt(e.target.value);
                     //match data variant id
                     if (data.variants[i].id === variantIdNumber) {
-                        const price = (data.variants[i].price / 100).toFixed(2);
+                        // prevPriceComparisonDiv.classList.remove("d-none");
 
+                        const price = (data.variants[i].price / 100).toFixed(2);
+                        const priceComparison = (data.variants[i].compare_at_price / 100).toFixed(2);
+
+
+                        productInfoComparePrice.innerHTML = `$${priceComparison}`;
                         productInfoPrice.innerHTML = `$${price}`;
                     }
                 }
@@ -269,9 +276,8 @@ let quantity = 1;
 
 selectVariants.forEach((item) => {
     item.addEventListener('change', (e) => {
-        const url = '/products/' + item.getAttribute('product-handle') + '.js';
+        const url = '/products/' + item.getAttribute('data-product-handle') + '.js';
         // let sliced = productPrice.innerHTML.slice(1);
-
 
         fetch(url).then((res) => res.json()).then((data) => {
             console.log(data);
@@ -279,13 +285,14 @@ selectVariants.forEach((item) => {
                 const variantIdNumber = parseInt(e.target.value);
                 //match data variant id
                 if (data.variants[i].id === variantIdNumber) {
-                    //set product price
-                    const price = Number(data.variants[i].price / 100).toFixed(2);
-                    productPrice.innerHTML = `$${price}`;
-
+                    console.log('match!');
                     //set compare at price
                     const compare_at_price = Number(data.variants[i].compare_at_price / 100).toFixed(2);
                     productCompareAtPrice.innerHTML = `$${compare_at_price}`;
+
+                    //set product price
+                    const price = Number(data.variants[i].price / 100).toFixed(2);
+                    productPrice.innerHTML = `$${price}`;
 
                     //set total price before shipping and tax
                     // total.innerHTML = `Total price before tax and shipping: <br> $${(Number(price) * quantity).toFixed(2)}`;

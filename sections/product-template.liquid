@@ -31,7 +31,7 @@
                 {% when "variant_selector" %}                                
                 <div class="mb-3">
                     <label for="productSelect" class="form-label" >Size</label>
-                    <select class="form-select" id="productSelect" product-handle="{{ product.handle }}" name="id">
+                    <select class="form-select" id="productSelect" data-product-handle="{{ product.handle }}" name="id">
                         {% for variant in product.variants %}
                             {% if variant.available %}
                                 <option value="{{ variant.id }}">
@@ -54,7 +54,7 @@
                         
                 </div>
                 {% when "checkout_buttons" %}
-                {% if variant.available %}
+                {% if product.selected_or_first_available_variant.available %}
                 <button class="btn btn-large w-100 rust bg-transparent btn-add_to_cart mb-3"id="AddToCart" name="add" type="submit">Add To Cart</button>
                 {% else %}
                 <button class="btn btn-large w-100 rust bg-transparent btn-add_to_cart mb-3" id="AddToCart" alt="item out of stock!" name="add" type="submit" disabled>Out Of Stock</button>
