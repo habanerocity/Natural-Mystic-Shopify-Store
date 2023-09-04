@@ -55,9 +55,13 @@ if (document.getElementById('productInfoModal') != null) {
 if (productInfoAnchors.length > 0) {
     productInfoAnchors.forEach(item => {
         item.addEventListener('click', e => {
+
             const url = '/products/' + item.getAttribute('data-product-handle') + '.js';
 
             fetch(url).then((res) => res.json()).then((data) => {
+                const compareDiv = document.getElementById("compareDiv");
+                const modalNow = document.getElementById("modalNow");
+
                 document.getElementById("productInfoImg").src = data.images[0];
                 document.getElementById("productInfoTitle").innerHTML = data.title;
                 document.getElementById("productInfoComparePrice").innerHTML = item.getAttribute('data-product-compare-at-price');
@@ -72,11 +76,29 @@ if (productInfoAnchors.length > 0) {
                 variants.forEach(function (variant, index) {
                     variantSelect.options[variantSelect.options.length] = new Option(variant.option1, variant.id);
                 })
+
+                //Render Compare at Price for Modal
+                if (data.compare_at_price != null) {
+                    compareDiv.classList.remove("d-none");
+                    modalNow.classList.remove("d-none");
+                }
+
+                //RemoveCompare at Price for Modal
+                if (data.compare_at_price === null) {
+                    compareDiv.classList.add("d-none");
+                    modalNow.classList.add("d-none");
+                }
+
+                //disable add to cart button if product is not available
+
+
                 productModal.show();
+
             })
         })
     })
 }
+
 
 //modal add to cart functionality
 
@@ -102,6 +124,7 @@ if (modalAddToCartForm != null) {
             const url = '/products/' + handle + '.js';
 
             fetch(url).then((res) => res.json()).then((data) => {
+                console.log(data);
                 for (let i = 0; i < data.variants.length; i++) {
 
                     const variantIdNumber = parseInt(e.target.value);

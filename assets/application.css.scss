@@ -149,12 +149,14 @@ input::placeholder {
     font-size: 12px;
     white-space: nowrap;
     border-radius: 2px;
+    line-height: auto!important;
   }
 
   .not_available{
     color: #fff;
     font-size: 12px;
     white-space: nowrap;
+    line-height: auto!important;
   }
 
   .category {
