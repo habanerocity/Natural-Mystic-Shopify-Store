@@ -277,7 +277,6 @@ let quantity = 1;
 selectVariants.forEach((item) => {
     item.addEventListener('change', (e) => {
         const url = '/products/' + item.getAttribute('data-product-handle') + '.js';
-        // let sliced = productPrice.innerHTML.slice(1);
 
         fetch(url).then((res) => res.json()).then((data) => {
             console.log(data);
@@ -285,10 +284,12 @@ selectVariants.forEach((item) => {
                 const variantIdNumber = parseInt(e.target.value);
                 //match data variant id
                 if (data.variants[i].id === variantIdNumber) {
-                    console.log('match!');
+
                     //set compare at price
-                    const compare_at_price = Number(data.variants[i].compare_at_price / 100).toFixed(2);
-                    productCompareAtPrice.innerHTML = `$${compare_at_price}`;
+                    if (productCompareAtPrice) {
+                        const compare_at_price = Number(data.variants[i].compare_at_price / 100).toFixed(2);
+                        productCompareAtPrice.innerHTML = `$${compare_at_price}`;
+                    }
 
                     //set product price
                     const price = Number(data.variants[i].price / 100).toFixed(2);
