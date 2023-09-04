@@ -130,24 +130,31 @@ input::placeholder {
   width: 100%;
   }
 
+.available-container{
+  padding: 2px;
+  border-radius: 2px;
+  background-color: #4BB543;
+  width: 22%;
+}
+
+.not_available-container{
+  padding: 2px;
+  border-radius: 2px;
+  background-color: rgb(216, 61, 82);
+  width: 30%;
+}
+
 .available {
-    background-color: #4BB543;
-    // position: absolute;
-    // top: 315px;
-    width: 22%;
     color: #fff;
     font-size: 12px;
-    padding: 2px 8px;
+    white-space: nowrap;
     border-radius: 2px;
   }
 
   .not_available{
-    background-color: rgb(216, 61, 82);
-    width: 30%;
     color: #fff;
     font-size: 12px;
-    padding: 2px 8px;
-    border-radius: 2px;
+    white-space: nowrap;
   }
 
   .category {

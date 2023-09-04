@@ -42,9 +42,13 @@
                     <div class="card-body">
                         <div class="swym-button swym-add-to-wishlist heart__beat" data-with-epi="true" data-swaction="addToWishlist" data-product-id="{{ product.id }}" data-variant-id="{{ product.variants[0].id }}" data-product-url="{{ shop.url }}{{ product.url }}"></div>
                         {% if product.available %}
-                        <h4 class="available">In Stock</h4>
+                        <div class="available-container d-flex justify-content-center align-items-center" >
+                            <h4 class="available mb-0" >In Stock</h4>
+                        </div>
                         {% else %}
-                        <h4 class="not_available">Out of Stock</h4>
+                        <div class="not_available-container d-flex justify-content-center align-items-center" >
+                            <h4 class="not_available mb-0">Out of Stock</h4>
+                        </div>
                         {% endif %}
                         <h5>
                             <a class="product-link" href="{{ product.url }}">{{ product.title }}</a>
