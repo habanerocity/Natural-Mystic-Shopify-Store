@@ -43,6 +43,13 @@ if (document.getElementById('forgotPassword') != null) {
 
 const productInfoAnchors = document.querySelectorAll("#productInfoAnchor");
 
+//item added to cart modal
+
+let addedToCartModal;
+
+if (document.getElementById('addedToCartModal') != null) {
+    itemAddedModal = new bootstrap.Modal(document.getElementById('addedToCartModal'), {});
+};
 
 //product modal
 
@@ -61,6 +68,7 @@ if (productInfoAnchors.length > 0) {
             fetch(url).then((res) => res.json()).then((data) => {
                 const compareDiv = document.getElementById("compareDiv");
                 const modalNow = document.getElementById("modalNow");
+                const addToCartBtn = document.getElementById("AddToCart");
 
                 document.getElementById("productInfoImg").src = data.images[0];
                 document.getElementById("productInfoTitle").innerHTML = data.title;
@@ -90,7 +98,15 @@ if (productInfoAnchors.length > 0) {
                 }
 
                 //disable add to cart button if product is not available
+                if (data.available === false) {
+                    addToCartBtn.disabled = true;
+                    addToCartBtn.innerHTML = 'Out of Stock';
+                }
 
+                if (data.available === true) {
+                    addToCartBtn.disabled = false;
+                    addToCartBtn.innerHTML = 'Add to Cart';
+                }
 
                 productModal.show();
 
@@ -130,11 +146,8 @@ if (modalAddToCartForm != null) {
                     const variantIdNumber = parseInt(e.target.value);
                     //match data variant id
                     if (data.variants[i].id === variantIdNumber) {
-                        // prevPriceComparisonDiv.classList.remove("d-none");
-
                         const price = (data.variants[i].price / 100).toFixed(2);
                         const priceComparison = (data.variants[i].compare_at_price / 100).toFixed(2);
-
 
                         productInfoComparePrice.innerHTML = `$${priceComparison}`;
                         productInfoPrice.innerHTML = `$${price}`;
@@ -168,7 +181,9 @@ if (modalAddToCartForm != null) {
             body: JSON.stringify(formData)
         }).then((res) => {
             return res.json();
-        }).then(() => update_cart()).catch((err) => {
+        }).then(() => {
+            return update_cart();
+        }).catch((err) => {
             console.error('Error: ' + err);
         })
     })

@@ -5,7 +5,7 @@
 {% assign placeholder = 'lifestyle-2' %}
 {{ placeholder | placeholder_svg_tag: 'placeholder-svg' }}
 {% endif %} -->
-                                                                                                                                                                                                                                                                                <!-- <div class="position-relative text-center bg-light p-3 p-md-5">
+                                                                                                                                                                                                                                                                                                    <!-- <div class="position-relative text-center bg-light p-3 p-md-5">
         <div class="col-md-5 p-lg-5 mx-auto my-5">
             <h1 class="display-4 dot">{{ collection.title}}</h1>
             <p class="lead">Browse Our Curated Selection of the World's Finest Spices</p>
@@ -139,11 +139,22 @@
                         <input class="col-2 text-center mx-3 " id="modalItemQuantity" min="1" name="quantity" type="number" value="1">
                         <!-- <button class="btn btn-success col-auto" type="submit">Add to cart</button> -->
 
-                        <button class="btn btn-large w-100 rust bg-transparent btn-add_to_cart mb-3" id="AddToCart" name="add" type="submit">Add To Cart</button>
+                        <button class="btn btn-large w-100 rust bg-transparent btn-add_to_cart" id="AddToCart" name="add" type="submit">Add To Cart</button>
 
                     </div>
                 </form>
             </div>
+        </div>
+    </div>
+</div>
+
+<div aria-hidden="true" class="modal fade" id="addedToCartModal" tabindex="-2">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button aria-label="close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+        </div>
+        <div class="modal-body">
+            <h3>Item has been added to cart</h3>
         </div>
     </div>
 </div>
