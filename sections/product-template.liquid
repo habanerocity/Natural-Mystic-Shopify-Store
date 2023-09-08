@@ -55,9 +55,9 @@
                 </div>
                 {% when "checkout_buttons" %}
                 {% if product.selected_or_first_available_variant.available %}
-                <button class="btn btn-large w-100 rust bg-transparent btn-add_to_cart mb-3"id="AddToCart" name="add" type="submit">Add To Cart</button>
+                <button class="btn btn-large w-100 rust bg-transparent btn-add_to_cart mb-3 py-2"id="AddToCart" name="add" type="submit">Add To Cart</button>
                 {% else %}
-                <button class="btn btn-large w-100 rust bg-transparent btn-add_to_cart mb-3" id="AddToCart" alt="item out of stock!" name="add" type="submit" disabled>Out Of Stock</button>
+                <button class="btn btn-large w-100 rust bg-transparent btn-add_to_cart mb-3 py-2" id="AddToCart" alt="item out of stock!" name="add" type="submit" disabled>Out Of Stock</button>
                 {% endif %}
                 {% if section.settings.dynamic_buttons_checkbox == true %}
                 {{ form | payment_button }}
@@ -79,6 +79,18 @@
         </div>
     </div>
 </div>
+
+<!-- <div aria-hidden="true" class="modal fade" id="addedToCartModal" tabindex="-2">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button aria-label="close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+        </div>
+        <div class="modal-body">
+            <h3>Item has been added to cart</h3>
+        </div>
+    </div>
+</div> -->
+
 
 {% schema %}
 {

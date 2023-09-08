@@ -325,7 +325,7 @@ input::placeholder {
     border-width: 2px;
     color: #000;
     transition: .5s all;
-    border-radius: 0!important;
+    border-radius: 4px!important;
 }
 
 .color-white {
@@ -336,8 +336,21 @@ input::placeholder {
   background-color: #C52C03;
 }
 
+// .modal_window{
+//     text-align: center;
+//     z-index: 999999999999999999999999999999999999;
+//     position: absolute;
+//     top: 50%;
+//     left: 50%;
+//     -webkit-transform: translate(-50%,-50%);
+//     transform: translate(-50%,-50%);
+//     position: fixed;
+//     z-index: 900;
+//     color: #1b1b1b;
+// }
+
 .footer-logo{
-  width: 10rem;ç
+  width: 10rem;
 }
 
 .rust__button{
