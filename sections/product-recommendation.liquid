@@ -17,7 +17,7 @@
                 Related Items
             </h1>
             <!-- <div class="products-carousel js-flickity" data-flickity='{{ flickity_options }}'> -->
-            <div class="row justify-content-center text-left" id="product_recommendation_body"></div>
+            <div class="row justify-content-start text-left" id="product_recommendation_body"></div>
             <!-- </div> -->
         </div>
     </section>
@@ -33,7 +33,7 @@
             products.forEach(function (product, index) {
                 let card;
 
-                card = "<div class=\"flex_container col-auto col-sm-12 col-md-3 g-3\">";
+                card = "<div class=\"flex_container col-6 col-sm-6 col-md-3 g-3\">";
                 card += "<div class=\"card product_item col\">";
                 if (product.images.length > 0) {
                     card += "<a class=\"dot text-decoration-none blog_link\" href=\"" + product.url + "\"><img class=\"card-img-top card-img-size\" src=\"" + product.images[0] + "\"></a>";
