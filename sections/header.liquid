@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
     <div class="container">
         {% for block in section.blocks %}
-            <a class="navbar-brand p-0" href="https://natural-mystic-foods.myshopify.com/"><img src="{{ block.settings.store-logo | img_url: '40x40' }}" class="p-0"/></span>
+            <a class="navbar-brand p-0" href="https://natural-mystic-foods.myshopify.com/"><img src="{{ block.settings.store-logo | img_url: '40x40' }}" alt="store logo" class="p-0"/></span>
         </a>
         {% endfor %}
         <button aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbarNav" data-bs-toggle="collapse" type="button">
@@ -74,7 +74,7 @@
                     <div class="search-box">
                         <input id="searchInputField" name="q" placeholder="Search..." type="text">
                         <button class="search_btn" type="submit">
-                            <img class="mag_glass" src="https://i.postimg.cc/5yNv8tTq/magnifying-glass-white.png"/>
+                            <img class="mag_glass" alt="search button" src="https://i.postimg.cc/5yNv8tTq/magnifying-glass-white.png"/>
                         </button>
                     </div>
                 </form>
