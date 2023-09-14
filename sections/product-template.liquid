@@ -23,10 +23,10 @@
                 {% when "price" %}
                 
                 {% if product.selected_or_first_available_variant.compare_at_price %}
-                <span class="h6"><i>Was</i></span><h4 id="productCompareAtPrice" class="text-decoration-line-through text-decoration-red">{{ current_product.compare_at_price | money}}</h4>
+                <span class="h6"><i>Was</i></span><h4 id="productCompareAtPrice" class="text-decoration-line-through text-muted">{{ current_product.compare_at_price | money}}</h4>
                 <span class="h4"><i>Now</i></span>
                 {% endif %}
-                <h2 id="productPrice">{{ current_product.price | money}}</h2>
+                <h2 {% if product.compare_at_price %} class="text-danger" {% endif %} id="productPrice">{{ current_product.price | money}}</h2>
                 
                 {% when "variant_selector" %}                                
                 <div class="mb-3">
