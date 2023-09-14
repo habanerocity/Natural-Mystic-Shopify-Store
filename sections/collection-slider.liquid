@@ -1,14 +1,14 @@
 {%- capture flickity_options -%}
     {
-                                                                              "prevNextButtons": true,
-                                                                              "autoPlay": 5000,
-                                                                              "contain": true,
-                                                                              "pageDots": false,
-                                                                              "contain": true,
-                                                                              "cellAlign": "left",
-                                                                              "groupCells": false,
-                                                                              "arrowShape": {"x0": 20, "x1": 60, "y1": 40, "x2": 60, "y2": 35, "x3": 25}
-                                                                            }
+                                                                                  "prevNextButtons": true,
+                                                                                  "autoPlay": 5000,
+                                                                                  "contain": true,
+                                                                                  "pageDots": false,
+                                                                                  "contain": true,
+                                                                                  "cellAlign": "left",
+                                                                                  "groupCells": false,
+                                                                                  "arrowShape": {"x0": 20, "x1": 60, "y1": 40, "x2": 60, "y2": 35, "x3": 25}
+                                                                                }
 {%- endcapture -%}
 <section class="container slider-container py-5">
     <div class="featured-collection-slider page-width">
@@ -35,7 +35,7 @@
             </div> -->
                 <div class="card mx-4 product_item">
                     {% if image != blank %}
-                        <img class="card-img-top pic" src="{{ image | img_url: 'large' }}" alt="{{ product.title }}">
+                        <img class="card-img-top pic lazyload" data-src="{{ image | img_url: 'large' }}" alt="{{ product.title }}">
                     {% else %}
                         {{ 'product-1' | placeholder_svg_tag: 'card-img-top'}}
                     {% endif %}

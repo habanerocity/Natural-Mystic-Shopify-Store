@@ -1,6 +1,6 @@
 <section class="inner-hero-section overlay">
     {% if section.settings.image != blank %}
-        <img class="hero_pic" src="{{ section.settings.image | img_url: 'master'}}" alt="{{ section.settings.image.alt}}">
+        <img class="hero_pic" srcset="{{ section.settings.image | img_url: 'master'}} 1400w, {{ section.settings.image_mobile | img_url: width: 320 }} 320w" sizes="(max-width: 600px) 320px, 1400px" alt="{{ section.settings.image.alt}}">
     {% else %}
         {% assign placeholder = 'lifestyle-2' %}
         {{ placeholder | placeholder_svg_tag: 'placeholder-svg' }}
@@ -28,6 +28,10 @@
             "type": "image_picker",
             "id": "image",
             "label": "Heading Background Image"
+        }, {
+            "type": "image_picker",
+            "id": "image_mobile",
+            "label": "Heading Background Image for Mobile, 300 w"
         }, {
             "type": "text",
             "id": "title",
