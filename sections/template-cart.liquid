@@ -35,7 +35,7 @@
                                             </td>
                                             <td>
                                                 <a class="text-decoration-none dot" href="{{ item.url }}">{{ item.product.title }}</a>
-                                                <a href="/cart/change?line={{ forloop.index }}&amp;quantity=0"><img class="trash" src="{{ section.settings.delete_icon | img_url: "small"}}" width="15" height="15"></img></a>
+                                                <a href="/cart/change?line={{ forloop.index }}&amp;quantity=0"><img alt="delete item" class="trash" src="{{ section.settings.delete_icon | img_url: "small"}}" width="15" height="15"></img></a>
                                             </td>
                                             <td>
                                                 <p class="small">{{ item.variant.title }}</p>
