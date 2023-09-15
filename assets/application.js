@@ -8,48 +8,18 @@ if (document.getElementById('sort_by') != null) {
     });
 }
 
-if (document.getElementById('AddressCountryNew') != null) {
-    document.getElementById('AddressCountryNew').addEventListener('change', function (e) {
-        const provinces = this.options[this.selectedIndex].getAttribute('data-provinces');
-        const provinceSelector = document.getElementById('AddressProvinceNew');
-        const provinceArray = JSON.parse(provinces);
-
-        if (provinceArray.length < 1) {
-            provinceSelector.setAttribute('disabled', 'disabled');
-        } else {
-            provinceSelector.removeAttribute('disabled');
-        }
-
-        provinceSelector.innerHTML = '';
-        let options = '';
-
-        for (let i = 0; i < provinceArray.length; i++) {
-            options += '<option value="' + provinceArray[i][0] + '>' + provinceArray[i][0] + '</option>'
-        }
-
-        provinceSelector.innerHTML = options;
-    });
-}
+//forgot password script
 
 if (document.getElementById('forgotPassword') != null) {
     document.getElementById("forgotPassword").addEventListener("click", function (e) {
         const element = document.querySelector("#forgot_password_form");
+
         if (element.classList.contains('d-none')) {
             element.classList.remove("d-none");
             element.classList.add('d-block');
         }
     })
 }
-
-const productInfoAnchors = document.querySelectorAll("#productInfoAnchor");
-
-//item added to cart modal
-
-// let addedToCartModal;
-
-// if (document.getElementById('addedToCartModal') != null) {
-//     itemAddedModal = new bootstrap.Modal(document.getElementById('addedToCartModal'), {});
-// };
 
 //product modal
 
@@ -58,6 +28,9 @@ let productModal;
 if (document.getElementById('productInfoModal') != null) {
     productModal = new bootstrap.Modal(document.getElementById('productInfoModal'), {});
 };
+
+const productInfoAnchors = document.querySelectorAll("#productInfoAnchor");
+const productPricing = document.getElementById("productInfoPrice");
 
 if (productInfoAnchors.length > 0) {
     productInfoAnchors.forEach(item => {
@@ -73,8 +46,9 @@ if (productInfoAnchors.length > 0) {
                 document.getElementById("productInfoImg").src = data.images[0];
                 document.getElementById("productInfoTitle").innerHTML = data.title;
                 document.getElementById("productInfoComparePrice").innerHTML = item.getAttribute('data-product-compare-at-price');
-                document.getElementById("productInfoPrice").innerHTML = item.getAttribute('data-product-price');
                 document.getElementById("productInfoDescription").innerHTML = data.description;
+
+                productPricing.innerHTML = item.getAttribute('data-product-price');
 
                 const variants = data.variants;
                 let variantSelect = document.getElementById("modalItemID");
@@ -91,7 +65,7 @@ if (productInfoAnchors.length > 0) {
                     modalNow.classList.remove("d-none");
 
                     //add red font if compare_at_price exists
-                    document.getElementById("productInfoPrice").classList.add('text-danger');
+                    productPricing.classList.add('text-danger');
                 }
 
                 //RemoveCompare at Price for Modal
@@ -100,8 +74,8 @@ if (productInfoAnchors.length > 0) {
                     modalNow.classList.add("d-none");
 
                     //remove red font if there is no compare_at_price
-                    if (document.getElementById("productInfoPrice").classList.contains('text-danger')) {
-                        document.getElementById("productInfoPrice").classList.remove('text-danger');
+                    if (productPricing.classList.contains('text-danger')) {
+                        productPricing.classList.remove('text-danger');
                     }
                 }
 
@@ -123,11 +97,10 @@ if (productInfoAnchors.length > 0) {
     })
 }
 
-
 //modal add to cart functionality
 
 const modalAddToCartForm = document.querySelector('#addToCartForm');
-// const prevPriceComparisonDiv = document.querySelectorAll('.prevPriceComparison');
+
 let modalItemID = document.querySelectorAll('#modalItemID');
 let handle;
 
@@ -139,7 +112,6 @@ productInfoAnchors.forEach((item) => {
 })
 
 if (modalAddToCartForm != null) {
-    let productInfoPrice = document.querySelector('#productInfoPrice');
 
     //update modal variant price
     modalItemID.forEach((item) => {
@@ -148,7 +120,7 @@ if (modalAddToCartForm != null) {
             const url = '/products/' + handle + '.js';
 
             fetch(url).then((res) => res.json()).then((data) => {
-                console.log(data);
+
                 for (let i = 0; i < data.variants.length; i++) {
 
                     const variantIdNumber = parseInt(e.target.value);
@@ -158,7 +130,7 @@ if (modalAddToCartForm != null) {
                         const priceComparison = (data.variants[i].compare_at_price / 100).toFixed(2);
 
                         productInfoComparePrice.innerHTML = `$${priceComparison}`;
-                        productInfoPrice.innerHTML = `$${price}`;
+                        productPricing.innerHTML = `$${price}`;
                     }
                 }
             }
@@ -232,7 +204,6 @@ function fetchPredictiveSearch() {
     fetch(`/search/suggest.json?q=${predictiveSearchInput.value}&resources[type]=product`)
         .then((res) => res.json())
         .then((data) => {
-            console.log(data);
 
             let products = data.resources.results.products;
 
@@ -308,24 +279,12 @@ const total = document.getElementById("totalPrice");
 
 let quantity = 1;
 
-// quantityNode.forEach((item) => {
-//     item.addEventListener('change', (e) => {
-//         quantity = parseInt(e.target.value);
-//         let sliced = productPrice.innerHTML.slice(1);
-
-//         console.log(quantity);
-//         console.log(sliced);
-
-//         total.innerHTML = `Total price before tax and shipping is: <br> $${Number((sliced) * quantity).toFixed(2)}`;
-//     })
-// })
-
 selectVariants.forEach((item) => {
     item.addEventListener('change', (e) => {
         const url = '/products/' + item.getAttribute('data-product-handle') + '.js';
 
         fetch(url).then((res) => res.json()).then((data) => {
-            console.log(data);
+
             for (let i = 0; i < data.variants.length; i++) {
                 const variantIdNumber = parseInt(e.target.value);
                 //match data variant id
@@ -341,8 +300,6 @@ selectVariants.forEach((item) => {
                     const price = Number(data.variants[i].price / 100).toFixed(2);
                     productPrice.innerHTML = `$${price}`;
 
-                    //set total price before shipping and tax
-                    // total.innerHTML = `Total price before tax and shipping: <br> $${(Number(price) * quantity).toFixed(2)}`;
                 }
             }
         }

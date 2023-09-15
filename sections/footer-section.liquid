@@ -17,7 +17,7 @@
                     </div>
                 {% else if block.type == "text" %}
                     <div class="col">
-                        <img data-src="{{ item.logo | img_url: '75x75' }}" class="mb-5 footer-logo lazyload" alt="footer logo">
+                        <img src="{{ item.logo | img_url: '75x75' }}" class="mb-5 footer-logo" alt="footer logo">
                         <h5>{{ item.title }}</h5>
                         <p>{{ item.description }}</p>
                     </div>
