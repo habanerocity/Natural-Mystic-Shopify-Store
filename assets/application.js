@@ -299,7 +299,6 @@ selectVariants.forEach((item) => {
                     //set product price
                     const price = Number(data.variants[i].price / 100).toFixed(2);
                     productPrice.innerHTML = `$${price}`;
-
                 }
             }
         }
