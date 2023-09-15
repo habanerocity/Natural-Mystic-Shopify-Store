@@ -7,6 +7,10 @@ html, body {
     box-sizing: border-box;
 } 
 
+input::placeholder {
+  font-family: sans-serif;
+}
+
 //breadcrumbs css
 
 .breadcrumbs {
@@ -47,23 +51,24 @@ html, body {
   text-decoration: underline;
 }
 
+.btn{
+  font-family: 'Rajdhani'!important;
+}
+
 .btn-post {
   background-color: #C52C03;
   color: white;
   padding: 10px 30px;
   border-radius: 4px;
-}
-
-input::placeholder {
-  font-family: sans-serif;
+  
+  &:hover{
+    background-color: #a92502!important;
+    color:#fff!important;
+  }
 }
 
 .dark_grey {
   background-color: #b3b3b3;
-}
-
-.btn{
-  font-family: 'Rajdhani'!important;
 }
 
 .grey {

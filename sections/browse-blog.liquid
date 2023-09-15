@@ -7,7 +7,7 @@
                 <a href="{{ section.settings.hover_link_1}}">
                     <figure class="snip0015 rounded grid_img">
                         <!-- <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/331810/sample38.jpg" alt="sample38"/> -->
-                        <img class="grid_img" src="{{ section.settings.image_1 | img_url: 'large' }}" alt="{{ section.settings.image.alt}}">
+                        <img class="grid_img lazyload" data-src="{{ section.settings.image_1 | img_url: 'large' }}" alt="{{ section.settings.image.alt}}">
                         <figcaption class="d-flex flex-column justify-content-center align-items-center">
                             <h2>{{ section.settings.hover_title_1}}</h2>
                             <p>{{ section.settings.hover_paragraph_1}}</p>
@@ -25,7 +25,7 @@
                 <a href="{{ section.settings.hover_link_2}}">
                     <figure class="snip0015 rounded grid_img">
                         <!-- <img class="rounded grid_img" src="{{ section.settings.image_3 | img_url: '550x232', crop: 'center' }}" alt="{{ section.settings.image.alt}}"> -->
-                        <img class="rounded grid_img" src="{{ section.settings.image_2 | img_url: 'large' }}" alt="{{ section.settings.image.alt}}">
+                        <img class="rounded grid_img lazyload" data-src="{{ section.settings.image_2 | img_url: 'large' }}" alt="{{ section.settings.image.alt}}">
                         <figcaption class="d-flex flex-column justify-content-center align-items-center">
                             <h2>{{ section.settings.hover_title_2}}</h2>
                             <p>{{ section.settings.hover_paragraph_2}}</p>
@@ -45,7 +45,7 @@
                 <a href="{{ section.settings.hover_link_3}}">
                     <figure class="snip0015 rounded grid_img">
                         <!-- <img class=" grid_img" src="{{ section.settings.image_3 | img_url: '750x700', crop: 'left' }}" alt="{{ section.settings.image.alt}}"> -->
-                        <img class="rounded grid_img" src="{{ section.settings.image_3 | img_url: 'large' }}" alt="{{ section.settings.image.alt}}">
+                        <img class="rounded grid_img lazyload" data-src="{{ section.settings.image_3 | img_url: 'large' }}" alt="{{ section.settings.image.alt}}">
                         <figcaption class="py-2 d-flex flex-column justify-content-center align-items-center">
                             <h2>{{ section.settings.hover_title_3}}</h2>
                             <p>{{ section.settings.hover_paragraph_3}}</p>

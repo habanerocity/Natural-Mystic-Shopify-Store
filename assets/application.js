@@ -45,11 +45,11 @@ const productInfoAnchors = document.querySelectorAll("#productInfoAnchor");
 
 //item added to cart modal
 
-let addedToCartModal;
+// let addedToCartModal;
 
-if (document.getElementById('addedToCartModal') != null) {
-    itemAddedModal = new bootstrap.Modal(document.getElementById('addedToCartModal'), {});
-};
+// if (document.getElementById('addedToCartModal') != null) {
+//     itemAddedModal = new bootstrap.Modal(document.getElementById('addedToCartModal'), {});
+// };
 
 //product modal
 
@@ -89,12 +89,20 @@ if (productInfoAnchors.length > 0) {
                 if (data.compare_at_price != null) {
                     compareDiv.classList.remove("d-none");
                     modalNow.classList.remove("d-none");
+
+                    //add red font if compare_at_price exists
+                    document.getElementById("productInfoPrice").classList.add('text-danger');
                 }
 
                 //RemoveCompare at Price for Modal
                 if (data.compare_at_price === null) {
                     compareDiv.classList.add("d-none");
                     modalNow.classList.add("d-none");
+
+                    //remove red font if there is no compare_at_price
+                    if (document.getElementById("productInfoPrice").classList.contains('text-danger')) {
+                        document.getElementById("productInfoPrice").classList.remove('text-danger');
+                    }
                 }
 
                 //disable add to cart button if product is not available

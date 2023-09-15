@@ -5,7 +5,7 @@
 {% assign placeholder = 'lifestyle-2' %}
 {{ placeholder | placeholder_svg_tag: 'placeholder-svg' }}
 {% endif %} -->
-                                                                                                                                                                                                                                                                                                                                                                                                                                                        <!-- <div class="position-relative text-center bg-light p-3 p-md-5">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                <!-- <div class="position-relative text-center bg-light p-3 p-md-5">
         <div class="col-md-5 p-lg-5 mx-auto my-5">
             <h1 class="display-4 dot">{{ collection.title}}</h1>
             <p class="lead">Browse Our Curated Selection of the World's Finest Spices</p>
@@ -52,7 +52,7 @@
                     <div class="card my-1 product_item">
                         {% if image != blank %}
                             <a id="productInfoAnchor" data-product-handle="{{ product.handle }}" data-product-compare-at-price="{{ product.compare_at_price | money_without_trailing_zeros}}" data-product-price="{{ product.price | money_without_trailing_zeros}}">
-                                <img class="pic card-img-top" src="{{ image | img_url: 'medium' }}" alt="{{ product.title }}">
+                                <img class="pic card-img-top lazyload" data-src="{{ image | img_url: 'medium' }}" alt="{{ product.title }}">
                             </a>
                         {% else %}
                             {{ 'product-1' | placeholder_svg_tag: 'card-img-top'}}
@@ -116,7 +116,7 @@
                                 <h4 class="d-inline-block" id="modalNow">
                                     <i>Now</i>
                                 </h4>
-                                <h2 class="d-inline-block text-danger" id="productInfoPrice"></h2>
+                                <h2 class="d-inline-block" id="productInfoPrice"></h2>
                             </div>
                         </div>
                         <p id="productInfoDescription"></p>

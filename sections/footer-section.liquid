@@ -17,7 +17,7 @@
                     </div>
                 {% else if block.type == "text" %}
                     <div class="col">
-                        <img src="{{ item.logo | img_url: '75x75' }}" class="mb-5 footer-logo" alt="footer logo">
+                        <img data-src="{{ item.logo | img_url: '75x75' }}" class="mb-5 footer-logo lazyload" alt="footer logo">
                         <h5>{{ item.title }}</h5>
                         <p>{{ item.description }}</p>
                     </div>
@@ -26,31 +26,31 @@
                         <ul class="list-unstyled text-small">
                             <li>
                                 <a href="{{ item.link_url_1 }}">
-                                    <span><image alt="link icon" src="{{ block.settings.link_icon_1 | img_url: 'small'}}"/></span>
+                                    <span><image alt="link icon" class="lazyload" data-src="{{ block.settings.link_icon_1 | img_url: 'small'}}"/></span>
                                     {{ item.link_text_1 }}
                                 </a>
                             </li>
                             <li>
                                 <a href="{{ item.link_url_2 }}">
-                                    <span><image alt="link icon" src="{{ item.link_icon_2 | img_url: 'small'}}"/></span>
+                                    <span><image alt="link icon" class="lazyload" data-src="{{ item.link_icon_2 | img_url: 'small'}}"/></span>
                                     {{item.link_text_2 }}
                                 </a>
                             </li>
                             <li>
                                 <a href="{{ item.link_url_3 }}">
-                                    <span><image alt="link icon" src="{{ item.link_icon_3 | img_url: 'small'}}"/></span>
+                                    <span><image alt="link icon" class="lazyload" data-src="{{ item.link_icon_3 | img_url: 'small'}}"/></span>
                                     {{item.link_text_3 }}
                                 </a>
                             </li>
                             <li>
                                 <a href="{{ item.link_url_4}}">
-                                    <span><image alt="link icon" src="{{ item.link_icon_4 | img_url: 'small'}}"/></span>
+                                    <span><image alt="link icon" class="lazyload" data-src="{{ item.link_icon_4 | img_url: 'small'}}"/></span>
                                     {{item.link_text_4 }}
                                 </a>
                             </li>
                             <li>
                                 <a href="{{ item.link_url_5 }}">
-                                    <span><image alt="link icon" src="{{ item.link_icon_5 | img_url: 'small'}}"/></span>
+                                    <span><image alt="link icon" class="lazyload" data-src="{{ item.link_icon_5 | img_url: 'small'}}"/></span>
                                     {{item.link_text_5 }}
                                 </a>
                             </li>
