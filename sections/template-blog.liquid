@@ -21,7 +21,7 @@
                         <div class="col">
                             <div class="card hover-card">
                                 {% if article.image.src != null %}
-                                    <img src="{{ article.image.src | img_url: '500x1000' }}" class="card-img-top" alt="{{ article.image.alt }}"></img>
+                                    <img data-src="{{ article.image.src | img_url: '500x1000' }}" class="card-img-top lazyload" alt="{{ article.image.alt }}"></img>
                                 {% else %}
                                     {{ 'image' | placeholder_svg_tag: 'card-img-top'}}
                                 {% endif %}
@@ -68,6 +68,17 @@
         height: 100%;
         width: 100%;
         }
+
+        @media screen and (max-width: 600px){
+        .header_banner-blog {
+        background: url({{ section.settings.banner_image-mobile | img_url: 'master'}});
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: cover;
+        height: 100%;
+        width: 100%;
+        }
+        }
         
 </style>
 
@@ -97,6 +108,11 @@
         "type": "image_picker",
         "id": "banner_image",
         "label": "Heading Background Image"
+    },
+    {
+        "type": "image_picker",
+        "id": "banner_image-mobile",
+        "label": "Mobile Heading Background Image"
     }
     ]
 }

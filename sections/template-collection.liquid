@@ -1,16 +1,18 @@
 {% paginate collection.products by 16 %}
     <!-- {% if section.settings.image != blank %}
-<img class="hero_pic" src="{{ section.settings.image | img_url: 'master'}}" alt="{{ section.settings.image.alt}}">
-{% else %}
-{% assign placeholder = 'lifestyle-2' %}
-{{ placeholder | placeholder_svg_tag: 'placeholder-svg' }}
-{% endif %} -->
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                <!-- <div class="position-relative text-center bg-light p-3 p-md-5">
+    <img class="hero_pic" src="{{ section.settings.image | img_url: 'master'}}" alt="{{ section.settings.image.alt}}">
+    {% else %}
+    {% assign placeholder = 'lifestyle-2' %}
+    {{ placeholder | placeholder_svg_tag: 'placeholder-svg' }}
+    {% endif %} -->
+                                                    <!-- <div class="position-relative text-center bg-light p-3 p-md-5">
         <div class="col-md-5 p-lg-5 mx-auto my-5">
             <h1 class="display-4 dot">{{ collection.title}}</h1>
             <p class="lead">Browse Our Curated Selection of the World's Finest Spices</p>
         </div>
     </div> -->
+                                                    
+                                                    <!-- <section class="overlay"> -->
     {% if collection.image != blank %}
         <div class="header_banner-collection position-relative text-center p-3 p-md-5">
             <div class="col-md-5 p-lg-5 mx-auto my-5">
@@ -96,7 +98,7 @@
     <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <button aria-label="close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+                <button aria-label="close" class="btn-close grey rounded-circle" data-bs-dismiss="modal" type="button"></button>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -153,46 +155,62 @@
     </div>
 </div>
 
-<div aria-hidden="true" class="modal fade" id="addedToCartModal" tabindex="-2">
+<!-- <div aria-hidden="true" class="modal fade" id="addedToCartModal" tabindex="-2">
     <div class="modal-content">
         <div class="modal-header">
-            <button aria-label="close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+            <button aria-label="close" class="btn-close " data-bs-dismiss="modal" type="button"></button>
         </div>
         <div class="modal-body">
             <h3>Item has been added to cart</h3>
         </div>
     </div>
-</div>
+</div> -->
 
 <style>
-    .header_banner-collection {
-        background: url({{ collection.image | img_url: "master"}});
-        background-repeat: no-repeat;
-        background-position: center center;
-        background-size: cover;
-        /* height: 100%; */
-        width: 100%;
-    }
+                .header_banner-collection {
+                    background: url({{ collection.image | img_url: "master"}});
+                    background-repeat: no-repeat;
+                    background-position: center center;
+                    background-size: cover;
+                    /* height: 100%; */
+                    width: 100%;
+                }
+            
+                .header_banner-shop{
+                    background-image: url({{ section.settings.banner_image | img_url: "master"}});
+                    background-repeat: no-repeat;
+                    background-position: center center;
+                    background-size: cover;
+                    /* height: 100%; */
+                    width: 100%;
+                }
 
-    .header_banner-shop{
-        background-image: url({{ section.settings.banner_image | img_url: "master"}});
-        background-repeat: no-repeat;
-        background-position: center center;
-        background-size: cover;
-        /* height: 100%; */
-        width: 100%;
-    }
-</style>
+                @media screen and (max-width: 600px){
+                    .header_banner-shop{
+                    background-image: url({{ section.settings.banner_image-mobile | img_url: "master"}});
+                    background-repeat: no-repeat;
+                    background-position: center center;
+                    background-size: cover;
+                    /* height: 100%; */
+                    width: 100%;
+                }
+                }
+            </style>
 
 {% schema %}
 {
-    "name": "Page settings",
-    "settings": [
-    {
-        "type": "image_picker",
-        "id": "banner_image",
-        "label": "Heading Background Image"
-    }
-    ]
-}
+                "name": "Page settings",
+                "settings": [
+                {
+                    "type": "image_picker",
+                    "id": "banner_image",
+                    "label": "Heading Background Image"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "banner_image-mobile",
+                    "label": "Mobile Heading Background Image"
+                }
+                ]
+            }
 {% endschema %}

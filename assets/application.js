@@ -1,3 +1,50 @@
+//gsap animations
+gsap.registerPlugin(ScrollTrigger);
+
+gsap.from(".hero-div", {
+    opacity: 0,
+    y: 100,
+    duration: 1
+});
+
+
+// gsap.from(".banner-new", {
+//     opacity: 0,
+//     y: 100,
+//     duration: 1
+// });
+
+// gsap.from(".spice_banner-title", {
+//     opacity: 0,
+//     y: 100,
+//     duration: 1,
+//     delay: .5
+// });
+
+// gsap.from(".spice_banner-description", {
+//     opacity: 0,
+//     y: 100,
+//     duration: 1,
+//     delay: 1
+// });
+
+// gsap.from(".banner__button", {
+//     opacity: 0,
+//     y: 100,
+//     duration: 1,
+//     delay: 1.5
+// });
+
+gsap.from(".banner-new", {
+    scrollTrigger: {
+        trigger: ".banner-new",
+        toggleActions: "restart none none none"
+    },
+    opacity: 0,
+    y: 100,
+    duration: .5
+})
+
 // sort products 
 if (document.getElementById('sort_by') != null) {
     document.querySelector('#sort_by').addEventListener('change', (e) => {
