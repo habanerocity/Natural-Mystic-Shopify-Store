@@ -7,43 +7,74 @@ gsap.from(".hero-div", {
     duration: 1
 });
 
-
-// gsap.from(".banner-new", {
-//     opacity: 0,
-//     y: 100,
-//     duration: 1
-// });
-
-// gsap.from(".spice_banner-title", {
-//     opacity: 0,
-//     y: 100,
-//     duration: 1,
-//     delay: .5
-// });
-
-// gsap.from(".spice_banner-description", {
-//     opacity: 0,
-//     y: 100,
-//     duration: 1,
-//     delay: 1
-// });
-
-// gsap.from(".banner__button", {
-//     opacity: 0,
-//     y: 100,
-//     duration: 1,
-//     delay: 1.5
-// });
-
 gsap.from(".banner-new", {
     scrollTrigger: {
         trigger: ".banner-new",
-        toggleActions: "restart none none none"
     },
     opacity: 0,
     y: 100,
     duration: .5
 })
+
+gsap.from(".spice_banner-title", {
+    scrollTrigger: {
+        trigger: ".spice_banner-title",
+    },
+    opacity: 0,
+    y: 100,
+    duration: .5,
+    delay: .5
+})
+
+gsap.from(".spice_banner-description", {
+    scrollTrigger: {
+        trigger: ".spice_banner-description",
+    },
+    opacity: 0,
+    y: 100,
+    duration: .5,
+    delay: 1
+})
+
+gsap.from(".banner__button", {
+    scrollTrigger: {
+        trigger: ".banner__button",
+    },
+    opacity: 0,
+    y: 100,
+    duration: .5,
+    delay: 1.25
+})
+
+gsap.from(".blog_grid_child-1", {
+    scrollTrigger: {
+        trigger: ".blog_grid_child-1",
+    },
+    opacity: 0,
+    y: 100,
+    duration: .5
+})
+
+gsap.from(".blog_grid_child-2", {
+    scrollTrigger: {
+        trigger: ".blog_grid_child-2",
+    },
+    opacity: 0,
+    y: 100,
+    duration: .5,
+    delay: .75
+})
+
+gsap.from(".blog_grid_child-3", {
+    scrollTrigger: {
+        trigger: ".blog_grid_child-3",
+    },
+    opacity: 0,
+    y: 100,
+    duration: .5,
+    delay: 1.5
+})
+
 
 // sort products 
 if (document.getElementById('sort_by') != null) {
