@@ -5,14 +5,14 @@
     {% assign placeholder = 'lifestyle-2' %}
     {{ placeholder | placeholder_svg_tag: 'placeholder-svg' }}
     {% endif %} -->
-                                                    <!-- <div class="position-relative text-center bg-light p-3 p-md-5">
+                                                        <!-- <div class="position-relative text-center bg-light p-3 p-md-5">
         <div class="col-md-5 p-lg-5 mx-auto my-5">
             <h1 class="display-4 dot">{{ collection.title}}</h1>
             <p class="lead">Browse Our Curated Selection of the World's Finest Spices</p>
         </div>
     </div> -->
-                                                    
-                                                    <!-- <section class="overlay"> -->
+                                                        
+                                                        <!-- <section class="overlay"> -->
     {% if collection.image != blank %}
         <div class="header_banner-collection position-relative text-center p-3 p-md-5">
             <div class="col-md-5 p-lg-5 mx-auto my-5">
@@ -51,7 +51,7 @@
             {% for product in collection.products %}
                 {% assign image = product.featured_media.preview_image %}
                 <div class="col-6 col-sm-6 col-md-auto col-lg-auto g-3">
-                    <div class="card my-1 product_item">
+                    <div class="product_card card my-1 product_item">
                         {% if image != blank %}
                             <a id="productInfoAnchor" data-product-handle="{{ product.handle }}" data-product-compare-at-price="{{ product.compare_at_price | money_without_trailing_zeros}}" data-product-price="{{ product.price | money_without_trailing_zeros}}">
                                 <img class="pic card-img-top lazyload" data-src="{{ image | img_url: 'medium' }}" alt="{{ product.title }}">

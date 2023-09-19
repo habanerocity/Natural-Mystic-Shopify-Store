@@ -1,25 +1,23 @@
 //gsap animations
 gsap.registerPlugin(ScrollTrigger);
 
+//hero div animation
 gsap.from(".hero-div", {
     opacity: 0,
     y: 100,
     duration: 1
 });
 
+//spicebanner div animation
 gsap.from(".banner-new", {
-    scrollTrigger: {
-        trigger: ".banner-new",
-    },
+    scrollTrigger: ".banner-new",
     opacity: 0,
     y: 100,
     duration: .5
 })
 
 gsap.from(".spice_banner-title", {
-    scrollTrigger: {
-        trigger: ".spice_banner-title",
-    },
+    scrollTrigger: ".spice_banner-title",
     opacity: 0,
     y: 100,
     duration: .5,
@@ -27,38 +25,31 @@ gsap.from(".spice_banner-title", {
 })
 
 gsap.from(".spice_banner-description", {
-    scrollTrigger: {
-        trigger: ".spice_banner-description",
-    },
+    scrollTrigger: ".spice_banner-description",
     opacity: 0,
     y: 100,
     duration: .5,
-    delay: 1
+    delay: .5
 })
 
 gsap.from(".banner__button", {
-    scrollTrigger: {
-        trigger: ".banner__button",
-    },
+    scrollTrigger: ".banner__button",
     opacity: 0,
     y: 100,
     duration: .5,
-    delay: 1.25
+    delay: .5
 })
 
+//blog grid animation
 gsap.from(".blog_grid_child-1", {
-    scrollTrigger: {
-        trigger: ".blog_grid_child-1",
-    },
+    scrollTrigger: ".blog_grid_child-1",
     opacity: 0,
     y: 100,
     duration: .5
 })
 
 gsap.from(".blog_grid_child-2", {
-    scrollTrigger: {
-        trigger: ".blog_grid_child-2",
-    },
+    scrollTrigger: ".blog_grid_child-2",
     opacity: 0,
     y: 100,
     duration: .5,
@@ -66,15 +57,28 @@ gsap.from(".blog_grid_child-2", {
 })
 
 gsap.from(".blog_grid_child-3", {
-    scrollTrigger: {
-        trigger: ".blog_grid_child-3",
-    },
+    scrollTrigger: ".blog_grid_child-3",
     opacity: 0,
     y: 100,
     duration: .5,
     delay: 1.5
 })
 
+//catalog card animation
+gsap.from(".product_card", {
+    scrollTrigger: ".product_card",
+    opacity: 0,
+    y: 100,
+    stagger: 0.4
+})
+
+//blog page card animation
+
+gsap.from(".blog_card", {
+    opacity: 0,
+    y: 100,
+    stagger: 0.75
+})
 
 // sort products 
 if (document.getElementById('sort_by') != null) {

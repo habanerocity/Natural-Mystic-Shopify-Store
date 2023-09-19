@@ -19,7 +19,7 @@
                 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 py-5">
                     {% for article in blog.articles %}
                         <div class="col">
-                            <div class="card hover-card">
+                            <div class="blog_card card hover-card">
                                 {% if article.image.src != null %}
                                     <img data-src="{{ article.image.src | img_url: '500x1000' }}" class="card-img-top lazyload" alt="{{ article.image.alt }}"></img>
                                 {% else %}
