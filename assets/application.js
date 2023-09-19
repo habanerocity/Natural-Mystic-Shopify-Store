@@ -65,12 +65,31 @@ gsap.from(".blog_grid_child-3", {
 })
 
 //catalog card animation
-gsap.from(".product_card", {
-    scrollTrigger: ".product_card",
-    opacity: 0,
-    y: 100,
-    stagger: 0.4
-})
+// gsap.from(".product_card", {
+//     scrollTrigger: ".product_card",
+//     opacity: 0,
+//     y: 100,
+//     stagger: 0.4
+// })
+
+gsap.set(".product_card", { y: 100, opacity: 0 });
+
+ScrollTrigger.batch(".product_card", {
+    interval: 1, // time window (in seconds) for batching to occur. 
+    batchMax: 4,   // maximum batch size (targets). Can be function-based for dynamic values
+    onEnter: batch => gsap.to(batch, { opacity: 1, y: 0, stagger: { each: 0.15, grid: [1, 4] }, overwrite: true }),
+    onEnterBack: batch => gsap.to(batch, { opacity: 1, y: 0, stagger: 0.15, overwrite: true }),
+    // you can also define most normal ScrollTrigger values like start, end, etc.
+    start: "20px bottom",
+    end: "top top"
+});
+
+// when ScrollTrigger does a refresh(), it maps all the positioning data which 
+// factors in transforms, but in this example we're initially setting all the ".box"
+// elements to a "y" of 100 solely for the animation in which would throw off the normal 
+// positioning, so we use a "refreshInit" listener to reset the y temporarily. When we 
+// return a gsap.set() in the listener, it'll automatically revert it after the refresh()!
+ScrollTrigger.addEventListener("refreshInit", () => gsap.set(".product_card", { y: 0, opacity: 1 }));
 
 //blog page card animation
 
