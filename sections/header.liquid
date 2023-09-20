@@ -10,21 +10,22 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
                 {% for link in linklists.main-menu.links %}
-                    {% assign child_list_handle
-        = link.title | handleize %}
-                    {% if linklists[child_list_handle].links !=
-        blank %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ link.url }}">{{ link.title }}</a>
+                    {% assign child_list_handle = link.title | handleize %}
+                    {% if linklists[child_list_handle].links != blank %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ link.title }}</a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <!-- <li class="p-2">
+                                    <span>Collections</span>
+                                </li> -->
+                                {% for childlink in linklists[child_list_handle].links %}
+                                    <li >
+                                        <a class="dropdown-item" href="{{ childlink.url }}">{{childlink.title | escape}}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
                         </li>
-                        [
-                        {% for childlink in linklists[child_list_handle].links %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ childlink.url }}">{{
-            childlink.title | escape
-          }}</a>
-                            </li>
-                        {% endfor %}]
+                        
                     {% else %}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ link.url }}">{{ link.title }}</a>
@@ -41,8 +42,6 @@
             <ul class="navbar-nav login_register">
                 {% if shop.customer_accounts_enabled %}
                     {% if customer %}
-                        <!-- <a href="/account">account</a> -->
-                                                <!-- {{ "log out" | customer_logout_link }} -->
                         <li class="nav-item">
                             <a class="nav-link" href="#swym-wishlist">Wishlist</a>
                         </li>
@@ -53,8 +52,6 @@
                             <a class="nav-link" href="{{ routes.account_logout_url }}">Log out</a>
                         </li>
                     {% else %}
-                        <!-- {{ "log in " | customer_login_link }}
-                        {{ "register" | customer_register_link }} -->
                         <li class="nav-item">
                             <a class="nav-link" href="#swym-wishlist">Wishlist</a>
                         </li>
