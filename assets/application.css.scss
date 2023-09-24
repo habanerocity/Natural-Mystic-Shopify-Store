@@ -619,6 +619,15 @@ input:focus {
   .blog_grid{
     grid-row-gap: 12px!important;
   }
+
+  .dropdown-menu{
+    border: none;
+    background-color: transparent;
+  }
+
+  // a:active {
+  //   background-color: #C52C03!important;
+  // }
 }
 
 @media screen and (max-width: 787px){
@@ -724,6 +733,10 @@ input:focus {
     height: 3.5rem!important;
   }
 
+  .features_grid-item{
+    margin-top: 0!important;
+  }
+
   .dark_grey{
     background-color: transparent;
   }
@@ -732,9 +745,9 @@ input:focus {
     padding:0!important;
   }
     
-  .grid-item {
-    background-color: transparent!important;
-}
+//   .grid-item {
+//     background-color: transparent!important;
+// }
 
   .mobile_button_shift:hover{
     background-color: #C52C03!important;
