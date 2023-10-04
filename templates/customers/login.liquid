@@ -15,8 +15,10 @@
             <input class="btn rust btn-primary btn-lg my-3 w-100 rounded-0" type="submit" value="Sign In"/>
 
         {% endform %}
-
-        <a class="text-center" href="#recover" id="forgotPassword">Forgot Password?</a>
+        <div class="d-flex flex-row justify-content-around">
+            <a class="text-center" href="https://natural-mystic-foods.myshopify.com/account/register" id="register">Register</a>
+            <a class="text-center" href="#recover" id="forgotPassword">Forgot Password?</a>
+        </div>
     </div>
     <div class="d-none forgot-password-form my-5" id="forgot_password_form">
         {% form 'recover_customer_password' %}

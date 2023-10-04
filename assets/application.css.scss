@@ -215,6 +215,8 @@ input::placeholder {
     height: 90vh;
 }
 
+
+
 .hero-div{
   background-color: rgba(255, 255, 255, 0.9)!important;
 }
@@ -726,7 +728,11 @@ input:focus {
   .features_grid{
     display: flex;
     flex-direction: column;
-    margin-bottom: 20rem;
+    margin-bottom: 16rem;
+  }
+
+  .w-sm-60{
+    width: 60%!important;
   }
 
   .feature-icon{
