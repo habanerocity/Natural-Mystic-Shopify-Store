@@ -4,34 +4,39 @@
             {{section.settings.title}}
         </h3>
         <h1 class=" spice_banner-title py-3 w-50 w-sm-60 ">{{section.settings.subheading_title}}</h1>
-        <h6 class=" spice_banner-description w-50 w-sm-60">{{section.settings.description}}</h6>
+        <h6 class=" spice_banner-description w-sm-60">{{section.settings.description}}</h6>
         <a class=" btn btn-md mobile_button_shift banner__button w-25 w-sm-60 my-2 text-dark" href={{section.settings.button_link}}>{{section.settings.button_label}}</a>
     </div>
 </div>
 
 <style>
         .spice_banner {
-        background-image: url({{ section.settings.image_1 | img_url: 'master'}});
+        background-image: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url({{ section.settings.image_1 | img_url: 'master'}});
         background-repeat: no-repeat;
         background-size: cover;
         height: 35rem;
         }
 
         .spice_banner .banner-new{
-            color: var(--color-alert);
+            color: var(--color-highlight);
+        }
+
+        .spice_banner-title,
+        .spice_banner-description{
+            color: #fff;
         }
 
         @media screen and (max-width: 787px){
             .spice_banner{
-            background-image: url({{ section.settings.image_2 | img_url: 'master'}});
+            background-image: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url({{ section.settings.image_2 | img_url: 'master'}});
             }
 
             .spice_banner-title{
-                color: var(--color-accent);
+                color: #fff;
             } 
 
             .spice_banner .banner-new{
-                color: var(--color-alert);
+                color: var(--color-highlight);
             }
 
             .spice_banner-description{
