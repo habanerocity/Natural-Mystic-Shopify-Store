@@ -5,8 +5,10 @@
 </div> -->
 <div class="header_banner-cart position-relative text-center p-3 p-md-5">
     <div class="col-md-5 p-lg-5 mx-auto my-5">
-        <h1 class="display-4 turmeric">Cart</h1>
-        <p class="lead text-light">Online Checkout</p>
+        <h1 class="display-4 turmeric">{{ section.settings.banner_heading | default: "Cart" }}</h1>
+        {% if section.settings.banner_subheading != blank %}
+<p class="lead text-light">{{ section.settings.banner_subheading }}</p>
+{% endif %}
     </div>
 </div>
 <div class="container my-5">
@@ -152,6 +154,19 @@
             "id": "banner_image-mobile",
             "label": "Mobile Heading Background Image"
         },
+{
+"type": "text",
+"id": "banner_heading",
+"label": "Heading",
+"info": "Leave blank to use \"Cart\"."
+},
+{
+"type": "text",
+"id": "banner_subheading",
+"label": "Subheading",
+"info": "Leave blank to hide.",
+"default": "Online Checkout"
+},
         {
             "type": "image_picker",
             "id": "delete_icon",

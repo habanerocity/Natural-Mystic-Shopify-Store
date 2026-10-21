@@ -9,8 +9,10 @@
         {% when 'page_title' %}
             <div class="header_banner-about position-relative text-center p-3 p-md-5">
                 <div class="col-md-5 p-lg-5 mx-auto my-5">
-                    <h1 class="display-4 turmeric">{{page.title}}</h1>
-                    <!-- <p class="lead text-light">Our Story</p> -->
+                    <h1 class="display-4 turmeric">{{ section.settings.banner_heading | default: page.title }}</h1>
+                    {% if section.settings.banner_subheading != blank %}
+<p class="lead text-light">{{ section.settings.banner_subheading }}</p>
+{% endif %}
                 </div>
             </div>
         {% when 'page_date' %}
@@ -83,6 +85,18 @@
             "id": "banner_image-mobile",
             "label": "Mobile Heading Background Image"
         },
+{
+"type": "text",
+"id": "banner_heading",
+"label": "Heading",
+"info": "Leave blank to use the page title."
+},
+{
+"type": "text",
+"id": "banner_subheading",
+"label": "Subheading",
+"info": "Optional line under the heading. Leave blank to hide."
+},
         {
             "type": "checkbox",
             "id": "show_publish_date",
