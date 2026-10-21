@@ -1,0 +1,16 @@
+{%- comment -%}
+  One Bootstrap accordion panel for the product page.
+  Params: id (unique string), heading, body (HTML), open (true/false), attributes (block.shopify_attributes)
+{%- endcomment -%}
+<div class="accordion-item" {{ attributes }}>
+    <h2 class="accordion-header" id="{{ id }}-heading">
+        <button class="accordion-button{% unless open %} collapsed{% endunless %}" type="button" data-bs-toggle="collapse" data-bs-target="#{{ id }}" aria-expanded="{% if open %}true{% else %}false{% endif %}" aria-controls="{{ id }}">
+            {{ heading | escape }}
+        </button>
+    </h2>
+    <div id="{{ id }}" class="accordion-collapse collapse{% if open %} show{% endif %}" aria-labelledby="{{ id }}-heading">
+        <div class="accordion-body">
+            {{ body }}
+        </div>
+    </div>
+</div>
