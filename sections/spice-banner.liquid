@@ -11,7 +11,7 @@
 
 <style>
         .spice_banner {
-        background-image: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url({{ section.settings.image_1 | img_url: 'master'}});
+        background-image: var(--banner-overlay), url({{ section.settings.image_1 | img_url: 'master'}});
         background-repeat: no-repeat;
         background-size: cover;
         height: 35rem;
@@ -28,7 +28,7 @@
 
         @media screen and (max-width: 787px){
             .spice_banner{
-            background-image: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url({{ section.settings.image_2 | img_url: 'master'}});
+            background-image: var(--banner-overlay), url({{ section.settings.image_2 | img_url: 'master'}});
             }
 
             .spice_banner-title{

@@ -43,7 +43,7 @@
 
 <style>
     .header_banner-contact {
-        background: url({{ section.settings.banner_image | img_url: "master"}});
+        background: var(--banner-overlay), url({{ section.settings.banner_image | img_url: "master"}});
         background-repeat: no-repeat;
         background-position: center center;
         background-size: cover;
@@ -53,7 +53,7 @@
 
     @media screen and (max-width: 600px){
         .header_banner-contact {
-        background: url({{ section.settings.banner_image-mobile | img_url: "master"}});
+        background: var(--banner-overlay), url({{ section.settings.banner_image-mobile | img_url: "master"}});
         background-repeat: no-repeat;
         background-position: center center;
         background-size: cover;

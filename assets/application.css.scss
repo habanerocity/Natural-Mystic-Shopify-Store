@@ -129,6 +129,21 @@ input::placeholder {
   width: 4rem;
 }
 
+:root {
+  /* Dark tint layered over banner background photos so light text stays readable */
+  --banner-overlay: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55));
+}
+
+/* Page heading banners: h1 uses the "Tile background" color from the theme editor */
+.header_banner-blog h1,
+.header_banner-collection h1,
+.header_banner-shop h1,
+.header_banner-contact h1,
+.header_banner-about h1,
+.header_banner-cart h1 {
+  color: var(--color-surface);
+}
+
 .header_banner {
   background-repeat: no-repeat;
   background-position: center center;
