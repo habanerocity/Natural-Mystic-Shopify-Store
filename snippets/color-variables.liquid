@@ -12,12 +12,15 @@
     --color-surface: {{ settings.color_surface }};
     /* Darker shade of the highlight color, derived so it always follows the theme editor */
     --color-highlight-dark: color-mix(in srgb, var(--color-highlight) 60%, #000);
+    /* Lighter, livelier shade of the primary color, used for the Add to cart button */
+    --color-cta: color-mix(in srgb, var(--color-primary) 78%, #fff);
   }
 
   /* Browsers that support relative colors keep the highlight's hue and saturation for a richer shade than mixing in black */
   @supports (color: hsl(from red h s l)) {
     :root {
       --color-highlight-dark: hsl(from var(--color-highlight) h s calc(l - 35));
+      --color-cta: hsl(from var(--color-primary) h calc(s + 8) calc(l + 14));
     }
   }
 </style>

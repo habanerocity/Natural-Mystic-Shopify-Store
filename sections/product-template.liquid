@@ -894,24 +894,28 @@
         flex: 0 0 auto;
     }
 
-    .pdp-add {
-        transition: background-color .25s, border-color .25s, color .25s;
+    .pdp-add.rust {
+        background-color: var(--color-cta);
+        border-color: var(--color-cta);
+        color: #fff !important;
+        transition: background-color .25s, border-color .25s;
     }
 
-    /* Unavailable: a calm, muted button instead of a faded copy of the primary one.
-       Bootstrap/.rust force colors with !important and disable pointer events, so override both. */
-    .pdp-add:disabled,
-    .pdp-add:disabled:hover {
-        --pdp-disabled-ink: color-mix(in srgb, var(--bs-body-color) 55%, #fff);
-        background-color: color-mix(in srgb, var(--bs-body-color) 6%, #fff) !important;
-        border-color: color-mix(in srgb, var(--bs-body-color) 12%, #fff) !important;
-        color: var(--pdp-disabled-ink) !important;
+    /* Hover deepens to the full primary color */
+    .pdp-add.rust:hover {
+        background-color: var(--color-primary) !important;
+        border-color: var(--color-primary) !important;
+    }
+
+    /* Unavailable: the same green, washed out, the way the Shop Pay button fades when it can't be used */
+    .pdp-add.rust:disabled,
+    .pdp-add.rust:disabled:hover {
+        background-color: color-mix(in srgb, var(--color-cta) 40%, #fff) !important;
+        border-color: color-mix(in srgb, var(--color-cta) 40%, #fff) !important;
+        color: #fff !important;
         opacity: 1;
         cursor: not-allowed;
         pointer-events: auto;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        font-size: 0.85em;
     }
 
     .pdp-dynamic {
