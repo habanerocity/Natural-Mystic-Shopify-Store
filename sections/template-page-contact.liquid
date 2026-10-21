@@ -7,7 +7,9 @@
     </div>
 </div>
 <div class="container my-5">
-    <h4 class="text-center">Got a spicy query? Let's chat! Your satisfaction is our main ingredient.</h4>
+    {% if section.settings.form_heading != blank %}
+        <h4 class="text-center">{{ section.settings.form_heading }}</h4>
+    {% endif %}
     <div class="row">
         {% form 'contact' %}
             {% if form.posted_successfully? %}
@@ -92,7 +94,14 @@
 "label": "Subheading",
 "info": "Leave blank to hide.",
 "default": "Send us a message"
-}
+},
+    {
+        "type": "text",
+        "id": "form_heading",
+        "label": "Form heading",
+        "info": "Text above the contact form. Leave blank to hide.",
+        "default": "Got a spicy query? Let's chat! Your satisfaction is our main ingredient."
+    }
     ]
 }
 {% endschema %}

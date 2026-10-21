@@ -1,96 +1,446 @@
-{% assign current_product = product.selected_or_first_available_variant %}
-{% assign product_image = current_product.featured_image | default: product.featured_image %}
+{% assign current_variant = product.selected_or_first_available_variant %}
+{% assign featured_media = current_variant.featured_media | default: product.featured_media %}
+{% assign on_sale = false %}
+{% if current_variant.compare_at_price > current_variant.price %}
+    {% assign on_sale = true %}
+{% endif %}
 
-<div class="container my-5">
-    <div class="my-3">
-        {% if settings.show_breadcrumb_nav %}
+<div class="pdp container my-5" id="ProductSection-{{ section.id }}">
+    {% if settings.show_breadcrumb_nav %}
+        <div class="mb-4">
             {% include 'breadcrumbs' %}
-        {% endif %}
-    </div>
-    <div class="row">
-        <div class="col-md-6 col-12">
-            <img class="img-fluid rounded mb-3" src="{{ product_image | img_url: 'large'}}" alt="{{ product_image.alt }}" id="ProductMainImage"/>
-            <!-- {% for image in product.images %}
-                <img class="rounded" src="{{ image.src | img_url: 'medium' }}" alt="{{image.alt}}">
-            {% endfor %} -->
         </div>
-        <div class="col-12 col-md-6">
-            {% form 'product', product, class: "product.form", id: "AddToCartForm" %}
-            {% for block in section.blocks %}
-                {% case block.type %}
-                {% when "title" %}
-                <h1 class="dot">{{ product.title }}</h1>
-                {% when "price" %}
-                
-                {% if product.selected_or_first_available_variant.compare_at_price %}
-                <span class="h6"><i>Was</i></span><h4 id="productCompareAtPrice" class="text-decoration-line-through text-muted">{{ current_product.compare_at_price | money}}</h4>
-                <span class="h4"><i>Now</i></span>
-                {% endif %}
-                <h2 {% if product.compare_at_price %} class="text-danger" {% endif %} id="productPrice">{{ current_product.price | money}}</h2>
-                
-                {% when "variant_selector" %}                                
-                <div class="mb-3">
-                    <label for="productSelect" class="form-label" >Size</label>
-                    <select class="form-select" id="productSelect" data-product-handle="{{ product.handle }}" name="id">
-                        {% for variant in product.variants %}
-                            {% if variant.available %}
-                                <option value="{{ variant.id }}">
-                                    {{ variant.title }}
-                                </option>
-                            {% else %}
-                                <option value="{{ variant.id }}" disabled="disabled">
-                                    {{ variant.title }}
-                                </option>
+    {% endif %}
+
+    <div class="row g-4 g-lg-5">
+        {%- comment -%} Gallery {%- endcomment -%}
+        <div class="col-12 col-md-6 col-lg-7">
+            <div class="pdp-gallery">
+                <div class="pdp-gallery__main">
+                    {% assign image_count = 0 %}
+                    {% for media in product.media %}
+                        {% if media.media_type == 'image' %}
+                            {% assign image_count = image_count | plus: 1 %}
+                            {% assign is_active = false %}
+                            {% if featured_media %}
+                                {% if media.id == featured_media.id %}{% assign is_active = true %}{% endif %}
+                            {% elsif forloop.first %}
+                                {% assign is_active = true %}
+                            {% endif %}
+                            <div class="pdp-gallery__slide" data-media-id="{{ media.id }}" {% unless is_active %}hidden{% endunless %}>
+                                {% if is_active %}
+                                    {% assign loading = 'eager' %}
+                                {% else %}
+                                    {% assign loading = 'lazy' %}
+                                {% endif %}
+                                {% assign image_alt = media.alt | default: product.title | escape %}
+                                {{ media.preview_image | image_url: width: 1400 | image_tag:
+                                    widths: '400, 600, 800, 1000, 1200, 1400',
+                                    sizes: '(min-width: 992px) 55vw, (min-width: 768px) 50vw, 100vw',
+                                    loading: loading,
+                                    alt: image_alt,
+                                    class: 'pdp-gallery__img'
+                                }}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    {% if image_count == 0 %}
+                        <div class="pdp-gallery__slide">
+                            {{ 'product-1' | placeholder_svg_tag: 'pdp-gallery__img pdp-gallery__placeholder' }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                {% if image_count > 1 %}
+                    <div class="pdp-gallery__thumbs" role="list" aria-label="Product images">
+                        {% for media in product.media %}
+                            {% if media.media_type == 'image' %}
+                                {% assign is_active = false %}
+                                {% if featured_media %}
+                                    {% if media.id == featured_media.id %}{% assign is_active = true %}{% endif %}
+                                {% elsif forloop.first %}
+                                    {% assign is_active = true %}
+                                {% endif %}
+                                <button type="button" class="pdp-gallery__thumb" role="listitem" data-thumb-for="{{ media.id }}" aria-label="Show image {{ forloop.index }} of {{ image_count }}" {% if is_active %}aria-current="true"{% endif %}>
+                                    {{ media.preview_image | image_url: width: 200 | image_tag: loading: 'lazy', alt: '' }}
+                                </button>
                             {% endif %}
                         {% endfor %}
-                    </select>
-                </div>
-                {% when "quantity" %}
-                <div class="mb-3">
-                    <label for="Quantity" class="form-label" >Quantity</label>
-                    <input class="form-control" id="Quantity" name="quantity" type="number" value="1" min="1">
-                </div>
-                <div id="totalPrice" class="mb-3">
-                        
-                </div>
-                {% when "checkout_buttons" %}
-                {% if product.selected_or_first_available_variant.available %}
-                <button class="btn btn-large w-100 rust bg-transparent btn-add_to_cart mb-3 py-2"id="AddToCart" name="add" type="submit">Add To Cart</button>
-                {% else %}
-                <button class="btn btn-large w-100 rust bg-transparent btn-add_to_cart mb-3 py-2" id="AddToCart" alt="item out of stock!" name="add" type="submit" disabled>Out Of Stock</button>
-                {% endif %}
-                {% if section.settings.dynamic_buttons_checkbox == true %}
-                {{ form | payment_button }}
-                {% endif %}     
-                {% when "description" %}
-                <div class="d-flex justify-content-between align-items-center">
-                    <h3>Item Description</h3>
-                    <div class="icon_wrapper">
-                        <div class="swym-button swym-add-to-wishlist heart__beat position-relative top-0" data-with-epi="true" data-swaction="addToWishlist" data-product-id="{{ product.id }}" data-variant-id="{{ product.variants[0].id }}" data-product-url="{{ shop.url }}{{ product.url }}" alt="add to wishlist"></div>
                     </div>
-                </div>
-                <p>{{ product.description }}</p>           
-                {% else %}
-                    
-            {% endcase %}
-            {% endfor %}
+                {% endif %}
+            </div>
+        </div>
 
-            {% endform %}
+        {%- comment -%} Product info {%- endcomment -%}
+        <div class="col-12 col-md-6 col-lg-5">
+            <div class="pdp-info">
+                {% form 'product', product, id: "AddToCartForm", class: "pdp-form" %}
+                    <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-id-input>
+
+                    {% for block in section.blocks %}
+                        {% case block.type %}
+
+                        {% when "title" %}
+                            <div class="pdp-title-row" {{ block.shopify_attributes }}>
+                                <h1 class="pdp-title">{{ product.title }}</h1>
+                                <div class="icon_wrapper">
+                                    <div class="swym-button swym-add-to-wishlist heart__beat position-relative top-0" data-with-epi="true" data-swaction="addToWishlist" data-product-id="{{ product.id }}" data-variant-id="{{ current_variant.id }}" data-product-url="{{ shop.url }}{{ product.url }}" alt="add to wishlist"></div>
+                                </div>
+                            </div>
+
+                        {% when "price" %}
+                            <div class="pdp-price" {{ block.shopify_attributes }}>
+                                <span class="pdp-price__current{% if on_sale %} is-sale{% endif %}" id="productPrice" data-price>{{ current_variant.price | money }}</span>
+                                <s class="pdp-price__compare" id="productCompareAtPrice" data-compare-price {% unless on_sale %}hidden{% endunless %}>{% if on_sale %}{{ current_variant.compare_at_price | money }}{% endif %}</s>
+                                <span class="pdp-badge" data-sale-badge {% unless on_sale %}hidden{% endunless %}>Sale</span>
+                            </div>
+
+                        {% when "variant_selector" %}
+                            {% unless product.has_only_default_variant %}
+                                <div class="pdp-field" {{ block.shopify_attributes }}>
+                                    <label for="ProductVariantSelect-{{ section.id }}" class="pdp-label">
+                                        {% if product.options.size == 1 %}{{ product.options.first }}{% else %}Options{% endif %}
+                                    </label>
+                                    <select class="form-select pdp-select" id="ProductVariantSelect-{{ section.id }}" data-variant-select>
+                                        {% for variant in product.variants %}
+                                            <option value="{{ variant.id }}" {% if variant.id == current_variant.id %}selected{% endif %} {% unless variant.available %}disabled{% endunless %}>
+                                                {{ variant.title }}{% unless variant.available %} (sold out){% endunless %}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            {% endunless %}
+
+                        {% when "quantity" %}
+                            <div class="pdp-field" {{ block.shopify_attributes }}>
+                                <label for="Quantity" class="pdp-label">Quantity</label>
+                                <div class="pdp-qty">
+                                    <button type="button" class="pdp-qty__btn" data-qty-step="-1" aria-label="Decrease quantity">&minus;</button>
+                                    <input class="pdp-qty__input" id="Quantity" name="quantity" type="number" value="1" min="1" inputmode="numeric">
+                                    <button type="button" class="pdp-qty__btn" data-qty-step="1" aria-label="Increase quantity">+</button>
+                                </div>
+                            </div>
+
+                        {% when "checkout_buttons" %}
+                            <div class="pdp-buttons" {{ block.shopify_attributes }}>
+                                <button class="btn rust w-100 pdp-add" id="AddToCart" name="add" type="submit" data-add-button {% unless current_variant.available %}disabled{% endunless %}>
+                                    {% if current_variant.available %}Add to cart{% else %}Sold out{% endif %}
+                                </button>
+                                {% if section.settings.dynamic_buttons_checkbox == true %}
+                                    <div class="pdp-dynamic">{{ form | payment_button }}</div>
+                                {% endif %}
+                            </div>
+
+                        {% when "description" %}
+                            {% if product.description != blank %}
+                                <div class="pdp-description" {{ block.shopify_attributes }}>
+                                    <h2 class="pdp-label">Description</h2>
+                                    <div class="pdp-description__body">{{ product.description }}</div>
+                                </div>
+                            {% endif %}
+
+                        {% endcase %}
+                    {% endfor %}
+                {% endform %}
+            </div>
         </div>
     </div>
+
+    <script type="application/json" data-variant-json>
+        [{% for variant in product.variants %}{
+            "id": {{ variant.id }},
+            "available": {{ variant.available | json }},
+            "media": {{ variant.featured_media.id | json }},
+            "price": {{ variant.price | money | json }},
+            "compare": {% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money | json }}{% else %}null{% endif %}
+        }{% unless forloop.last %},{% endunless %}{% endfor %}]
+    </script>
 </div>
 
-<!-- <div aria-hidden="true" class="modal fade" id="addedToCartModal" tabindex="-2">
-    <div class="modal-content">
-        <div class="modal-header">
-            <button aria-label="close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
-        </div>
-        <div class="modal-body">
-            <h3>Item has been added to cart</h3>
-        </div>
-    </div>
-</div> -->
+<style>
+    .pdp-gallery {
+        position: sticky;
+        top: 6rem;
+    }
 
+    .pdp-gallery__main {
+        aspect-ratio: 1 / 1;
+        background-color: #f6f5f3;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .pdp-gallery__slide {
+        width: 100%;
+        height: 100%;
+    }
+
+    .pdp-gallery__img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    .pdp-gallery__placeholder {
+        fill: #c9c6c0;
+    }
+
+    .pdp-gallery__thumbs {
+        display: flex;
+        gap: 0.75rem;
+        margin-top: 1rem;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    .pdp-gallery__thumbs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .pdp-gallery__thumb {
+        flex: 0 0 4.5rem;
+        aspect-ratio: 1 / 1;
+        padding: 0;
+        background-color: #f6f5f3;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        overflow: hidden;
+        cursor: pointer;
+        opacity: 0.6;
+        transition: opacity .2s, border-color .2s;
+    }
+
+    .pdp-gallery__thumb:hover,
+    .pdp-gallery__thumb:focus-visible,
+    .pdp-gallery__thumb[aria-current="true"] {
+        opacity: 1;
+    }
+
+    .pdp-gallery__thumb[aria-current="true"] {
+        border-color: var(--color-primary);
+    }
+
+    .pdp-gallery__thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .pdp-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .pdp-form > * + * {
+        margin-top: 1.5rem;
+    }
+
+    .pdp-title-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .pdp-title {
+        margin: 0;
+        font-size: clamp(1.75rem, 1.2rem + 1.6vw, 2.5rem);
+        line-height: 1.15;
+    }
+
+    .pdp-price {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 0.75rem;
+        margin-top: 0.75rem !important;
+    }
+
+    .pdp-price__current {
+        font-size: 1.5rem;
+        font-weight: 500;
+    }
+
+    .pdp-price__current.is-sale {
+        color: var(--color-alert);
+    }
+
+    .pdp-price__compare {
+        color: #8a8a8a;
+    }
+
+    .pdp-badge {
+        padding: 0.15rem 0.6rem;
+        border-radius: 999px;
+        background-color: var(--color-alert);
+        color: #fff;
+        font-size: 0.75rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    .pdp-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-size: 0.8rem;
+        font-weight: 500;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #6b6b6b;
+    }
+
+    .pdp-select {
+        border-radius: 8px;
+        padding-block: 0.65rem;
+    }
+
+    .pdp-qty {
+        display: inline-flex;
+        align-items: center;
+        border: 1px solid #d6d6d6;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .pdp-qty__btn {
+        width: 2.75rem;
+        height: 2.75rem;
+        border: 0;
+        background: transparent;
+        font-size: 1.25rem;
+        line-height: 1;
+        cursor: pointer;
+    }
+
+    .pdp-qty__btn:hover {
+        background-color: #f3f3f3;
+    }
+
+    .pdp-qty__input {
+        width: 3rem;
+        height: 2.75rem;
+        border: 0;
+        text-align: center;
+        -moz-appearance: textfield;
+    }
+
+    .pdp-qty__input::-webkit-outer-spin-button,
+    .pdp-qty__input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    .pdp-add {
+        padding-block: 0.85rem;
+        letter-spacing: 0.04em;
+    }
+
+    .pdp-add:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .pdp-dynamic {
+        margin-top: 0.75rem;
+    }
+
+    .pdp-description {
+        padding-top: 1.5rem;
+        border-top: 1px solid #e6e6e6;
+    }
+
+    .pdp-description__body {
+        line-height: 1.7;
+    }
+
+    .pdp-description__body img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    @media screen and (max-width: 767px) {
+        .pdp-gallery {
+            position: static;
+        }
+    }
+</style>
+
+<script>
+    (function () {
+        var root = document.getElementById('ProductSection-{{ section.id }}');
+        if (!root) return;
+
+        var variants = JSON.parse(root.querySelector('[data-variant-json]').textContent);
+        var slides = root.querySelectorAll('[data-media-id]');
+        var thumbs = root.querySelectorAll('[data-thumb-for]');
+        var idInput = root.querySelector('[data-variant-id-input]');
+        var select = root.querySelector('[data-variant-select]');
+        var priceEl = root.querySelector('[data-price]');
+        var compareEl = root.querySelector('[data-compare-price]');
+        var badgeEl = root.querySelector('[data-sale-badge]');
+        var addButton = root.querySelector('[data-add-button]');
+        var qtyInput = root.querySelector('#Quantity');
+
+        function showMedia(mediaId) {
+            if (!mediaId || !root.querySelector('[data-media-id="' + mediaId + '"]')) return;
+            slides.forEach(function (slide) {
+                slide.hidden = slide.getAttribute('data-media-id') !== String(mediaId);
+            });
+            thumbs.forEach(function (thumb) {
+                if (thumb.getAttribute('data-thumb-for') === String(mediaId)) {
+                    thumb.setAttribute('aria-current', 'true');
+                } else {
+                    thumb.removeAttribute('aria-current');
+                }
+            });
+        }
+
+        thumbs.forEach(function (thumb) {
+            thumb.addEventListener('click', function () {
+                showMedia(thumb.getAttribute('data-thumb-for'));
+            });
+        });
+
+        if (select) {
+            select.addEventListener('change', function () {
+                var variant = variants.find(function (v) { return String(v.id) === select.value; });
+                if (!variant) return;
+
+                idInput.value = variant.id;
+
+                if (priceEl) {
+                    priceEl.innerHTML = variant.price;
+                    priceEl.classList.toggle('is-sale', !!variant.compare);
+                }
+                if (compareEl) {
+                    compareEl.innerHTML = variant.compare || '';
+                    compareEl.hidden = !variant.compare;
+                }
+                if (badgeEl) badgeEl.hidden = !variant.compare;
+
+                if (addButton) {
+                    addButton.disabled = !variant.available;
+                    addButton.textContent = variant.available ? 'Add to cart' : 'Sold out';
+                }
+
+                showMedia(variant.media);
+
+                var url = new URL(window.location.href);
+                url.searchParams.set('variant', variant.id);
+                window.history.replaceState({}, '', url.toString());
+            });
+        }
+
+        root.querySelectorAll('[data-qty-step]').forEach(function (button) {
+            button.addEventListener('click', function () {
+                if (!qtyInput) return;
+                var next = (parseInt(qtyInput.value, 10) || 1) + parseInt(button.getAttribute('data-qty-step'), 10);
+                qtyInput.value = Math.max(1, next);
+            });
+        });
+    })();
+</script>
 
 {% schema %}
 {
