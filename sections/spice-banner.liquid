@@ -17,6 +17,10 @@
         height: 35rem;
         }
 
+        .spice_banner .banner-new{
+            color: var(--color-alert);
+        }
+
         @media screen and (max-width: 787px){
             .spice_banner{
             background-image: url({{ section.settings.image_2 | img_url: 'master'}});
@@ -26,8 +30,8 @@
                 color: var(--color-accent);
             } 
 
-            .banner-new{
-                color: #fff;
+            .spice_banner .banner-new{
+                color: var(--color-alert);
             }
 
             .spice_banner-description{

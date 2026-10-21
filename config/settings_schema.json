@@ -53,6 +53,20 @@
       },
       {
         "type": "color",
+        "id": "color_highlight",
+        "label": "Highlight color",
+        "info": "For highlighted text, badges, and callouts.",
+        "default": "#FFF3CD"
+      },
+      {
+        "type": "color",
+        "id": "color_alert",
+        "label": "Alert color",
+        "info": "For error messages, warnings, and sale or sold-out notices.",
+        "default": "#D52F44"
+      },
+      {
+        "type": "color",
         "id": "color_surface",
         "label": "Tile background",
         "info": "Background of the features grid tiles.",
