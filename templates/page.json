@@ -1,26 +1,44 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
-    "sections": {
-        "template": {
-            "type": "template-page-default",
-            "blocks": {
-                "title": {
-                    "type": "page_title"
-                },
-                "date": {
-                    "type": "page_date"
-                },
-                "content": {
-                    "type": "page_content"
-                }
-            },
-            "block_order": [
-                "title",
-                "date",
-                "content"
-            ]
+  "sections": {
+    "template": {
+      "type": "template-page-default",
+      "blocks": {
+        "title": {
+          "type": "page_title",
+          "settings": {}
+        },
+        "date": {
+          "type": "page_date",
+          "settings": {}
+        },
+        "content": {
+          "type": "page_content",
+          "settings": {}
         }
-    },
-    "order": [
-        "template"
-    ]
+      },
+      "block_order": [
+        "title",
+        "date",
+        "content"
+      ],
+      "settings": {
+        "container": "container",
+        "banner_image": "shopify://shop_images/spices_market-sm_4.webp",
+        "banner_image-mobile": "shopify://shop_images/spices_market-sm_1.webp",
+        "show_publish_date": true
+      }
+    }
+  },
+  "order": [
+    "template"
+  ]
 }

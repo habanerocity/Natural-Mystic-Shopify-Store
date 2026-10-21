@@ -1,25 +1,98 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
-    "sections": {
-        "hero": {
-            "type": "hero",
-            "settings": {
-                "image": "",
-                "title": "Welcome to Natural Mystic",
-                "description": "<p>Welcome!</p>",
-                "button_label": "learn more",
-                "button_link": "https:\/\/google.com\/"
-            }
-        },
-        "featured-collection": {
-            "type": "featured-collection",
-            "settings": {
-                "featured_collection": "all",
-                "title": "Featured Collection"
-            }
-        }
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "image": "shopify://shop_images/spices2.webp",
+        "image_mobile": "shopify://shop_images/spices2-300w_e9905ca3-136e-4f49-b92c-cec8f7d2ac8f.webp",
+        "title": "Discover Over 50+ Spices",
+        "description": "<p class=\"mb-0\">Flavors With Character</p>",
+        "button_label": "Shop Now",
+        "button_link": "https://natural-mystic-foods.myshopify.com/collections/all"
+      }
     },
-    "order": [
-        "hero",
-        "featured-collection"
-    ]
+    "43f1f6c2-8c22-41be-8ad7-bf3e3915cd21": {
+      "type": "features-grid",
+      "settings": {
+        "grid_item_title_1": "Super Fast and Reliable Delivery",
+        "grid_item_title_2": "Contactless Shipping",
+        "grid_item_title_3": "Money-Back Guarantee",
+        "grid_item_title_4": "Super Secure Payment System",
+        "grid_image_1": "shopify://shop_images/icons8-shipping-50.png",
+        "grid_image_2": "shopify://shop_images/icons8-verified-50.png",
+        "grid_image_3": "shopify://shop_images/icons8-money-50.png",
+        "grid_image_4": "shopify://shop_images/icons8-credit-card-50.png"
+      }
+    },
+    "1664559826d79da4ed": {
+      "type": "collection-slider",
+      "settings": {
+        "title": "Best Sellers",
+        "collection": "frontpage",
+        "product_count": 8
+      }
+    },
+    "16645937410ba2e856": {
+      "type": "spice-banner",
+      "settings": {
+        "image_1": "shopify://shop_images/spiceswoodbanner.webp",
+        "image_2": "shopify://shop_images/assorted-cooking-spices-in-spoons.jpg",
+        "title": "New Flavors",
+        "subheading_title": "Get up to 30% off all warm spices & warm spice blends",
+        "description": "<p>Discover the warmth and richness of our carefully curated warm spices and blends, all now at an unbeatable 30% discount. Embrace the changing seasons with the comforting flavors of cinnamon, nutmeg, and more. Elevate your dishes with these aromatic ingredients, sourced from around the world.</p>",
+        "button_label": "View Sale",
+        "button_link": "shopify://collections/warm-spices"
+      }
+    },
+    "16646624727567becb": {
+      "type": "browse-categories",
+      "settings": {
+        "heading_title": "Our Collections",
+        "subheading_title": "Discover & Browse",
+        "category_label_a": "Best Sellers",
+        "category_label_b": "Warm Spices",
+        "category_label_c": "cooling spices",
+        "category_label_d": "herbs",
+        "category_link_a": "shopify://collections/frontpage",
+        "category_link_b": "shopify://collections/warm-spices",
+        "category_link_c": "shopify://collections/cooling-spices",
+        "category_link_d": "shopify://collections/herbs"
+      }
+    },
+    "1664760159a4388479": {
+      "type": "browse-blog",
+      "settings": {
+        "title": "The Latest From Our Blog",
+        "hover_title_1": "Layover in Taiwan",
+        "hover_title_2": "Mojito Mint",
+        "hover_title_3": "Breakfast in Manila",
+        "hover_paragraph_1": "Great noodles in quaint Taipei",
+        "hover_paragraph_2": "A classic herb for mojitos",
+        "hover_paragraph_3": "An entirely different flavor palette",
+        "hover_link_1": "shopify://blogs/news/another-blog-post",
+        "hover_link_2": "shopify://blogs/news/bumpers",
+        "hover_link_3": "shopify://blogs/news/nicky",
+        "image_1": "shopify://shop_images/taiwan.jpg",
+        "image_2": "shopify://shop_images/20180405_161629.jpg",
+        "image_3": "shopify://shop_images/bangus-2.jpg"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "43f1f6c2-8c22-41be-8ad7-bf3e3915cd21",
+    "1664559826d79da4ed",
+    "16645937410ba2e856",
+    "16646624727567becb",
+    "1664760159a4388479"
+  ]
 }

@@ -1,0 +1,12 @@
+{%- comment -%}
+  Theme colors from Theme settings > Colors. Render before application.css.scss.
+  Use these in CSS as var(--color-primary), etc.
+{%- endcomment -%}
+<style>
+  :root {
+    --color-primary: {{ settings.color_primary }};
+    --color-primary-dark: {{ settings.color_primary_dark }};
+    --color-accent: {{ settings.color_accent }};
+    --color-surface: {{ settings.color_surface }};
+  }
+</style>

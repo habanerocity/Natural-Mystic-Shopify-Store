@@ -1,22 +1,32 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
-    "sections": {
-        "template": {
-            "type": "template-page-faq",
-            "blocks": {
-                "new-faq-item": {
-                    "type": "faq",
-                    "settings": {
-                        "title": "How to create a block for this page template",
-                        "answer": "<p>To create a block, you can open your customizer or your theme editor and then navigate to your faq page where you should be able to create an FAQ item</p>"
-                    }
-                }
-            },
-            "block_order": [
-                "new-faq-item"
-            ]
+  "sections": {
+    "template": {
+      "type": "template-page-faq",
+      "blocks": {
+        "new-faq-item": {
+          "type": "faq",
+          "settings": {
+            "title": "How to create a block for this page template",
+            "answer": "<p>To create a block, you can open your customizer or your theme editor and then navigate to your faq page where you should be able to create an FAQ item</p>"
+          }
         }
-    },
-    "order": [
-        "template"
-    ]
+      },
+      "block_order": [
+        "new-faq-item"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "template"
+  ]
 }

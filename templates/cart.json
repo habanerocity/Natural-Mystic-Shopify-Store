@@ -1,22 +1,38 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
-    "sections": {
-        "template": {
-            "type": "template-cart",
-            "blocks": {
-                "cart_total": {
-                    "type": "cart_total"
-                },
-                "cart_checkout_button": {
-                    "type": "cart_checkout_button"
-                }
-            },
-            "block_order": [
-                "cart_total",
-                "cart_checkout_button"
-            ]
+  "sections": {
+    "template": {
+      "type": "template-cart",
+      "blocks": {
+        "cart_total": {
+          "type": "cart_total",
+          "settings": {}
+        },
+        "cart_checkout_button": {
+          "type": "cart_checkout_button",
+          "settings": {}
         }
-    },
-    "order": [
-        "template"
-    ]
+      },
+      "block_order": [
+        "cart_total",
+        "cart_checkout_button"
+      ],
+      "settings": {
+        "banner_image": "shopify://shop_images/peppercorns-overlaypng_1.webp",
+        "banner_image-mobile": "shopify://shop_images/peppercorns-overlaypng.webp",
+        "delete_icon": "shopify://shop_images/trash-can.png"
+      }
+    }
+  },
+  "order": [
+    "template"
+  ]
 }

@@ -1,42 +1,59 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
-    "sections": {
-        "template": {
-            "type": "product-template",
-            "blocks": {
-                "title": {
-                    "type": "title"
-                },
-                "price": {
-                    "type": "price"
-                },
-                "variantSelector": {
-                    "type": "variant_selector"
-                },
-                "quantity": {
-                    "type": "quantity"
-                },
-                "checkoutButtons": {
-                    "type": "checkout_buttons"
-                },
-                "description": {
-                    "type": "description"
-                }
-            },
-            "block_order": [
-                "title",
-                "price",
-                "variantSelector",
-                "quantity",
-                "checkoutButtons",
-                "description"
-            ]
+  "sections": {
+    "template": {
+      "type": "product-template",
+      "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {}
         },
-        "product-recommendation": {
-            "type": "product-recommendation"
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "variantSelector": {
+          "type": "variant_selector",
+          "settings": {}
+        },
+        "quantity": {
+          "type": "quantity",
+          "settings": {}
+        },
+        "checkoutButtons": {
+          "type": "checkout_buttons",
+          "settings": {}
+        },
+        "description": {
+          "type": "description",
+          "settings": {}
         }
+      },
+      "block_order": [
+        "title",
+        "price",
+        "variantSelector",
+        "quantity",
+        "checkoutButtons",
+        "description"
+      ],
+      "settings": {}
     },
-    "order": [
-        "template",
-        "product-recommendation"
-    ]
+    "product-recommendation": {
+      "type": "product-recommendation",
+      "settings": {}
+    }
+  },
+  "order": [
+    "template",
+    "product-recommendation"
+  ]
 }

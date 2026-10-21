@@ -1,35 +1,71 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
-    "layout": "theme-blog-with-sidebar",
-    "sections": {
-        "template": {
-            "type": "template-article",
-            "blocks": {
-                "image_block": {
-                    "type": "featured_image"
-                },
-                "title": {
-                    "type": "title"
-                },
-                "article_meta": {
-                    "type": "article_meta"
-                },
-                "content": {
-                    "type": "content"
-                }
-            },
-            "block_order": [
-                "image_block",
-                "title",
-                "article_meta",
-                "content"
-            ]
+  "layout": "theme-blog-with-sidebar",
+  "sections": {
+    "template": {
+      "type": "template-article",
+      "blocks": {
+        "image_block": {
+          "type": "featured_image",
+          "settings": {}
         },
-        "sidebar": {
-            "type": "sidebar"
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "article_meta": {
+          "type": "article_meta",
+          "settings": {}
+        },
+        "content": {
+          "type": "content",
+          "settings": {}
         }
+      },
+      "block_order": [
+        "image_block",
+        "title",
+        "article_meta",
+        "content"
+      ],
+      "settings": {}
     },
-    "order": [
-        "template",
-        "sidebar"
-    ]
+    "sidebar": {
+      "type": "sidebar",
+      "blocks": {
+        "52eed077-b55b-48fc-8b2b-a1b4c46ea5f5": {
+          "type": "image",
+          "settings": {
+            "title": "About the Author",
+            "image": "shopify://shop_images/IMG_5466.jpg",
+            "url": ""
+          }
+        },
+        "b68e5320-9203-432c-afd0-6f74482f4224": {
+          "type": "text",
+          "settings": {
+            "title": "",
+            "description": "<p>Hey there, I'm Lindy, a foodie from Los Angeles, California. My wanderlust ignited when I was just a kid, and since then, I've traversed over six countries spanning three continents, all while nurturing a profound fascination for diverse cultures and awe-inspiring landscapes. With an insatiable appetite for exploration, I've blended my passions for food, technology, sports, and, of course, travel, into an exhilarating journey of discovery. Armed with a bachelor's degree in anthropology from the University of California, Santa Barbara, I'm not just a traveler – I'm a cultural enthusiast, diving deep into the vibrant tapestry of every place I visit. Through my eyes and experiences, I invite you to join me on this thrilling quest to uncover the hidden treasures of our world.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "52eed077-b55b-48fc-8b2b-a1b4c46ea5f5",
+        "b68e5320-9203-432c-afd0-6f74482f4224"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "template",
+    "sidebar"
+  ]
 }

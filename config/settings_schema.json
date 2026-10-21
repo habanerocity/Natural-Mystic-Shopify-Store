@@ -29,6 +29,50 @@
     ]
   },
   {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_primary",
+        "label": "Primary color",
+        "info": "Buttons, links, and highlights.",
+        "default": "#C52C03"
+      },
+      {
+        "type": "color",
+        "id": "color_primary_dark",
+        "label": "Primary color (hover)",
+        "info": "Darker shade used when hovering over buttons.",
+        "default": "#9B2302"
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Accent color",
+        "default": "#FEC016"
+      },
+      {
+        "type": "color",
+        "id": "color_surface",
+        "label": "Tile background",
+        "info": "Background of the features grid tiles.",
+        "default": "#E0E0E0"
+      }
+    ]
+  },
+  {
+    "name": "Brand fonts",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "use_brand_fonts",
+        "label": "Use G&Z brand fonts",
+        "info": "Cormorant Garamond for headings and DM Sans for body text. When on, the Typography font pickers are ignored.",
+        "default": true
+      }
+    ]
+  },
+  {
     "name": "Typography",
     "settings": [
       {

@@ -1,6 +1,86 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
-  "current": "Default",
+  "current": {
+    "show_breadcrumb_nav": false,
+    "favicon": "shopify://shop_images/shopify-icon-2.png",
+    "header_text_font": "rajdhani_n6",
+    "body_text_font": "chong_modern_n4",
+    "checkout_header_image": "shopify://shop_images/habanerocity_a_banner_for_a_Shopify_spice_stores_warm_spices_co_64e35bb8-7d58-4041-96dd-b2a205d663b2_2.png",
+    "checkout_logo_image": "shopify://shop_images/nm_logo-removebg-preview.png",
+    "checkout_accent_color": "#fec016",
+    "checkout_button_color": "#c52c03",
+    "sections": {
+      "header": {
+        "type": "header",
+        "blocks": {
+          "eeb1f426-e7f2-476c-9d52-a8417e1dcce1": {
+            "type": "image",
+            "settings": {
+              "store-logo": "shopify://shop_images/NM._4.svg"
+            }
+          }
+        },
+        "block_order": [
+          "eeb1f426-e7f2-476c-9d52-a8417e1dcce1"
+        ],
+        "settings": {}
+      },
+      "footer-section": {
+        "type": "footer-section",
+        "blocks": {
+          "f080974e-439d-4d93-971d-552281e6130e": {
+            "type": "link_list",
+            "settings": {
+              "title": "Quick Links",
+              "menu": "main-menu"
+            }
+          },
+          "e3676aec-5970-4a5e-ab70-2ec4e45cffb7": {
+            "type": "link_list",
+            "settings": {
+              "title": "Collections",
+              "menu": "collections"
+            }
+          },
+          "28021cab-1fff-4a71-a996-15d50cdb36b3": {
+            "type": "link_list",
+            "settings": {
+              "title": "Account",
+              "menu": "social-media-links"
+            }
+          },
+          "ab70c76d-c7aa-4718-9a87-ce8cddbe254b": {
+            "type": "text",
+            "settings": {
+              "logo": "shopify://shop_images/NM._6_-cropped.svg",
+              "title": "Store information",
+              "description": "<p>1288 Baldwin Park Ave</p><p>El Monte, CA 91733</p><p>info@nm.com</p><p>626.544.4366</p>"
+            }
+          }
+        },
+        "block_order": [
+          "f080974e-439d-4d93-971d-552281e6130e",
+          "e3676aec-5970-4a5e-ab70-2ec4e45cffb7",
+          "28021cab-1fff-4a71-a996-15d50cdb36b3",
+          "ab70c76d-c7aa-4718-9a87-ce8cddbe254b"
+        ],
+        "settings": {
+          "col_num": 4,
+          "enable_payment_type_icons": true
+        }
+      }
+    },
+    "content_for_index": []
+  },
   "presets": {
-    "Default": { }
+    "Default": {}
   }
 }
