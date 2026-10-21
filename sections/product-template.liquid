@@ -5,6 +5,14 @@
     {% assign on_sale = true %}
 {% endif %}
 
+{%- comment -%} Subscription cards replace the plain price when the product has selling plans and the block is in use {%- endcomment -%}
+{% assign show_purchase_options = false %}
+{% if product.selling_plan_groups.size > 0 %}
+    {% for b in section.blocks %}
+        {% if b.type == 'purchase_options' %}{% assign show_purchase_options = true %}{% endif %}
+    {% endfor %}
+{% endif %}
+
 <div class="pdp container my-5" id="ProductSection-{{ section.id }}">
     {% if settings.show_breadcrumb_nav %}
         <div class="mb-4">
@@ -27,7 +35,7 @@
                             {% elsif forloop.first %}
                                 {% assign is_active = true %}
                             {% endif %}
-                            <div class="pdp-gallery__slide" data-media-id="{{ media.id }}" {% unless is_active %}hidden{% endunless %}>
+                            <div class="pdp-gallery__slide{% if is_active %} is-active{% endif %}" data-media-id="{{ media.id }}" {% unless is_active %}aria-hidden="true"{% endunless %}>
                                 {% if is_active %}
                                     {% assign loading = 'eager' %}
                                 {% else %}
@@ -45,7 +53,7 @@
                         {% endif %}
                     {% endfor %}
                     {% if image_count == 0 %}
-                        <div class="pdp-gallery__slide">
+                        <div class="pdp-gallery__slide is-active">
                             {{ 'product-1' | placeholder_svg_tag: 'pdp-gallery__img pdp-gallery__placeholder' }}
                         </div>
                     {% endif %}
@@ -107,34 +115,126 @@
 
                         {% case block.type %}
 
+                        {% when "rating" %}
+                            {% assign rating = product.metafields.reviews.rating.value %}
+                            {% assign rating_count = product.metafields.reviews.rating_count.value | default: 0 | plus: 0 %}
+                            {% if rating != blank and rating_count > 0 %}
+                                {% assign rating_value = rating.rating | times: 1.0 %}
+                                {% assign rating_max = rating.scale_max | times: 1.0 %}
+                                {% assign rating_pct = rating_value | divided_by: rating_max | times: 100 %}
+                                {% if rating_count >= 1000 %}
+                                    {% assign count_thousands = rating_count | divided_by: 1000 %}
+                                    {% assign count_rest = rating_count | modulo: 1000 | prepend: '00' | slice: -3, 3 %}
+                                    {% assign count_label = count_thousands | append: ',' | append: count_rest %}
+                                {% else %}
+                                    {% assign count_label = rating_count %}
+                                {% endif %}
+                                <div class="pdp-rating" {{ block.shopify_attributes }}>
+                                    <span class="pdp-rating__stars" style="--rating: {{ rating_pct }}%;" aria-hidden="true"></span>
+                                    <span aria-hidden="true">{{ rating_value | round: 1 }} &middot; {{ count_label }} {% if rating_count == 1 %}review{% else %}reviews{% endif %}</span>
+                                    <span class="visually-hidden">Rated {{ rating_value | round: 1 }} out of {{ rating.scale_max }}, {{ rating_count }} reviews</span>
+                                </div>
+                            {% endif %}
+
+                        {% when "subtitle" %}
+                            {% assign subtitle = block.settings.text %}
+                            {% if subtitle == blank and block.settings.use_excerpt %}
+                                {% assign subtitle = product.description | strip_html | truncatewords: 28 %}
+                            {% endif %}
+                            {% if subtitle != blank %}
+                                <div class="pdp-subtitle" {{ block.shopify_attributes }}>{{ subtitle }}</div>
+                            {% endif %}
+
                         {% when "title" %}
                             <div class="pdp-title-row" {{ block.shopify_attributes }}>
-                                <h1 class="pdp-title dot">{{ product.title }}</h1>
-                                <div class="icon_wrapper">
-                                    <div class="swym-button swym-add-to-wishlist heart__beat position-relative top-0" data-with-epi="true" data-swaction="addToWishlist" data-product-id="{{ product.id }}" data-variant-id="{{ current_variant.id }}" data-product-url="{{ shop.url }}{{ product.url }}" alt="add to wishlist"></div>
-                                </div>
+                                <h1 class="pdp-title">{{ product.title }}</h1>
                             </div>
 
                         {% when "price" %}
+                            {% unless show_purchase_options %}
                             <div class="pdp-price" {{ block.shopify_attributes }}>
                                 <span class="pdp-price__current{% if on_sale %} is-sale{% endif %}" id="productPrice" data-price>{{ current_variant.price | money }}</span>
                                 <s class="pdp-price__compare" id="productCompareAtPrice" data-compare-price {% unless on_sale %}hidden{% endunless %}>{% if on_sale %}{{ current_variant.compare_at_price | money }}{% endif %}</s>
                                 <span class="pdp-badge" data-sale-badge {% unless on_sale %}hidden{% endunless %}>Sale</span>
                             </div>
+                            {% endunless %}
+
+                        {% when "purchase_options" %}
+                            {% if show_purchase_options %}
+                                {% assign subscribe_default = false %}
+                                {% if product.requires_selling_plan or block.settings.default_option == 'subscription' %}
+                                    {% assign subscribe_default = true %}
+                                {% endif %}
+                                {% assign first_allocation = current_variant.selling_plan_allocations.first %}
+                                {% assign first_plan = first_allocation.selling_plan %}
+                                {% assign plan_count = 0 %}
+                                {% for group in product.selling_plan_groups %}
+                                    {% assign plan_count = plan_count | plus: group.selling_plans.size %}
+                                {% endfor %}
+                                <div class="pdp-purchase" role="radiogroup" aria-label="Purchase options" {{ block.shopify_attributes }}>
+                                    <input type="hidden" name="selling_plan" value="{{ first_plan.id }}" data-selling-plan-input {% unless subscribe_default %}disabled{% endunless %}>
+
+                                    <label class="pdp-purchase__card{% if subscribe_default %} is-selected{% endif %}" data-purchase-card>
+                                        <span class="pdp-purchase__badge" data-plan-badge hidden></span>
+                                        <span class="pdp-purchase__row">
+                                            <span class="pdp-purchase__choice">
+                                                <input type="radio" class="pdp-purchase__radio" name="purchase-{{ section.id }}" value="subscription" data-purchase-input {% if subscribe_default %}checked{% endif %}>
+                                                <span>{{ block.settings.subscription_label }}</span>
+                                            </span>
+                                            <span class="pdp-purchase__prices">
+                                                <s class="pdp-purchase__compare" data-plan-compare {% unless first_allocation.compare_at_price > first_allocation.price %}hidden{% endunless %}>{{ first_allocation.compare_at_price | money }}</s>
+                                                <span class="pdp-purchase__price" data-plan-price>{{ first_allocation.price | money }}</span>
+                                            </span>
+                                        </span>
+                                        <span class="pdp-purchase__plan">
+                                            {% if plan_count > 1 %}
+                                                <select class="pdp-purchase__plan-select" aria-label="Delivery frequency" data-plan-select>
+                                                    {% for group in product.selling_plan_groups %}
+                                                        {% for plan in group.selling_plans %}
+                                                            <option value="{{ plan.id }}" {% if plan.id == first_plan.id %}selected{% endif %}>{{ plan.name }}</option>
+                                                        {% endfor %}
+                                                    {% endfor %}
+                                                </select>
+                                            {% else %}
+                                                {{ first_plan.name }}
+                                            {% endif %}
+                                        </span>
+                                    </label>
+
+                                    {% unless product.requires_selling_plan %}
+                                        <label class="pdp-purchase__card{% unless subscribe_default %} is-selected{% endunless %}" data-purchase-card>
+                                            <span class="pdp-purchase__row">
+                                                <span class="pdp-purchase__choice">
+                                                    <input type="radio" class="pdp-purchase__radio" name="purchase-{{ section.id }}" value="one_time" data-purchase-input {% unless subscribe_default %}checked{% endunless %}>
+                                                    <span>{{ block.settings.onetime_label }}</span>
+                                                </span>
+                                                <span class="pdp-purchase__prices">
+                                                    <s class="pdp-purchase__compare" data-onetime-compare {% unless on_sale %}hidden{% endunless %}>{% if on_sale %}{{ current_variant.compare_at_price | money }}{% endif %}</s>
+                                                    <span class="pdp-purchase__price" data-onetime-price>{{ current_variant.price | money }}</span>
+                                                </span>
+                                            </span>
+                                        </label>
+                                    {% endunless %}
+                                </div>
+                            {% endif %}
 
                         {% when "variant_selector" %}
                             {% unless product.has_only_default_variant %}
-                                <div class="pdp-field" {{ block.shopify_attributes }}>
-                                    <label for="ProductVariantSelect-{{ section.id }}" class="pdp-label">
-                                        {% if product.options.size == 1 %}{{ product.options.first }}{% else %}Options{% endif %}
-                                    </label>
-                                    <select class="form-select pdp-select" id="ProductVariantSelect-{{ section.id }}" data-variant-select>
-                                        {% for variant in product.variants %}
-                                            <option value="{{ variant.id }}" {% if variant.id == current_variant.id %}selected{% endif %} {% unless variant.available %}disabled{% endunless %}>
-                                                {{ variant.title }}{% unless variant.available %} (sold out){% endunless %}
-                                            </option>
-                                        {% endfor %}
-                                    </select>
+                                <div class="pdp-options" {{ block.shopify_attributes }}>
+                                    {% for option in product.options_with_values %}
+                                        {% assign option_index = forloop.index0 %}
+                                        <fieldset class="pdp-option" data-option-index="{{ option_index }}">
+                                            <legend class="pdp-option__label">{{ option.name }}</legend>
+                                            <div class="pdp-option__values">
+                                                {% for value in option.values %}
+                                                    {% assign value_name = value | append: '' %}
+                                                    {% assign input_id = 'Option-' | append: section.id | append: '-' | append: option_index | append: '-' | append: forloop.index0 %}
+                                                    <input class="pdp-option__input visually-hidden" type="radio" id="{{ input_id }}" name="option-{{ section.id }}-{{ option_index }}" value="{{ value_name | escape }}" data-option-input {% if current_variant.options[option_index] == value_name %}checked{% endif %}>
+                                                    <label class="pdp-pill" for="{{ input_id }}">{{ value_name }}</label>
+                                                {% endfor %}
+                                            </div>
+                                        </fieldset>
+                                    {% endfor %}
                                 </div>
                             {% endunless %}
 
@@ -150,9 +250,14 @@
 
                         {% when "checkout_buttons" %}
                             <div class="pdp-buttons" {{ block.shopify_attributes }}>
-                                <button class="btn rust w-100 pdp-add" id="AddToCart" name="add" type="submit" data-add-button {% unless current_variant.available %}disabled{% endunless %}>
-                                    {% if current_variant.available %}Add to cart{% else %}Sold out{% endif %}
-                                </button>
+                                <div class="pdp-buy">
+                                    <button class="btn rust pdp-add" id="AddToCart" name="add" type="submit" data-add-button {% unless current_variant.available %}disabled{% endunless %}>
+                                        {% if current_variant.available %}Add to cart{% else %}Sold out{% endif %}
+                                    </button>
+                                    <div class="pdp-wishlist" role="button" tabindex="0" aria-pressed="false" aria-label="Add to wishlist" data-wishlist-button>
+                                        <div class="swym-button swym-add-to-wishlist heart__beat" data-with-epi="true" data-swaction="addToWishlist" data-product-id="{{ product.id }}" data-variant-id="{{ current_variant.id }}" data-product-url="{{ shop.url }}{{ product.url }}"></div>
+                                    </div>
+                                </div>
                                 {% if section.settings.dynamic_buttons_checkbox == true %}
                                     <div class="pdp-dynamic">{{ form | payment_button }}</div>
                                 {% endif %}
@@ -212,8 +317,30 @@
             "available": {{ variant.available | json }},
             "media": {{ variant.featured_media.id | json }},
             "price": {{ variant.price | money | json }},
-            "compare": {% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money | json }}{% else %}null{% endif %}
+            "compare": {% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money | json }}{% else %}null{% endif %},
+            "options": {{ variant.options | json }},
+            "plans": {
+                {% for allocation in variant.selling_plan_allocations %}
+                    "{{ allocation.selling_plan.id }}": {
+                        "price": {{ allocation.price | money | json }},
+                        "compare": {% if allocation.compare_at_price > allocation.price %}{{ allocation.compare_at_price | money | json }}{% else %}null{% endif %}
+                    }{% unless forloop.last %},{% endunless %}
+                {% endfor %}
+            }
         }{% unless forloop.last %},{% endunless %}{% endfor %}]
+    </script>
+
+    <script type="application/json" data-plan-json>
+        {
+            {% for group in product.selling_plan_groups %}
+                {% for plan in group.selling_plans %}
+                    {% assign adjustment = plan.price_adjustments.first %}
+                    "{{ plan.id }}": {
+                        "badge": {% if adjustment.value_type == 'percentage' and adjustment.value > 0 %}{{ adjustment.value | append: '% off' | json }}{% elsif adjustment.value_type == 'fixed_amount' and adjustment.value > 0 %}{{ adjustment.value | money | append: ' off' | json }}{% else %}null{% endif %}
+                    }{% unless forloop.last %},{% endunless %}
+                {% endfor %}{% unless forloop.last %},{% endunless %}
+            {% endfor %}
+        }
     </script>
 </div>
 
@@ -299,9 +426,26 @@
         }
     }
 
+    /* Slides are stacked and cross-fade; only the active one is visible and interactive */
     .pdp-gallery__slide {
-        width: 100%;
-        height: 100%;
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity .45s ease, visibility 0s linear .45s;
+    }
+
+    .pdp-gallery__slide.is-active {
+        opacity: 1;
+        visibility: visible;
+        transition: opacity .45s ease, visibility 0s;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .pdp-gallery__slide,
+        .pdp-gallery__slide.is-active {
+            transition: none;
+        }
     }
 
     .pdp-gallery__img {
@@ -374,8 +518,257 @@
 
     .pdp-title {
         margin: 0;
-        font-size: clamp(1.75rem, 1.2rem + 1.6vw, 2.5rem);
-        line-height: 1.15;
+        font-size: clamp(2.25rem, 1.5rem + 2.4vw, 3.5rem);
+        font-weight: 700;
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+        color: var(--bs-body-color);
+    }
+
+    /* Rating pill */
+    .pdp-rating {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.4rem 0.9rem;
+        border-radius: 999px;
+        background-color: var(--color-highlight);
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    .pdp-rating__stars {
+        position: relative;
+        display: inline-block;
+        font-size: 1.05rem;
+        line-height: 1;
+        letter-spacing: 0.15em;
+    }
+
+    .pdp-rating__stars::before {
+        content: "\2605\2605\2605\2605\2605";
+        color: rgba(0, 0, 0, 0.12);
+    }
+
+    .pdp-rating__stars::after {
+        content: "\2605\2605\2605\2605\2605";
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: var(--rating, 100%);
+        overflow: hidden;
+        white-space: nowrap;
+        color: var(--color-accent);
+    }
+
+    /* Tighter spacing between rating, title and subtitle so they read as one group */
+    .pdp-form > .pdp-title-row,
+    .pdp-form > .pdp-subtitle {
+        margin-top: 0.85rem;
+    }
+
+    .pdp-subtitle {
+        line-height: 1.6;
+    }
+
+    .pdp-subtitle > :last-child {
+        margin-bottom: 0;
+    }
+
+    /* Variant options as pills */
+    .pdp-option {
+        min-width: 0;
+        margin: 0;
+        padding: 0;
+        border: 0;
+    }
+
+    .pdp-option + .pdp-option {
+        margin-top: 1.25rem;
+    }
+
+    .pdp-option__label {
+        float: none;
+        width: auto;
+        margin-bottom: 0.75rem;
+        padding: 0;
+        font-size: 1.1rem;
+        font-weight: 600;
+        line-height: 1.3;
+    }
+
+    .pdp-option__values {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr));
+        gap: 0.75rem;
+    }
+
+    .pdp-pill {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 3.25rem;
+        padding: 0.6rem 1rem;
+        border: 1.5px solid transparent;
+        border-radius: 14px;
+        background-color: var(--color-highlight);
+        text-align: center;
+        cursor: pointer;
+        transition: border-color .2s, opacity .2s;
+    }
+
+    .pdp-pill:hover {
+        border-color: color-mix(in srgb, var(--color-highlight-dark) 55%, transparent);
+    }
+
+    .pdp-option__input:checked + .pdp-pill {
+        border-color: var(--color-highlight-dark);
+    }
+
+    .pdp-option__input:focus-visible + .pdp-pill {
+        outline: 2px solid var(--color-primary);
+        outline-offset: 2px;
+    }
+
+    .pdp-pill.is-unavailable {
+        color: #6c757d;
+        text-decoration: line-through;
+    }
+
+    /* Subscribe & save / one-time cards */
+    .pdp-purchase {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding-top: 0.75rem;
+    }
+
+    .pdp-purchase__card {
+        position: relative;
+        display: block;
+        margin: 0;
+        padding: 1.25rem 1.5rem;
+        border: 1.5px solid var(--bs-body-color);
+        border-radius: 16px;
+        background-color: #fff;
+        color: #adb5bd;
+        cursor: pointer;
+        transition: background-color .25s, color .25s;
+    }
+
+    .pdp-purchase__card.is-selected {
+        background-color: var(--color-highlight);
+        color: var(--bs-body-color);
+    }
+
+    .pdp-purchase__badge {
+        position: absolute;
+        top: 0;
+        right: 1.5rem;
+        transform: translateY(-50%);
+        padding: 0.3rem 0.9rem;
+        border-radius: 999px;
+        background-color: var(--bs-body-color);
+        color: #fff;
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+    }
+
+    .pdp-purchase__row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .pdp-purchase__choice {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    .pdp-purchase__radio {
+        appearance: none;
+        -webkit-appearance: none;
+        flex: 0 0 auto;
+        display: grid;
+        place-content: center;
+        width: 1.15rem;
+        height: 1.15rem;
+        margin: 0;
+        border: 1.5px solid currentColor;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    .pdp-purchase__radio::before {
+        content: "";
+        width: 0.55rem;
+        height: 0.55rem;
+        border-radius: 50%;
+        background-color: currentColor;
+        transform: scale(0);
+        transition: transform .2s;
+    }
+
+    .pdp-purchase__radio:checked::before {
+        transform: scale(1);
+    }
+
+    .pdp-purchase__radio:focus-visible {
+        outline: 2px solid var(--color-primary);
+        outline-offset: 2px;
+    }
+
+    .pdp-purchase__prices {
+        display: flex;
+        align-items: baseline;
+        gap: 0.75rem;
+        white-space: nowrap;
+    }
+
+    .pdp-purchase__compare {
+        color: #adb5bd;
+    }
+
+    .pdp-purchase__price {
+        font-size: 1rem;
+        font-weight: 500;
+        transition: font-size .25s;
+    }
+
+    .pdp-purchase__card.is-selected .pdp-purchase__price {
+        font-size: 1.5rem;
+        font-weight: 700;
+    }
+
+    .pdp-purchase__plan {
+        display: block;
+        margin-top: 0.5rem;
+        padding-left: 1.9rem;
+        font-size: 0.95rem;
+    }
+
+    .pdp-purchase__plan-select {
+        padding: 0 1.25rem 0 0;
+        border: 0;
+        background-color: transparent;
+        color: inherit;
+        font: inherit;
+        cursor: pointer;
+    }
+
+    @media screen and (max-width: 575px) {
+        .pdp-purchase__card {
+            padding: 1.1rem 1.15rem;
+        }
+
+        .pdp-purchase__choice {
+            font-size: 1rem;
+        }
     }
 
     .pdp-price {
@@ -460,14 +853,65 @@
         margin: 0;
     }
 
+    .pdp-buy {
+        display: flex;
+        align-items: stretch;
+        gap: 0.75rem;
+    }
+
     .pdp-add {
+        flex: 1 1 auto;
         padding-block: 0.85rem;
         letter-spacing: 0.04em;
     }
 
-    .pdp-add:disabled {
-        opacity: 0.5;
+    /* Square outlined wishlist button next to Add to cart */
+    .pdp-wishlist {
+        flex: 0 0 3.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 0;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color .2s;
+    }
+
+    .pdp-wishlist:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .pdp-wishlist:focus-visible {
+        outline: 2px solid var(--color-primary);
+        outline-offset: 2px;
+    }
+
+    /* The heart is drawn with CSS (a rotated square plus two circles), so its visible shape sits a hair above its box */
+    .pdp-wishlist .heart__beat {
+        position: relative !important;
+        top: 0.07rem !important;
+        right: auto !important;
+        flex: 0 0 auto;
+    }
+
+    .pdp-add {
+        transition: background-color .25s, border-color .25s, color .25s;
+    }
+
+    /* Unavailable: a calm, muted button instead of a faded copy of the primary one.
+       Bootstrap/.rust force colors with !important and disable pointer events, so override both. */
+    .pdp-add:disabled,
+    .pdp-add:disabled:hover {
+        --pdp-disabled-ink: color-mix(in srgb, var(--bs-body-color) 55%, #fff);
+        background-color: color-mix(in srgb, var(--bs-body-color) 6%, #fff) !important;
+        border-color: color-mix(in srgb, var(--bs-body-color) 12%, #fff) !important;
+        color: var(--pdp-disabled-ink) !important;
+        opacity: 1;
         cursor: not-allowed;
+        pointer-events: auto;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        font-size: 0.85em;
     }
 
     .pdp-dynamic {
@@ -555,7 +999,6 @@
         var slides = root.querySelectorAll('[data-media-id]');
         var thumbs = root.querySelectorAll('[data-thumb-for]');
         var idInput = root.querySelector('[data-variant-id-input]');
-        var select = root.querySelector('[data-variant-select]');
         var priceEl = root.querySelector('[data-price]');
         var compareEl = root.querySelector('[data-compare-price]');
         var badgeEl = root.querySelector('[data-sale-badge]');
@@ -567,7 +1010,7 @@
 
         function currentIndex() {
             for (var i = 0; i < slides.length; i++) {
-                if (!slides[i].hidden) return i;
+                if (slides[i].classList.contains('is-active')) return i;
             }
             return 0;
         }
@@ -579,7 +1022,13 @@
         function showMedia(mediaId) {
             if (!mediaId || !root.querySelector('[data-media-id="' + mediaId + '"]')) return;
             slides.forEach(function (slide) {
-                slide.hidden = slide.getAttribute('data-media-id') !== String(mediaId);
+                var active = slide.getAttribute('data-media-id') === String(mediaId);
+                slide.classList.toggle('is-active', active);
+                if (active) {
+                    slide.removeAttribute('aria-hidden');
+                } else {
+                    slide.setAttribute('aria-hidden', 'true');
+                }
             });
             thumbs.forEach(function (thumb) {
                 if (thumb.getAttribute('data-thumb-for') === String(mediaId)) {
@@ -639,35 +1088,168 @@
 
         updateCounter();
 
-        if (select) {
-            select.addEventListener('change', function () {
-                var variant = variants.find(function (v) { return String(v.id) === select.value; });
-                if (!variant) return;
+        var wishlistButton = root.querySelector('[data-wishlist-button]');
+        var wishlistHeart = wishlistButton && wishlistButton.querySelector('.swym-button');
 
-                idInput.value = variant.id;
-
-                if (priceEl) {
-                    priceEl.innerHTML = variant.price;
-                    priceEl.classList.toggle('is-sale', !!variant.compare);
+        if (wishlistButton && wishlistHeart) {
+            // The wishlist app listens on the heart itself, so pass clicks on the larger square through to it
+            wishlistButton.addEventListener('click', function (e) {
+                if (!wishlistHeart.contains(e.target)) wishlistHeart.click();
+            });
+            wishlistButton.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    wishlistHeart.click();
                 }
-                if (compareEl) {
-                    compareEl.innerHTML = variant.compare || '';
-                    compareEl.hidden = !variant.compare;
-                }
-                if (badgeEl) badgeEl.hidden = !variant.compare;
+            });
 
-                if (addButton) {
-                    addButton.disabled = !variant.available;
-                    addButton.textContent = variant.available ? 'Add to cart' : 'Sold out';
-                }
+            // Reflect the app's "liked" state for assistive tech
+            var syncWishlistState = function () {
+                var liked = wishlistHeart.classList.contains('liked');
+                wishlistButton.setAttribute('aria-pressed', liked ? 'true' : 'false');
+                wishlistButton.setAttribute('aria-label', liked ? 'Remove from wishlist' : 'Add to wishlist');
+            };
+            new MutationObserver(syncWishlistState).observe(wishlistHeart, { attributes: true, attributeFilter: ['class'] });
+            syncWishlistState();
+        }
 
-                showMedia(variant.media);
+        var optionGroups = root.querySelectorAll('[data-option-index]');
+        var planData = JSON.parse((root.querySelector('[data-plan-json]') || { textContent: '{}' }).textContent || '{}');
+        var sellingPlanInput = root.querySelector('[data-selling-plan-input]');
+        var planSelect = root.querySelector('[data-plan-select]');
+        var purchaseInputs = root.querySelectorAll('[data-purchase-input]');
+        var purchaseCards = root.querySelectorAll('[data-purchase-card]');
+        var planPriceEl = root.querySelector('[data-plan-price]');
+        var planCompareEl = root.querySelector('[data-plan-compare]');
+        var planBadgeEl = root.querySelector('[data-plan-badge]');
+        var oneTimePriceEl = root.querySelector('[data-onetime-price]');
+        var oneTimeCompareEl = root.querySelector('[data-onetime-compare]');
 
-                var url = new URL(window.location.href);
-                url.searchParams.set('variant', variant.id);
-                window.history.replaceState({}, '', url.toString());
+        function selectedOptions() {
+            return Array.prototype.map.call(optionGroups, function (group) {
+                var checked = group.querySelector('[data-option-input]:checked');
+                return checked ? checked.value : null;
             });
         }
+
+        function findVariant(options) {
+            return variants.find(function (v) {
+                return v.options.every(function (value, i) { return options[i] == null || value === options[i]; });
+            });
+        }
+
+        function currentVariant() {
+            if (!optionGroups.length) {
+                return variants.find(function (v) { return String(v.id) === idInput.value; }) || variants[0];
+            }
+            return findVariant(selectedOptions());
+        }
+
+        // Strike through option values that have no available variant with the other current choices
+        function markAvailability() {
+            var selected = selectedOptions();
+            optionGroups.forEach(function (group, index) {
+                group.querySelectorAll('[data-option-input]').forEach(function (input) {
+                    var options = selected.slice();
+                    options[index] = input.value;
+                    var match = findVariant(options);
+                    var label = root.querySelector('label[for="' + input.id + '"]');
+                    if (label) label.classList.toggle('is-unavailable', !match || !match.available);
+                });
+            });
+        }
+
+        function setText(el, html) {
+            if (!el) return;
+            el.innerHTML = html || '';
+            el.hidden = !html;
+        }
+
+        function updatePurchaseOptions(variant) {
+            if (!purchaseCards.length) return;
+
+            var checked = root.querySelector('[data-purchase-input]:checked');
+            var subscribe = checked && checked.value === 'subscription';
+            var planId = planSelect ? planSelect.value : (sellingPlanInput && sellingPlanInput.value);
+            var allocation = variant && variant.plans ? variant.plans[planId] : null;
+
+            if (allocation) {
+                if (planPriceEl) planPriceEl.innerHTML = allocation.price;
+                setText(planCompareEl, allocation.compare);
+            }
+            setText(planBadgeEl, planData[planId] ? planData[planId].badge : null);
+
+            if (variant) {
+                if (oneTimePriceEl) oneTimePriceEl.innerHTML = variant.price;
+                setText(oneTimeCompareEl, variant.compare);
+            }
+
+            if (sellingPlanInput) {
+                sellingPlanInput.value = planId || '';
+                // A disabled input isn't submitted, so one-time purchases don't send a selling plan
+                sellingPlanInput.disabled = !subscribe || !allocation;
+            }
+
+            purchaseCards.forEach(function (card) {
+                var input = card.querySelector('[data-purchase-input]');
+                card.classList.toggle('is-selected', !!(input && input.checked));
+            });
+        }
+
+        function onVariantChange() {
+            var variant = currentVariant();
+            markAvailability();
+
+            if (!variant) {
+                if (addButton) {
+                    addButton.disabled = true;
+                    addButton.textContent = 'Unavailable';
+                }
+                return;
+            }
+
+            idInput.value = variant.id;
+            if (wishlistHeart) wishlistHeart.setAttribute('data-variant-id', variant.id);
+
+            if (priceEl) {
+                priceEl.innerHTML = variant.price;
+                priceEl.classList.toggle('is-sale', !!variant.compare);
+            }
+            setText(compareEl, variant.compare);
+            if (badgeEl) badgeEl.hidden = !variant.compare;
+
+            if (addButton) {
+                addButton.disabled = !variant.available;
+                addButton.textContent = variant.available ? 'Add to cart' : 'Sold out';
+            }
+
+            updatePurchaseOptions(variant);
+            showMedia(variant.media);
+
+            var url = new URL(window.location.href);
+            url.searchParams.set('variant', variant.id);
+            window.history.replaceState({}, '', url.toString());
+        }
+
+        optionGroups.forEach(function (group) {
+            group.addEventListener('change', onVariantChange);
+        });
+
+        purchaseInputs.forEach(function (input) {
+            input.addEventListener('change', function () { updatePurchaseOptions(currentVariant()); });
+        });
+
+        if (planSelect) {
+            planSelect.addEventListener('change', function () {
+                // Choosing a frequency also chooses the subscription option
+                var subscribeInput = root.querySelector('[data-purchase-input][value="subscription"]');
+                if (subscribeInput) subscribeInput.checked = true;
+                updatePurchaseOptions(currentVariant());
+            });
+        }
+
+        markAvailability();
+        updatePurchaseOptions(currentVariant());
 
         root.querySelectorAll('[data-qty-step]').forEach(function (button) {
             button.addEventListener('click', function () {
@@ -692,9 +1274,72 @@
     ],
     "blocks": [
         {
+            "type": "rating",
+            "name": "Rating",
+            "limit": 1,
+            "settings": [
+                {
+                    "type": "paragraph",
+                    "content": "Shows the star rating from a reviews app that uses Shopify's standard product rating metafields (for example Shopify Product Reviews or Judge.me). Hidden when a product has no reviews."
+                }
+            ]
+        },
+        {
             "type": "title",
             "name": "Title",
             "limit": 1
+        },
+        {
+            "type": "subtitle",
+            "name": "Subtitle",
+            "limit": 1,
+            "settings": [
+                {
+                    "type": "richtext",
+                    "id": "text",
+                    "label": "Text",
+                    "info": "Connect a product metafield here to give each product its own subtitle."
+                },
+                {
+                    "type": "checkbox",
+                    "id": "use_excerpt",
+                    "label": "Use a short excerpt of the description when empty",
+                    "default": true
+                }
+            ]
+        },
+        {
+            "type": "purchase_options",
+            "name": "Purchase options",
+            "limit": 1,
+            "settings": [
+                {
+                    "type": "paragraph",
+                    "content": "Shows subscribe & save and one-time purchase cards when the product has a subscription plan from a subscriptions app. Hidden otherwise, and the regular price shows instead."
+                },
+                {
+                    "type": "text",
+                    "id": "subscription_label",
+                    "label": "Subscription label",
+                    "default": "Subscribe & save"
+                },
+                {
+                    "type": "text",
+                    "id": "onetime_label",
+                    "label": "One-time label",
+                    "default": "One-time purchase"
+                },
+                {
+                    "type": "select",
+                    "id": "default_option",
+                    "label": "Selected by default",
+                    "options": [
+                        { "value": "one_time", "label": "One-time purchase" },
+                        { "value": "subscription", "label": "Subscription" }
+                    ],
+                    "default": "one_time"
+                }
+            ]
         },
         {
             "type": "price",

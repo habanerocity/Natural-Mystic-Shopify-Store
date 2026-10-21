@@ -1,5 +1,5 @@
 {%- comment -%}
-  Theme colors from Theme settings > Colors. Render before application.css.scss.
+  Theme colors from Theme settings > Colors. Render before application.css.
   Use these in CSS as var(--color-primary), etc.
 {%- endcomment -%}
 <style>
@@ -10,5 +10,14 @@
     --color-highlight: {{ settings.color_highlight }};
     --color-alert: {{ settings.color_alert }};
     --color-surface: {{ settings.color_surface }};
+    /* Darker shade of the highlight color, derived so it always follows the theme editor */
+    --color-highlight-dark: color-mix(in srgb, var(--color-highlight) 60%, #000);
+  }
+
+  /* Browsers that support relative colors keep the highlight's hue and saturation for a richer shade than mixing in black */
+  @supports (color: hsl(from red h s l)) {
+    :root {
+      --color-highlight-dark: hsl(from var(--color-highlight) h s calc(l - 35));
+    }
   }
 </style>

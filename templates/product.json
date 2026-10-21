@@ -12,8 +12,20 @@
     "template": {
       "type": "product-template",
       "blocks": {
+        "rating": {
+          "type": "rating",
+          "settings": {}
+        },
         "title": {
           "type": "title",
+          "settings": {}
+        },
+        "subtitle": {
+          "type": "subtitle",
+          "settings": {}
+        },
+        "purchaseOptions": {
+          "type": "purchase_options",
           "settings": {}
         },
         "price": {
@@ -38,9 +50,12 @@
         }
       },
       "block_order": [
+        "rating",
         "title",
-        "price",
+        "subtitle",
         "variantSelector",
+        "purchaseOptions",
+        "price",
         "quantity",
         "checkoutButtons",
         "description"

@@ -11,7 +11,7 @@ input::placeholder {
   font-family: sans-serif;
 }
 
-//breadcrumbs css
+/* breadcrumbs css */
 
 .breadcrumbs {
   font-size: .85em;
@@ -455,13 +455,13 @@ input::placeholder {
     margin: auto;
 }
 
-//custom heart icon for wishlist
+/* custom heart icon for wishlist */
 
 .icon_wrapper{
   transform: translateY(-3px);
 }
 
-// slider
+/* slider */
 .featured-collection-slider{
     margin: 0 auto;
   }
@@ -597,7 +597,7 @@ input:focus {
 
 .heart__beat.liked::before,
 .heart__beat.liked::after, .heart__beat.liked {    
-    background-color: var(--color-primary);
+    background-color: var(--color-alert);
     cursor: pointer;
 }
 
@@ -661,9 +661,9 @@ input:focus {
     background-color: transparent;
   }
 
-  // a:active {
-  //   background-color: var(--color-primary)!important;
-  // }
+  /* a:active { */
+  /*   background-color: var(--color-primary)!important; */
+  /* } */
 }
 
 @media screen and (max-width: 787px){
@@ -785,9 +785,9 @@ input:focus {
     padding:0!important;
   }
     
-//   .grid-item {
-//     background-color: transparent!important;
-// }
+/*   .grid-item { */
+/*     background-color: transparent!important; */
+/* } */
 
   .mobile_button_shift:hover{
     background-color: var(--color-primary-dark)!important;
