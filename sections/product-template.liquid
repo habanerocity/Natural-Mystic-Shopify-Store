@@ -49,6 +49,16 @@
                             {{ 'product-1' | placeholder_svg_tag: 'pdp-gallery__img pdp-gallery__placeholder' }}
                         </div>
                     {% endif %}
+
+                    {% if image_count > 1 %}
+                        <button type="button" class="pdp-gallery__nav pdp-gallery__nav--prev" data-gallery-step="-1" aria-label="Previous image">
+                            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </button>
+                        <button type="button" class="pdp-gallery__nav pdp-gallery__nav--next" data-gallery-step="1" aria-label="Next image">
+                            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </button>
+                        <span class="pdp-gallery__counter" aria-live="polite" data-gallery-counter></span>
+                    {% endif %}
                 </div>
 
                 {% if image_count > 1 %}
@@ -164,10 +174,79 @@
     }
 
     .pdp-gallery__main {
+        position: relative;
         aspect-ratio: 1 / 1;
         background-color: #f6f5f3;
         border-radius: 12px;
         overflow: hidden;
+        touch-action: pan-y;
+    }
+
+    .pdp-gallery__nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.75rem;
+        height: 2.75rem;
+        padding: 0;
+        border: 0;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.85);
+        color: #1a1a1a;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        backdrop-filter: blur(4px);
+        cursor: pointer;
+        opacity: 0;
+        transition: opacity .25s, background-color .2s, transform .2s;
+    }
+
+    .pdp-gallery__nav--prev {
+        left: 1rem;
+    }
+
+    .pdp-gallery__nav--next {
+        right: 1rem;
+    }
+
+    .pdp-gallery__main:hover .pdp-gallery__nav,
+    .pdp-gallery__nav:focus-visible {
+        opacity: 1;
+    }
+
+    .pdp-gallery__nav:hover {
+        background-color: #fff;
+        transform: translateY(-50%) scale(1.06);
+    }
+
+    .pdp-gallery__nav:focus-visible {
+        outline: 2px solid var(--color-primary);
+        outline-offset: 2px;
+    }
+
+    .pdp-gallery__counter {
+        position: absolute;
+        bottom: 1rem;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 0.2rem 0.7rem;
+        border-radius: 999px;
+        background-color: rgba(255, 255, 255, 0.85);
+        color: #1a1a1a;
+        font-size: 0.75rem;
+        letter-spacing: 0.08em;
+        font-variant-numeric: tabular-nums;
+    }
+
+    /* Touch screens have no hover, so keep the arrows visible */
+    @media (hover: none) {
+        .pdp-gallery__nav {
+            opacity: 1;
+            width: 2.25rem;
+            height: 2.25rem;
+        }
     }
 
     .pdp-gallery__slide {
@@ -382,6 +461,20 @@
         var addButton = root.querySelector('[data-add-button]');
         var qtyInput = root.querySelector('#Quantity');
 
+        var counter = root.querySelector('[data-gallery-counter]');
+        var thumbStrip = root.querySelector('.pdp-gallery__thumbs');
+
+        function currentIndex() {
+            for (var i = 0; i < slides.length; i++) {
+                if (!slides[i].hidden) return i;
+            }
+            return 0;
+        }
+
+        function updateCounter() {
+            if (counter) counter.textContent = (currentIndex() + 1) + ' / ' + slides.length;
+        }
+
         function showMedia(mediaId) {
             if (!mediaId || !root.querySelector('[data-media-id="' + mediaId + '"]')) return;
             slides.forEach(function (slide) {
@@ -390,10 +483,21 @@
             thumbs.forEach(function (thumb) {
                 if (thumb.getAttribute('data-thumb-for') === String(mediaId)) {
                     thumb.setAttribute('aria-current', 'true');
+                    // Keep the active thumbnail visible without scrolling the page
+                    if (thumbStrip) {
+                        thumbStrip.scrollTo({ left: thumb.offsetLeft - thumbStrip.offsetLeft - 16, behavior: 'smooth' });
+                    }
                 } else {
                     thumb.removeAttribute('aria-current');
                 }
             });
+            updateCounter();
+        }
+
+        function step(direction) {
+            if (slides.length < 2) return;
+            var next = (currentIndex() + direction + slides.length) % slides.length;
+            showMedia(slides[next].getAttribute('data-media-id'));
         }
 
         thumbs.forEach(function (thumb) {
@@ -401,6 +505,38 @@
                 showMedia(thumb.getAttribute('data-thumb-for'));
             });
         });
+
+        root.querySelectorAll('[data-gallery-step]').forEach(function (button) {
+            button.addEventListener('click', function () {
+                step(parseInt(button.getAttribute('data-gallery-step'), 10));
+            });
+        });
+
+        var gallery = root.querySelector('.pdp-gallery');
+        if (gallery) {
+            // Arrow keys while focus is anywhere in the gallery
+            gallery.addEventListener('keydown', function (e) {
+                if (e.key === 'ArrowLeft') { e.preventDefault(); step(-1); }
+                if (e.key === 'ArrowRight') { e.preventDefault(); step(1); }
+            });
+        }
+
+        var mainFrame = root.querySelector('.pdp-gallery__main');
+        if (mainFrame) {
+            // Swipe left/right on touch screens
+            var touchStartX = null;
+            mainFrame.addEventListener('touchstart', function (e) {
+                touchStartX = e.touches[0].clientX;
+            }, { passive: true });
+            mainFrame.addEventListener('touchend', function (e) {
+                if (touchStartX === null) return;
+                var deltaX = e.changedTouches[0].clientX - touchStartX;
+                if (Math.abs(deltaX) > 40) step(deltaX < 0 ? 1 : -1);
+                touchStartX = null;
+            });
+        }
+
+        updateCounter();
 
         if (select) {
             select.addEventListener('change', function () {
