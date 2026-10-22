@@ -96,16 +96,16 @@
                     <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-id-input>
 
                     {% for block in section.blocks %}
-                        {%- comment -%} Consecutive Description / Accordion item blocks share one accordion wrapper {%- endcomment -%}
+                        {%- comment -%} Consecutive Accordion item blocks share one accordion wrapper {%- endcomment -%}
                         {% assign is_accordion = false %}
-                        {% if block.type == 'description' or block.type == 'accordion' %}
+                        {% if block.type == 'accordion' %}
                             {% assign is_accordion = true %}
                         {% endif %}
                         {% assign prev_is_accordion = false %}
                         {% unless forloop.first %}
                             {% assign prev_index = forloop.index0 | minus: 1 %}
                             {% assign prev_block = section.blocks[prev_index] %}
-                            {% if prev_block.type == 'description' or prev_block.type == 'accordion' %}
+                            {% if prev_block.type == 'accordion' %}
                                 {% assign prev_is_accordion = true %}
                             {% endif %}
                         {% endunless %}
@@ -263,33 +263,27 @@
                                 {% endif %}
                             </div>
 
-                        {% when "description" %}
-                            {% if product.description != blank %}
+                        {% when "accordion" %}
+                            {% assign accordion_heading = block.settings.heading %}
+                            {% case block.settings.content_source %}
+                                {% when 'product_description' %}
+                                    {% assign accordion_body = product.description %}
+                                    {% if accordion_heading == blank %}{% assign accordion_heading = 'Description' %}{% endif %}
+                                {% when 'page' %}
+                                    {% assign accordion_body = block.settings.page.content %}
+                                {% else %}
+                                    {% assign accordion_body = block.settings.content %}
+                            {% endcase %}
+                            {% if accordion_heading != blank and accordion_body != blank %}
                                 {% assign accordion_id = 'ProductAccordion-' | append: block.id %}
-                                {% assign accordion_heading = block.settings.heading | default: 'Description' %}
                                 {% render 'product-accordion-item',
                                     id: accordion_id,
                                     heading: accordion_heading,
-                                    body: product.description,
-                                    open: block.settings.open,
-                                    attributes: block.shopify_attributes
-                                %}
-                            {% endif %}
-
-                        {% when "accordion" %}
-                            {% if block.settings.page != blank %}
-                                {% assign accordion_body = block.settings.page.content %}
-                            {% else %}
-                                {% assign accordion_body = block.settings.content %}
-                            {% endif %}
-                            {% if block.settings.heading != blank and accordion_body != blank %}
-                                {% assign accordion_id = 'ProductAccordion-' | append: block.id %}
-                                {% render 'product-accordion-item',
-                                    id: accordion_id,
-                                    heading: block.settings.heading,
                                     body: accordion_body,
                                     open: block.settings.open,
-                                    attributes: block.shopify_attributes
+                                    attributes: block.shopify_attributes,
+                                    icon: block.settings.icon,
+                                    icon_image: block.settings.icon_image
                                 %}
                             {% endif %}
 
@@ -298,7 +292,7 @@
                         {% assign next_is_accordion = false %}
                         {% unless forloop.last %}
                             {% assign next_block = section.blocks[forloop.index] %}
-                            {% if next_block.type == 'description' or next_block.type == 'accordion' %}
+                            {% if next_block.type == 'accordion' %}
                                 {% assign next_is_accordion = true %}
                             {% endif %}
                         {% endunless %}
@@ -922,6 +916,18 @@
         margin-top: 0.75rem;
     }
 
+    .pdp-dynamic .shopify-payment-button__more-options {
+        color: var(--bs-body-color);
+        text-decoration: underline;
+        text-decoration-color: rgba(0, 0, 0, 0.25);
+        text-underline-offset: 0.2em;
+        transition: text-decoration-color .2s;
+    }
+
+    .pdp-dynamic .shopify-payment-button__more-options:hover {
+        text-decoration-color: currentColor;
+    }
+
     /* Accordion: Bootstrap's component, restyled as thin divider lines */
     .pdp-accordion {
         --bs-accordion-bg: transparent;
@@ -969,6 +975,25 @@
 
     .pdp-accordion .accordion-button::after {
         opacity: 0.6;
+    }
+
+    .pdp-accordion__icon {
+        flex: 0 0 auto;
+        width: 1.35em;
+        height: 1.35em;
+        margin-right: 0.8rem;
+        color: inherit;
+    }
+
+    .pdp-accordion__icon--image {
+        width: auto;
+        max-width: 1.8em;
+        object-fit: contain;
+    }
+
+    .pdp-accordion__label {
+        flex: 1 1 auto;
+        text-align: left;
     }
 
     .pdp-accordion .accordion-body {
@@ -1366,25 +1391,6 @@
             "limit": 1
         },
         {
-            "type": "description",
-            "name": "Description",
-            "limit": 1,
-            "settings": [
-                {
-                    "type": "text",
-                    "id": "heading",
-                    "label": "Heading",
-                    "default": "Description"
-                },
-                {
-                    "type": "checkbox",
-                    "id": "open",
-                    "label": "Open by default",
-                    "default": true
-                }
-            ]
-        },
-        {
             "type": "accordion",
             "name": "Accordion item",
             "settings": [
@@ -1395,16 +1401,61 @@
                     "default": "Shipping & returns"
                 },
                 {
+                    "type": "select",
+                    "id": "content_source",
+                    "label": "Content",
+                    "options": [
+                        { "value": "custom", "label": "Custom text" },
+                        { "value": "product_description", "label": "Product description" },
+                        { "value": "page", "label": "Content from a page" }
+                    ],
+                    "default": "custom"
+                },
+                {
                     "type": "richtext",
                     "id": "content",
-                    "label": "Content",
+                    "label": "Text",
+                    "info": "Used when Content is set to Custom text.",
                     "default": "<p>Share details customers often ask about, like shipping times, ingredients, or how to use the product.</p>"
                 },
                 {
                     "type": "page",
                     "id": "page",
-                    "label": "Or show a page's content",
-                    "info": "If a page is chosen, its content replaces the text above. Useful for shipping or return policies."
+                    "label": "Page",
+                    "info": "Used when Content is set to Content from a page. Handy for shipping or return policies you maintain in one place."
+                },
+                {
+                    "type": "header",
+                    "content": "Icon"
+                },
+                {
+                    "type": "select",
+                    "id": "icon",
+                    "label": "Icon",
+                    "options": [
+                        { "value": "none", "label": "None" },
+                        { "value": "document", "label": "Document" },
+                        { "value": "truck", "label": "Shipping" },
+                        { "value": "return", "label": "Returns" },
+                        { "value": "leaf", "label": "Leaf" },
+                        { "value": "ruler", "label": "Ruler" },
+                        { "value": "droplet", "label": "Droplet" },
+                        { "value": "shield", "label": "Shield" },
+                        { "value": "clock", "label": "Clock" },
+                        { "value": "heart", "label": "Heart" },
+                        { "value": "info", "label": "Info" }
+                    ],
+                    "default": "none"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "icon_image",
+                    "label": "Custom icon",
+                    "info": "Replaces the icon above. A small square SVG or PNG works best."
+                },
+                {
+                    "type": "header",
+                    "content": "Display"
                 },
                 {
                     "type": "checkbox",

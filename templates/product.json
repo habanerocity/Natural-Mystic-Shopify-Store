@@ -22,18 +22,25 @@
         },
         "subtitle": {
           "type": "subtitle",
+          "settings": {
+            "text": "",
+            "use_excerpt": true
+          }
+        },
+        "variantSelector": {
+          "type": "variant_selector",
           "settings": {}
         },
         "purchaseOptions": {
           "type": "purchase_options",
-          "settings": {}
+          "settings": {
+            "subscription_label": "Subscribe & save",
+            "onetime_label": "One-time purchase",
+            "default_option": "one_time"
+          }
         },
         "price": {
           "type": "price",
-          "settings": {}
-        },
-        "variantSelector": {
-          "type": "variant_selector",
           "settings": {}
         },
         "quantity": {
@@ -45,8 +52,43 @@
           "settings": {}
         },
         "description": {
-          "type": "description",
-          "settings": {}
+          "type": "accordion",
+          "settings": {
+            "heading": "Description",
+            "content_source": "product_description",
+            "icon": "document",
+            "open": true
+          }
+        },
+        "accordion_whMtq7": {
+          "type": "accordion",
+          "settings": {
+            "heading": "Ingredients",
+            "content": "<p>Share details customers often ask about, like shipping times, ingredients, or how to use the product.</p>",
+            "open": false,
+            "icon": "leaf",
+            "content_source": "custom"
+          }
+        },
+        "accordion_zYF4Fg": {
+          "type": "accordion",
+          "settings": {
+            "heading": "Measurements",
+            "content": "<p>Share details customers often ask about, like shipping times, ingredients, or how to use the product.</p>",
+            "open": false,
+            "icon": "ruler",
+            "content_source": "custom"
+          }
+        },
+        "accordion_YCwBGr": {
+          "type": "accordion",
+          "settings": {
+            "heading": "Shipping & returns",
+            "content": "<p>Share details customers often ask about, like shipping times, ingredients, or how to use the product.</p>",
+            "open": false,
+            "icon": "truck",
+            "content_source": "custom"
+          }
         }
       },
       "block_order": [
@@ -58,9 +100,14 @@
         "price",
         "quantity",
         "checkoutButtons",
-        "description"
+        "description",
+        "accordion_whMtq7",
+        "accordion_zYF4Fg",
+        "accordion_YCwBGr"
       ],
-      "settings": {}
+      "settings": {
+        "dynamic_buttons_checkbox": true
+      }
     },
     "product-recommendation": {
       "type": "product-recommendation",
@@ -72,3 +119,4 @@
     "product-recommendation"
   ]
 }
+

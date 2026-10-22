@@ -194,7 +194,7 @@ input::placeholder {
   transition: all .4s;
   
   &:hover {
-    background-color: var(--color-accent);
+    background-color: var(--color-highlight);
     color: 	#FFFAFA;
     cursor: pointer;
   }
@@ -240,6 +240,39 @@ input::placeholder {
 
 .hero-div{
   background-color: rgba(255, 255, 255, 0.9)!important;
+  /* Size to the content with real padding, instead of a fixed half-height box */
+  width: min(90%, 42rem) !important;
+  height: auto !important;
+  padding: 3rem 2.5rem !important;
+  text-align: center;
+}
+
+.hero-div h1 {
+  margin: 0 0 1rem;
+  line-height: 1.15;
+}
+
+.hero-description {
+  margin: 0 0 2rem;
+  line-height: 1.6;
+}
+
+.hero-description > :last-child {
+  margin-bottom: 0;
+}
+
+@media screen and (max-width: 575px) {
+  .hero-div {
+    padding: 2rem 1.5rem !important;
+  }
+
+  .hero-div h1 {
+    font-size: 1.75rem;
+  }
+
+  .hero-description {
+    margin-bottom: 1.5rem;
+  }
 }
 
 .hero-btn_link{
@@ -561,7 +594,7 @@ input:focus {
 }
 
 .heart__beat {
-    background-color: #574136;
+    background-color: var(--bs-body-color);
     position: absolute;
     height: 1rem;
     width: 1rem;
@@ -716,11 +749,6 @@ input:focus {
 }
 
 @media screen and (max-width: 580px){
-  .hero_text {
-    width: 18rem!important;
-    height: 16rem!important;
-  }
-
   .features_grid-item {
     font-size: 14px;
 }
@@ -848,11 +876,6 @@ input:focus {
 }
 
 @media screen and (max-width: 330px){
-  .hero_text {
-    width: 16rem!important;
-    height: 14rem!important;
-  }
-
   .not_available-container{
     width: 65%;
   }
