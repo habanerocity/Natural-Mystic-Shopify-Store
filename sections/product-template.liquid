@@ -96,21 +96,22 @@
                     <input type="hidden" name="id" value="{{ current_variant.id }}" data-variant-id-input>
 
                     {% for block in section.blocks %}
-                        {%- comment -%} Consecutive Accordion item blocks share one accordion wrapper {%- endcomment -%}
-                        {% assign is_accordion = false %}
-                        {% if block.type == 'accordion' %}
-                            {% assign is_accordion = true %}
+                        {%- comment -%} Consecutive Accordion item blocks share one accordion, and consecutive Attribute blocks share one list {%- endcomment -%}
+                        {% assign group_type = '' %}
+                        {% if block.type == 'accordion' or block.type == 'attribute' %}
+                            {% assign group_type = block.type %}
                         {% endif %}
-                        {% assign prev_is_accordion = false %}
+                        {% assign prev_group = '' %}
                         {% unless forloop.first %}
                             {% assign prev_index = forloop.index0 | minus: 1 %}
-                            {% assign prev_block = section.blocks[prev_index] %}
-                            {% if prev_block.type == 'accordion' %}
-                                {% assign prev_is_accordion = true %}
-                            {% endif %}
+                            {% assign prev_group = section.blocks[prev_index].type %}
                         {% endunless %}
-                        {% if is_accordion and prev_is_accordion == false %}
-                            <div class="accordion pdp-accordion">
+                        {% if group_type != '' and prev_group != group_type %}
+                            {% if group_type == 'accordion' %}
+                                <div class="accordion pdp-accordion">
+                            {% else %}
+                                <ul class="pdp-attributes" role="list">
+                            {% endif %}
                         {% endif %}
 
                         {% case block.type %}
@@ -263,6 +264,18 @@
                                 {% endif %}
                             </div>
 
+                        {% when "attribute" %}
+                            {% if block.settings.text != blank %}
+                                <li class="pdp-attribute" {{ block.shopify_attributes }}>
+                                    {% if block.settings.icon != 'none' or block.settings.icon_image != blank %}
+                                        <span class="pdp-attribute__badge" aria-hidden="true">
+                                            {% render 'product-accordion-icon', icon: block.settings.icon, image: block.settings.icon_image, class: 'pdp-attribute__icon' %}
+                                        </span>
+                                    {% endif %}
+                                    <span class="pdp-attribute__text">{{ block.settings.text }}</span>
+                                </li>
+                            {% endif %}
+
                         {% when "accordion" %}
                             {% assign accordion_heading = block.settings.heading %}
                             {% case block.settings.content_source %}
@@ -289,15 +302,16 @@
 
                         {% endcase %}
 
-                        {% assign next_is_accordion = false %}
+                        {% assign next_group = '' %}
                         {% unless forloop.last %}
-                            {% assign next_block = section.blocks[forloop.index] %}
-                            {% if next_block.type == 'accordion' %}
-                                {% assign next_is_accordion = true %}
-                            {% endif %}
+                            {% assign next_group = section.blocks[forloop.index].type %}
                         {% endunless %}
-                        {% if is_accordion and next_is_accordion == false %}
-                            </div>
+                        {% if group_type != '' and next_group != group_type %}
+                            {% if group_type == 'accordion' %}
+                                </div>
+                            {% else %}
+                                </ul>
+                            {% endif %}
                         {% endif %}
                     {% endfor %}
                 {% endform %}
@@ -931,6 +945,45 @@
         text-decoration-color: currentColor;
     }
 
+    /* Attribute rows: icon in a soft tinted circle, then a short line of text */
+    .pdp-attributes {
+        display: flex;
+        flex-direction: column;
+        gap: 0.85rem;
+        margin-bottom: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .pdp-attribute {
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+        line-height: 1.4;
+    }
+
+    .pdp-attribute__badge {
+        flex: 0 0 2.5rem;
+        display: grid;
+        place-items: center;
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 50%;
+        background-color: color-mix(in srgb, var(--color-primary) 9%, #fff);
+        color: var(--color-primary);
+    }
+
+    .pdp-attribute__icon {
+        width: 1.3rem;
+        height: 1.3rem;
+    }
+
+    .pdp-attribute__icon--image {
+        width: 1.4rem;
+        height: 1.4rem;
+        object-fit: contain;
+    }
+
     /* Accordion: Bootstrap's component, restyled as thin divider lines */
     .pdp-accordion {
         --bs-accordion-bg: transparent;
@@ -1297,12 +1350,12 @@
 {
     "name": "Product",
     "settings": [
-    {
-        "type": "checkbox",
-        "id": "dynamic_buttons_checkbox",
-        "label": "Enable Dynamic Buttons",
-        "default": true
-    }
+        {
+            "type": "checkbox",
+            "id": "dynamic_buttons_checkbox",
+            "label": "Enable Dynamic Buttons",
+            "default": true
+        }
     ],
     "blocks": [
         {
@@ -1366,8 +1419,14 @@
                     "id": "default_option",
                     "label": "Selected by default",
                     "options": [
-                        { "value": "one_time", "label": "One-time purchase" },
-                        { "value": "subscription", "label": "Subscription" }
+                        {
+                            "value": "one_time",
+                            "label": "One-time purchase"
+                        },
+                        {
+                            "value": "subscription",
+                            "label": "Subscription"
+                        }
                     ],
                     "default": "one_time"
                 }
@@ -1394,6 +1453,109 @@
             "limit": 1
         },
         {
+            "type": "attribute",
+            "name": "Attribute",
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "text",
+                    "label": "Text",
+                    "default": "Add a key benefit",
+                    "info": "Connect a product metafield to show different text on each product. The row is hidden when empty."
+                },
+                {
+                    "type": "select",
+                    "id": "icon",
+                    "label": "Icon",
+                    "options": [
+                        {
+                            "value": "none",
+                            "label": "None"
+                        },
+                        {
+                            "value": "check",
+                            "label": "Check"
+                        },
+                        {
+                            "value": "bolt",
+                            "label": "Energy"
+                        },
+                        {
+                            "value": "leaf",
+                            "label": "Leaf"
+                        },
+                        {
+                            "value": "moon",
+                            "label": "Calm / sleep"
+                        },
+                        {
+                            "value": "sun",
+                            "label": "Sun"
+                        },
+                        {
+                            "value": "smile",
+                            "label": "Smile"
+                        },
+                        {
+                            "value": "mug",
+                            "label": "Mug"
+                        },
+                        {
+                            "value": "bowl",
+                            "label": "Mortar & bowl"
+                        },
+                        {
+                            "value": "droplet",
+                            "label": "Droplet"
+                        },
+                        {
+                            "value": "sparkle",
+                            "label": "Sparkle"
+                        },
+                        {
+                            "value": "heart",
+                            "label": "Heart"
+                        },
+                        {
+                            "value": "shield",
+                            "label": "Shield"
+                        },
+                        {
+                            "value": "clock",
+                            "label": "Clock"
+                        },
+                        {
+                            "value": "document",
+                            "label": "Document"
+                        },
+                        {
+                            "value": "truck",
+                            "label": "Shipping"
+                        },
+                        {
+                            "value": "return",
+                            "label": "Returns"
+                        },
+                        {
+                            "value": "ruler",
+                            "label": "Ruler"
+                        },
+                        {
+                            "value": "info",
+                            "label": "Info"
+                        }
+                    ],
+                    "default": "check"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "icon_image",
+                    "label": "Custom icon",
+                    "info": "Replaces the icon above. A small square SVG or PNG works best."
+                }
+            ]
+        },
+        {
             "type": "accordion",
             "name": "Accordion item",
             "settings": [
@@ -1408,9 +1570,18 @@
                     "id": "content_source",
                     "label": "Content",
                     "options": [
-                        { "value": "custom", "label": "Custom text" },
-                        { "value": "product_description", "label": "Product description" },
-                        { "value": "page", "label": "Content from a page" }
+                        {
+                            "value": "custom",
+                            "label": "Custom text"
+                        },
+                        {
+                            "value": "product_description",
+                            "label": "Product description"
+                        },
+                        {
+                            "value": "page",
+                            "label": "Content from a page"
+                        }
                     ],
                     "default": "custom"
                 },
@@ -1436,17 +1607,82 @@
                     "id": "icon",
                     "label": "Icon",
                     "options": [
-                        { "value": "none", "label": "None" },
-                        { "value": "document", "label": "Document" },
-                        { "value": "truck", "label": "Shipping" },
-                        { "value": "return", "label": "Returns" },
-                        { "value": "leaf", "label": "Leaf" },
-                        { "value": "ruler", "label": "Ruler" },
-                        { "value": "droplet", "label": "Droplet" },
-                        { "value": "shield", "label": "Shield" },
-                        { "value": "clock", "label": "Clock" },
-                        { "value": "heart", "label": "Heart" },
-                        { "value": "info", "label": "Info" }
+                        {
+                            "value": "none",
+                            "label": "None"
+                        },
+                        {
+                            "value": "check",
+                            "label": "Check"
+                        },
+                        {
+                            "value": "bolt",
+                            "label": "Energy"
+                        },
+                        {
+                            "value": "leaf",
+                            "label": "Leaf"
+                        },
+                        {
+                            "value": "moon",
+                            "label": "Calm / sleep"
+                        },
+                        {
+                            "value": "sun",
+                            "label": "Sun"
+                        },
+                        {
+                            "value": "smile",
+                            "label": "Smile"
+                        },
+                        {
+                            "value": "mug",
+                            "label": "Mug"
+                        },
+                        {
+                            "value": "bowl",
+                            "label": "Mortar & bowl"
+                        },
+                        {
+                            "value": "droplet",
+                            "label": "Droplet"
+                        },
+                        {
+                            "value": "sparkle",
+                            "label": "Sparkle"
+                        },
+                        {
+                            "value": "heart",
+                            "label": "Heart"
+                        },
+                        {
+                            "value": "shield",
+                            "label": "Shield"
+                        },
+                        {
+                            "value": "clock",
+                            "label": "Clock"
+                        },
+                        {
+                            "value": "document",
+                            "label": "Document"
+                        },
+                        {
+                            "value": "truck",
+                            "label": "Shipping"
+                        },
+                        {
+                            "value": "return",
+                            "label": "Returns"
+                        },
+                        {
+                            "value": "ruler",
+                            "label": "Ruler"
+                        },
+                        {
+                            "value": "info",
+                            "label": "Info"
+                        }
                     ],
                     "default": "none"
                 },
