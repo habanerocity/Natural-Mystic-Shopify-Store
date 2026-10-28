@@ -1290,6 +1290,21 @@ input:focus {
   cursor: pointer;
 }
 
+/* Frosted-glass backdrop instead of the flat dark overlay. Browsers without backdrop-filter keep Bootstrap's dark overlay. */
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  body.quickview-open .modal-backdrop {
+    --bs-backdrop-opacity: 1;
+    background-color: rgba(28, 32, 30, 0.18);
+    -webkit-backdrop-filter: blur(10px) saturate(140%);
+    backdrop-filter: blur(10px) saturate(140%);
+  }
+
+  /* Bootstrap fades the backdrop in by animating opacity; keep that fade, just from 0 to fully frosted */
+  body.quickview-open .modal-backdrop.fade:not(.show) {
+    opacity: 0;
+  }
+}
+
 .quickview__dialog {
   max-width: min(64rem, calc(100vw - 2rem));
 }

@@ -130,6 +130,10 @@ if (document.getElementById('forgotPassword') != null) {
 
     const modal = new bootstrap.Modal(modalEl);
     const $ = (selector) => modalEl.querySelector(selector);
+
+    // Lets the CSS give this modal's backdrop the frosted-glass look (set before Bootstrap draws the backdrop)
+    modalEl.addEventListener('show.bs.modal', () => document.body.classList.add('quickview-open'));
+    modalEl.addEventListener('hidden.bs.modal', () => document.body.classList.remove('quickview-open'));
     const main = $('[data-quickview-main]');
     const thumbsEl = $('[data-quickview-thumbs]');
     const counter = $('[data-quickview-counter]');
