@@ -283,6 +283,10 @@ input::placeholder {
     height: 15rem;
 }
 
+.product-grid .product_item {
+    width: 100%;
+}
+
 .product_item {
     width: 18rem;
     

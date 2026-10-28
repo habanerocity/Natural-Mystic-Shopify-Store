@@ -47,11 +47,11 @@
             </div>
         </div>
 
-        <div class="row justify-content-center my-5">
+        <div class="row g-3 my-5 product-grid">
             {% for product in collection.products %}
                 {% assign image = product.featured_media.preview_image %}
-                <div class="col-6 col-sm-6 col-md-auto col-lg-auto g-3">
-                    <div class="product_card card my-1 product_item">
+                <div class="col-6 col-md-4 col-xl-3">
+                    <div class="product_card card h-100 product_item">
                         {% if image != blank %}
                             <a class="quickview-trigger" href="{{ product.url }}" data-quickview-handle="{{ product.handle }}" aria-label="Quick view: {{ product.title | escape }}">
                                 <img class="pic card-img-top lazyload" data-src="{{ image | img_url: 'medium' }}" alt="{{ product.title }}">

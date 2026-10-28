@@ -1,10 +1,10 @@
 <section class="container py-4">
     <h2 class="text-center my-3">{{ section.settings.title }}</h2>
-    <div class="row g-3 row-cols-md-4 row-cols-1">
+    <div class="row g-3 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 product-grid">
         {% for product in collections[section.settings.featured_collection].products %}
             {% assign image = product.featured_media.preview_image %}
             <div class="col">
-                <div class="card my-3 product_item">
+                <div class="card h-100 product_item">
                     {% if image != blank %}
                         <img class="card-img-top pic" src="{{ image | img_url: 'large' }}" alt="{{ product.title }}">
                     {% else %}
