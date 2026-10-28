@@ -122,153 +122,300 @@ if (document.getElementById('forgotPassword') != null) {
     })
 }
 
-//product modal
+//product quick view modal (collection pages)
 
-let productModal;
+(function () {
+    const modalEl = document.getElementById('productInfoModal');
+    if (!modalEl || !window.bootstrap) return;
 
-if (document.getElementById('productInfoModal') != null) {
-    productModal = new bootstrap.Modal(document.getElementById('productInfoModal'), {});
-};
+    const modal = new bootstrap.Modal(modalEl);
+    const $ = (selector) => modalEl.querySelector(selector);
+    const main = $('[data-quickview-main]');
+    const thumbsEl = $('[data-quickview-thumbs]');
+    const counter = $('[data-quickview-counter]');
+    const prevBtn = $('[data-quickview-step="-1"]');
+    const nextBtn = $('[data-quickview-step="1"]');
+    const titleEl = $('[data-quickview-title]');
+    const priceEl = $('[data-quickview-price]');
+    const compareEl = $('[data-quickview-compare]');
+    const badgeEl = $('[data-quickview-badge]');
+    const descEl = $('[data-quickview-description]');
+    const optionsEl = $('[data-quickview-options]');
+    const idInput = $('[data-quickview-variant-id]');
+    const qtyInput = $('#modalItemQuantity');
+    const addBtn = $('[data-quickview-add]');
+    const statusEl = $('[data-quickview-status]');
+    const linkEl = $('[data-quickview-link]');
+    const form = $('#addToCartForm');
+    const wishlistBtn = $('[data-quickview-wishlist]');
+    const heart = wishlistBtn && wishlistBtn.querySelector('.swym-button');
 
-const productInfoAnchors = document.querySelectorAll("#productInfoAnchor");
-const productPricing = document.getElementById("productInfoPrice");
+    const root = (window.Shopify && window.Shopify.routes && window.Shopify.routes.root) || '/';
+    const currency = window.Shopify && window.Shopify.currency && window.Shopify.currency.active;
+    const cache = {};
+    let product = null;
+    let images = [];
+    let current = 0;
 
-if (productInfoAnchors.length > 0) {
-    productInfoAnchors.forEach(item => {
-        item.addEventListener('click', e => {
+    const escapeHTML = (value) => String(value == null ? '' : value)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 
-            const url = '/products/' + item.getAttribute('data-product-handle') + '.js';
+    const money = (cents) => {
+        const amount = (cents || 0) / 100;
+        try {
+            if (currency) return new Intl.NumberFormat(document.documentElement.lang || undefined, { style: 'currency', currency: currency }).format(amount);
+        } catch (e) { /* fall through */ }
+        return amount.toFixed(2);
+    };
 
-            fetch(url).then((res) => res.json()).then((data) => {
-                const compareDiv = document.getElementById("compareDiv");
-                const modalNow = document.getElementById("modalNow");
-                const addToCartBtn = document.getElementById("AddToCart");
+    const sized = (src, width) => src ? src + (src.includes('?') ? '&' : '?') + 'width=' + width : '';
+    const baseSrc = (src) => (src || '').split('?')[0].replace(/^https?:/, '');
 
-                document.getElementById("productInfoImg").src = data.images[0];
-                document.getElementById("productInfoTitle").innerHTML = data.title;
-                document.getElementById("productInfoComparePrice").innerHTML = item.getAttribute('data-product-compare-at-price');
-                document.getElementById("productInfoDescription").innerHTML = data.description;
-
-                productPricing.innerHTML = item.getAttribute('data-product-price');
-
-                const variants = data.variants;
-                let variantSelect = document.getElementById("modalItemID");
-
-                variantSelect.innerHTML = '';
-
-                variants.forEach(function (variant, index) {
-                    variantSelect.options[variantSelect.options.length] = new Option(variant.option1, variant.id);
-                })
-
-                //Render Compare at Price for Modal
-                if (data.compare_at_price != null) {
-                    compareDiv.classList.remove("d-none");
-                    modalNow.classList.remove("d-none");
-
-                    //add red font if compare_at_price exists
-                    productPricing.classList.add('text-danger');
-                }
-
-                //RemoveCompare at Price for Modal
-                if (data.compare_at_price === null) {
-                    compareDiv.classList.add("d-none");
-                    modalNow.classList.add("d-none");
-
-                    //remove red font if there is no compare_at_price
-                    if (productPricing.classList.contains('text-danger')) {
-                        productPricing.classList.remove('text-danger');
-                    }
-                }
-
-                //disable add to cart button if product is not available
-                if (data.available === false) {
-                    addToCartBtn.disabled = true;
-                    addToCartBtn.innerHTML = 'Out of Stock';
-                }
-
-                if (data.available === true) {
-                    addToCartBtn.disabled = false;
-                    addToCartBtn.innerHTML = 'Add to Cart';
-                }
-
-                productModal.show();
-
-            })
-        })
-    })
-}
-
-//modal add to cart functionality
-
-const modalAddToCartForm = document.querySelector('#addToCartForm');
-
-let modalItemID = document.querySelectorAll('#modalItemID');
-let handle;
-
-//add click event listener to access product handle
-productInfoAnchors.forEach((item) => {
-    item.addEventListener('click', (e) => {
-        handle = item.getAttribute('data-product-handle');
-    })
-})
-
-if (modalAddToCartForm != null) {
-
-    //update modal variant price
-    modalItemID.forEach((item) => {
-        item.addEventListener('change', (e) => {
-
-            const url = '/products/' + handle + '.js';
-
-            fetch(url).then((res) => res.json()).then((data) => {
-
-                for (let i = 0; i < data.variants.length; i++) {
-
-                    const variantIdNumber = parseInt(e.target.value);
-                    //match data variant id
-                    if (data.variants[i].id === variantIdNumber) {
-                        const price = (data.variants[i].price / 100).toFixed(2);
-                        const priceComparison = (data.variants[i].compare_at_price / 100).toFixed(2);
-
-                        productInfoComparePrice.innerHTML = `$${priceComparison}`;
-                        productPricing.innerHTML = `$${price}`;
-                    }
-                }
+    // ----- gallery -----
+    function showImage(index) {
+        if (!images.length) return;
+        current = (index + images.length) % images.length;
+        main.querySelectorAll('.quickview__slide').forEach((slide, i) => {
+            slide.classList.toggle('is-active', i === current);
+            slide.setAttribute('aria-hidden', i === current ? 'false' : 'true');
+        });
+        thumbsEl.querySelectorAll('.quickview__thumb').forEach((thumb, i) => {
+            if (i === current) {
+                thumb.setAttribute('aria-current', 'true');
+                thumb.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+            } else {
+                thumb.removeAttribute('aria-current');
             }
-            ).catch((err) => {
-                console.log(err);
+        });
+        counter.textContent = (current + 1) + ' / ' + images.length;
+    }
+
+    function renderGallery() {
+        main.querySelectorAll('.quickview__slide').forEach((slide) => slide.remove());
+        thumbsEl.innerHTML = '';
+
+        const slidesHTML = images.length
+            ? images.map((img, i) => `<div class="quickview__slide${i === 0 ? ' is-active' : ''}" aria-hidden="${i === 0 ? 'false' : 'true'}"><img src="${escapeHTML(sized(img.src, 900))}" alt="${escapeHTML(img.alt || product.title)}" ${i === 0 ? '' : 'loading="lazy"'}></div>`).join('')
+            : '<div class="quickview__slide is-active"></div>';
+        main.insertAdjacentHTML('afterbegin', slidesHTML);
+
+        const multiple = images.length > 1;
+        prevBtn.hidden = !multiple;
+        nextBtn.hidden = !multiple;
+        counter.hidden = !multiple;
+        thumbsEl.hidden = !multiple;
+        modalEl.querySelector('[data-quickview-gallery]').classList.toggle('has-thumbs', multiple);
+
+        if (multiple) {
+            thumbsEl.innerHTML = images.map((img, i) => `
+                <button type="button" class="quickview__thumb" role="listitem" data-index="${i}" aria-label="Show image ${i + 1} of ${images.length}"${i === 0 ? ' aria-current="true"' : ''}>
+                    <img src="${escapeHTML(sized(img.src, 160))}" alt="" loading="lazy">
+                </button>`).join('');
+        }
+        current = 0;
+        counter.textContent = '1 / ' + images.length;
+    }
+
+    thumbsEl.addEventListener('click', (e) => {
+        const thumb = e.target.closest('.quickview__thumb');
+        if (thumb) showImage(parseInt(thumb.dataset.index, 10));
+    });
+    prevBtn.addEventListener('click', () => showImage(current - 1));
+    nextBtn.addEventListener('click', () => showImage(current + 1));
+    modalEl.querySelector('[data-quickview-gallery]').addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') { e.preventDefault(); showImage(current - 1); }
+        if (e.key === 'ArrowRight') { e.preventDefault(); showImage(current + 1); }
+    });
+
+    let touchX = null;
+    main.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
+    main.addEventListener('touchend', (e) => {
+        if (touchX === null) return;
+        const dx = e.changedTouches[0].clientX - touchX;
+        if (Math.abs(dx) > 40) showImage(current + (dx < 0 ? 1 : -1));
+        touchX = null;
+    });
+
+    // ----- variants -----
+    const hasRealOptions = () => !(product.variants.length === 1 && product.options.length === 1 && product.options[0].values[0] === 'Default Title');
+
+    function selectedOptions() {
+        return Array.from(optionsEl.querySelectorAll('.pdp-option')).map((group) => {
+            const checked = group.querySelector('input:checked');
+            return checked ? checked.value : null;
+        });
+    }
+
+    function findVariant(options) {
+        return product.variants.find((v) => v.options.every((value, i) => options[i] == null || value === options[i]));
+    }
+
+    function currentVariant() {
+        return hasRealOptions() ? findVariant(selectedOptions()) : product.variants[0];
+    }
+
+    function markAvailability() {
+        const selected = selectedOptions();
+        optionsEl.querySelectorAll('.pdp-option').forEach((group, index) => {
+            group.querySelectorAll('input').forEach((input) => {
+                const options = selected.slice();
+                options[index] = input.value;
+                const match = findVariant(options);
+                input.nextElementSibling.classList.toggle('is-unavailable', !match || !match.available);
             });
-        })
-    })
+        });
+    }
 
-    //add to cart modal
-    modalAddToCartForm.addEventListener('submit', (e) => {
+    function renderOptions(initial) {
+        if (!hasRealOptions()) {
+            optionsEl.innerHTML = '';
+            optionsEl.hidden = true;
+            return;
+        }
+        optionsEl.hidden = false;
+        optionsEl.innerHTML = product.options.map((option, oi) => `
+            <fieldset class="pdp-option">
+                <legend class="pdp-option__label">${escapeHTML(option.name)}</legend>
+                <div class="pdp-option__values">
+                    ${option.values.map((value, vi) => {
+                        const id = `qv-option-${oi}-${vi}`;
+                        return `<input class="pdp-option__input visually-hidden" type="radio" id="${id}" name="qv-option-${oi}" value="${escapeHTML(value)}"${initial.options[oi] === value ? ' checked' : ''}>
+                                <label class="pdp-pill" for="${id}">${escapeHTML(value)}</label>`;
+                    }).join('')}
+                </div>
+            </fieldset>`).join('');
+    }
+
+    function updateVariant(fromUser) {
+        const variant = currentVariant();
+        markAvailability();
+        statusEl.textContent = '';
+
+        if (!variant) {
+            addBtn.disabled = true;
+            addBtn.textContent = 'Unavailable';
+            return;
+        }
+
+        idInput.value = variant.id;
+        priceEl.textContent = money(variant.price);
+        const onSale = variant.compare_at_price && variant.compare_at_price > variant.price;
+        priceEl.classList.toggle('is-sale', !!onSale);
+        compareEl.textContent = onSale ? money(variant.compare_at_price) : '';
+        compareEl.hidden = !onSale;
+        badgeEl.hidden = !onSale;
+
+        addBtn.disabled = !variant.available;
+        addBtn.textContent = variant.available ? 'Add to cart' : 'Sold out';
+
+        if (heart) heart.setAttribute('data-variant-id', variant.id);
+        linkEl.href = product.url + (hasRealOptions() ? '?variant=' + variant.id : '');
+
+        // Jump to the variant's own photo when it has one
+        if (fromUser && variant.featured_image) {
+            const target = baseSrc(variant.featured_image.src);
+            const index = images.findIndex((img) => baseSrc(img.src) === target);
+            if (index > -1) showImage(index);
+        }
+    }
+
+    optionsEl.addEventListener('change', () => updateVariant(true));
+
+    // ----- quantity -----
+    modalEl.querySelectorAll('[data-quickview-qty]').forEach((button) => {
+        button.addEventListener('click', () => {
+            const next = (parseInt(qtyInput.value, 10) || 1) + parseInt(button.dataset.quickviewQty, 10);
+            qtyInput.value = Math.max(1, next);
+        });
+    });
+
+    // ----- wishlist (Swym listens on the heart itself) -----
+    if (wishlistBtn && heart) {
+        wishlistBtn.addEventListener('click', (e) => {
+            if (!heart.contains(e.target)) heart.click();
+        });
+        wishlistBtn.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); heart.click(); }
+        });
+        new MutationObserver(() => {
+            const liked = heart.classList.contains('liked');
+            wishlistBtn.setAttribute('aria-pressed', liked ? 'true' : 'false');
+            wishlistBtn.setAttribute('aria-label', liked ? 'Remove from wishlist' : 'Add to wishlist');
+        }).observe(heart, { attributes: true, attributeFilter: ['class'] });
+    }
+
+    // ----- add to cart -----
+    form.addEventListener('submit', (e) => {
         e.preventDefault();
+        const label = addBtn.textContent;
+        addBtn.disabled = true;
+        addBtn.textContent = 'Adding…';
 
-        let formData = {
-            "items": [
-                {
-                    'id': document.getElementById("modalItemID").value,
-                    'quantity': document.getElementById("modalItemQuantity").value
-                }
-            ]
-        };
-
-        fetch('/cart/add.js', {
+        fetch(root + 'cart/add.js', {
             method: 'POST',
-            headers: {
-                "Content-Type": 'application/json'
-            },
-            body: JSON.stringify(formData)
-        }).then((res) => {
-            return res.json();
-        }).then(() => {
-            return update_cart();
-        }).catch((err) => {
-            console.error('Error: ' + err);
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({ items: [{ id: idInput.value, quantity: Math.max(1, parseInt(qtyInput.value, 10) || 1) }] })
         })
-    })
-}
+            .then((res) => res.json().then((data) => ({ ok: res.ok, data })))
+            .then(({ ok, data }) => {
+                if (!ok) throw new Error(data.description || data.message || 'Could not add to cart.');
+                statusEl.textContent = 'Added to cart';
+                addBtn.textContent = 'Added ✓';
+                if (typeof update_cart === 'function') update_cart();
+                setTimeout(() => { addBtn.disabled = false; addBtn.textContent = label; }, 1500);
+            })
+            .catch((err) => {
+                statusEl.textContent = err.message;
+                addBtn.disabled = false;
+                addBtn.textContent = label;
+            });
+    });
+
+    // ----- open -----
+    function populate(data) {
+        product = data;
+        images = (data.media || []).filter((m) => m.media_type === 'image').map((m) => ({ src: m.src, alt: m.alt }));
+        if (!images.length) images = (data.images || []).map((src) => ({ src: src, alt: '' }));
+
+        titleEl.textContent = data.title;
+        const text = (new DOMParser().parseFromString(data.description || '', 'text/html').body.textContent || '').replace(/\s+/g, ' ').trim();
+        descEl.textContent = text;
+        descEl.hidden = !text;
+
+        qtyInput.value = 1;
+        statusEl.textContent = '';
+        if (heart) {
+            heart.classList.remove('liked');
+            heart.setAttribute('data-product-id', data.id);
+            heart.setAttribute('data-product-url', window.location.origin + data.url);
+        }
+
+        renderGallery();
+        const initial = data.variants.find((v) => v.available) || data.variants[0];
+        renderOptions(initial);
+        updateVariant(false);
+        if (initial.featured_image) {
+            const index = images.findIndex((img) => baseSrc(img.src) === baseSrc(initial.featured_image.src));
+            if (index > 0) showImage(index);
+        }
+    }
+
+    document.addEventListener('click', (e) => {
+        const trigger = e.target.closest('[data-quickview-handle]');
+        if (!trigger) return;
+        e.preventDefault();
+        const handle = trigger.dataset.quickviewHandle;
+
+        const open = (data) => { populate(data); modal.show(); };
+        if (cache[handle]) return open(cache[handle]);
+
+        fetch(root + 'products/' + encodeURIComponent(handle) + '.js')
+            .then((res) => res.json())
+            .then((data) => { cache[handle] = data; open(data); })
+            .catch(() => { window.location.href = trigger.href; });
+    });
+})();
 
 //update cart
 

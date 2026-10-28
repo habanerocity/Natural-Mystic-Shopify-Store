@@ -1100,3 +1100,494 @@ input:focus {
     font-size: 14px;
   }
 }
+
+/* ------------------------------------------------------------
+   Shared product purchase controls
+   Used by the product page and the collection quick view
+   ------------------------------------------------------------ */
+
+/* Variant options as pills */
+.pdp-option {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+.pdp-option + .pdp-option {
+    margin-top: 1.25rem;
+}
+
+.pdp-option__label {
+    float: none;
+    width: auto;
+    margin-bottom: 0.75rem;
+    padding: 0;
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.pdp-option__values {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr));
+    gap: 0.75rem;
+}
+
+/* White pills with a light border; the selected one gets a primary-color outline */
+.pdp-pill {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3.5rem;
+    padding: 0.6rem 1rem;
+    border: 2px solid #ececec;
+    border-radius: 10px;
+    background-color: #fff;
+    font-size: 1.05rem;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color .2s;
+}
+
+.pdp-pill:hover {
+    border-color: color-mix(in srgb, var(--color-primary) 40%, #ececec);
+}
+
+.pdp-option__input:checked + .pdp-pill {
+    border-color: var(--color-primary);
+}
+
+.pdp-option__input:focus-visible + .pdp-pill {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.pdp-pill.is-unavailable {
+    color: #6c757d;
+    text-decoration: line-through;
+}
+
+.pdp-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #6c757d;
+}
+
+.pdp-select {
+    border-radius: 8px;
+    padding-block: 0.65rem;
+}
+
+.pdp-qty {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid #d6d6d6;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.pdp-qty__btn {
+    width: 2.75rem;
+    height: 2.75rem;
+    border: 0;
+    background: transparent;
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.pdp-qty__btn:hover {
+    background-color: #f3f3f3;
+}
+
+.pdp-qty__input {
+    width: 3rem;
+    height: 2.75rem;
+    border: 0;
+    text-align: center;
+    -moz-appearance: textfield;
+}
+
+.pdp-qty__input::-webkit-outer-spin-button,
+.pdp-qty__input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.pdp-buy {
+    display: flex;
+    align-items: stretch;
+    gap: 0.75rem;
+}
+
+.pdp-add {
+    flex: 1 1 auto;
+    padding-block: 0.85rem;
+    letter-spacing: 0.04em;
+}
+
+/* Square outlined wishlist button next to Add to cart */
+.pdp-wishlist {
+    flex: 0 0 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color .2s;
+}
+
+.pdp-wishlist:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.pdp-wishlist:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+/* The heart is drawn with CSS (a rotated square plus two circles), so its visible shape sits a hair above its box */
+.pdp-wishlist .heart__beat {
+    position: relative !important;
+    top: 0.07rem !important;
+    right: auto !important;
+    flex: 0 0 auto;
+}
+
+.pdp-add.rust {
+    background-color: var(--color-cta);
+    border-color: var(--color-cta);
+    color: #fff !important;
+    transition: background-color .25s, border-color .25s;
+}
+
+/* Hover deepens to the full primary color */
+.pdp-add.rust:hover {
+    background-color: var(--color-primary) !important;
+    border-color: var(--color-primary) !important;
+}
+
+/* Unavailable: the same green, washed out, the way the Shop Pay button fades when it can't be used */
+.pdp-add.rust:disabled,
+.pdp-add.rust:disabled:hover {
+    background-color: color-mix(in srgb, var(--color-cta) 40%, #fff) !important;
+    border-color: color-mix(in srgb, var(--color-cta) 40%, #fff) !important;
+    color: #fff !important;
+    opacity: 1;
+    cursor: not-allowed;
+    pointer-events: auto;
+}
+
+/* ------------------------------------------------------------
+   Collection quick view modal
+   ------------------------------------------------------------ */
+
+.quickview-trigger {
+  display: block;
+  cursor: zoom-in;
+}
+
+.quickview__dialog {
+  max-width: min(58rem, calc(100vw - 2rem));
+}
+
+.quickview__content {
+  position: relative;
+  border: 0;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.quickview__close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: 0;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.9);
+  color: var(--bs-body-color);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  transition: background-color .2s;
+}
+
+.quickview__close:hover {
+  background-color: #fff;
+}
+
+.quickview__close:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.quickview__body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  gap: 2rem;
+  padding: 1.5rem;
+}
+
+/* Gallery: main photo with a column of thumbnails on its right */
+.quickview__gallery {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.75rem;
+  align-self: start;
+}
+
+.quickview__gallery.has-thumbs {
+  grid-template-columns: minmax(0, 1fr) 4rem;
+}
+
+.quickview__main {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: 12px;
+  background-color: #f6f5f3;
+  overflow: hidden;
+  touch-action: pan-y;
+}
+
+.quickview__slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .45s ease, visibility 0s linear .45s;
+}
+
+.quickview__slide.is-active {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity .45s ease, visibility 0s;
+}
+
+.quickview__slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* The thumbnail column takes the photo's height and scrolls if there are many */
+.quickview__thumbs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  contain: size;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.quickview__thumbs::-webkit-scrollbar {
+  display: none;
+}
+
+.quickview__thumb {
+  flex: 0 0 auto;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background-color: #f6f5f3;
+  overflow: hidden;
+  opacity: 0.6;
+  cursor: pointer;
+  transition: opacity .2s, border-color .2s;
+}
+
+.quickview__thumb:hover,
+.quickview__thumb:focus-visible,
+.quickview__thumb[aria-current="true"] {
+  opacity: 1;
+}
+
+.quickview__thumb[aria-current="true"] {
+  border-color: var(--color-primary);
+}
+
+.quickview__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.quickview__nav {
+  position: absolute;
+  top: 50%;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.85);
+  color: var(--bs-body-color);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: opacity .25s, background-color .2s;
+}
+
+.quickview__nav--prev { left: 0.75rem; }
+.quickview__nav--next { right: 0.75rem; }
+
+.quickview__main:hover .quickview__nav,
+.quickview__nav:focus-visible {
+  opacity: 1;
+}
+
+.quickview__nav:hover {
+  background-color: #fff;
+}
+
+.quickview__nav:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.quickview__counter {
+  position: absolute;
+  bottom: 0.75rem;
+  left: 50%;
+  z-index: 2;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background-color: rgba(255, 255, 255, 0.85);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  transform: translateX(-50%);
+}
+
+@media (hover: none) {
+  .quickview__nav { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quickview__slide,
+  .quickview__slide.is-active { transition: none; }
+}
+
+/* Details column */
+.quickview__info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding-top: 0.5rem;
+}
+
+.quickview__title {
+  margin: 0 2.5rem 0.5rem 0;
+  font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--bs-body-color);
+}
+
+.quickview__price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.quickview__price-current {
+  font-size: 1.35rem;
+  font-weight: 500;
+}
+
+.quickview__price-current.is-sale {
+  color: var(--color-alert);
+}
+
+.quickview__price-compare {
+  color: #6c757d;
+}
+
+.quickview__badge {
+  padding: 0.1rem 0.55rem;
+  border-radius: 999px;
+  background-color: var(--color-alert);
+  color: #fff;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* A short preview of the description; the full text lives on the product page */
+.quickview__description {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  margin: 0.85rem 0 0;
+  overflow: hidden;
+  line-height: 1.6;
+}
+
+.quickview__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+.quickview__form .pdp-label {
+  margin-bottom: 0.5rem;
+}
+
+.quickview__status {
+  min-height: 1.25rem;
+  margin: -0.5rem 0 0;
+  font-size: 0.85rem;
+  color: var(--color-primary);
+}
+
+.quickview__status:empty {
+  display: none;
+}
+
+.quickview__details {
+  align-self: flex-start;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+.quickview__details:hover {
+  text-decoration: underline;
+}
+
+/* Phones and small tablets: photo on top, details below; the modal body scrolls */
+@media (max-width: 767px) {
+  .quickview__body {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.25rem;
+    padding: 1rem;
+  }
+
+  .quickview__gallery.has-thumbs {
+    grid-template-columns: minmax(0, 1fr) 3.25rem;
+  }
+
+  .quickview__title {
+    margin-right: 0;
+  }
+}

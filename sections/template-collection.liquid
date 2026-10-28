@@ -53,7 +53,7 @@
                 <div class="col-6 col-sm-6 col-md-auto col-lg-auto g-3">
                     <div class="product_card card my-1 product_item">
                         {% if image != blank %}
-                            <a id="productInfoAnchor" data-product-handle="{{ product.handle }}" data-product-compare-at-price="{{ product.compare_at_price | money_without_trailing_zeros}}" data-product-price="{{ product.price | money_without_trailing_zeros}}">
+                            <a class="quickview-trigger" href="{{ product.url }}" data-quickview-handle="{{ product.handle }}" aria-label="Quick view: {{ product.title | escape }}">
                                 <img class="pic card-img-top lazyload" data-src="{{ image | img_url: 'medium' }}" alt="{{ product.title }}">
                             </a>
                         {% else %}
@@ -94,62 +94,59 @@
     {% endpaginate %}
 </div>
 
-<div aria-hidden="true" class="modal fade" id="productInfoModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button aria-label="close" class="btn-close grey rounded-circle" data-bs-dismiss="modal" type="button"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-12 col-md-6">
-                        <img alt="" class="img-fluid" id="productInfoImg" src="">
+<div class="modal fade quickview" id="productInfoModal" tabindex="-1" aria-labelledby="quickviewTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable quickview__dialog">
+        <div class="modal-content quickview__content">
+            <button aria-label="Close" class="quickview__close" data-bs-dismiss="modal" type="button">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"/></svg>
+            </button>
+            <div class="modal-body quickview__body">
+                <div class="quickview__gallery" data-quickview-gallery>
+                    <div class="quickview__main" data-quickview-main>
+                        <button type="button" class="quickview__nav quickview__nav--prev" data-quickview-step="-1" aria-label="Previous image" hidden>
+                            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </button>
+                        <button type="button" class="quickview__nav quickview__nav--next" data-quickview-step="1" aria-label="Next image" hidden>
+                            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false"><path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </button>
+                        <span class="quickview__counter" aria-live="polite" data-quickview-counter hidden></span>
                     </div>
-                    <div class="col-12 col-md-6">
-                        <h1 id="productInfoTitle"></h1>
-                        <div>
-                            <div class="d-none" id="compareDiv">
-                                <h6 class="d-inline-block">
-                                    <i>Was</i>
-                                </h6>
-                                <h4 class="text-decoration-line-through text-muted d-inline-block" id="productInfoComparePrice"></h4>
-                            </div>
-                            <div>
-                                <h4 class="d-inline-block" id="modalNow">
-                                    <i>Now</i>
-                                </h4>
-                                <h2 class="d-inline-block" id="productInfoPrice"></h2>
+                    <div class="quickview__thumbs" role="list" aria-label="Product images" data-quickview-thumbs></div>
+                </div>
+
+                <div class="quickview__info">
+                    <h2 class="quickview__title" id="quickviewTitle" data-quickview-title></h2>
+                    <div class="quickview__price">
+                        <span class="quickview__price-current" data-quickview-price></span>
+                        <s class="quickview__price-compare" data-quickview-compare hidden></s>
+                        <span class="quickview__badge" data-quickview-badge hidden>Sale</span>
+                    </div>
+                    <p class="quickview__description" data-quickview-description></p>
+
+                    <form action="{{ routes.cart_add_url }}" method="post" class="quickview__form" id="addToCartForm">
+                        <input type="hidden" name="id" value="" data-quickview-variant-id>
+                        <div class="pdp-options" data-quickview-options></div>
+
+                        <div class="quickview__field">
+                            <label for="modalItemQuantity" class="pdp-label">Quantity</label>
+                            <div class="pdp-qty">
+                                <button type="button" class="pdp-qty__btn" data-quickview-qty="-1" aria-label="Decrease quantity">&minus;</button>
+                                <input class="pdp-qty__input" id="modalItemQuantity" name="quantity" type="number" value="1" min="1" inputmode="numeric">
+                                <button type="button" class="pdp-qty__btn" data-quickview-qty="1" aria-label="Increase quantity">+</button>
                             </div>
                         </div>
-                        <p id="productInfoDescription"></p>
-                    </div>
+
+                        <div class="pdp-buy">
+                            <button class="btn rust pdp-add" id="AddToCart" name="add" type="submit" data-quickview-add>Add to cart</button>
+                            <div class="pdp-wishlist" role="button" tabindex="0" aria-pressed="false" aria-label="Add to wishlist" data-quickview-wishlist>
+                                <div class="swym-button swym-add-to-wishlist heart__beat" data-with-epi="true" data-swaction="addToWishlist" data-product-id="" data-variant-id="" data-product-url=""></div>
+                            </div>
+                        </div>
+
+                        <p class="quickview__status" role="status" aria-live="polite" data-quickview-status></p>
+                        <a class="quickview__details" href="#" data-quickview-link>View full details <span aria-hidden="true">&rarr;</span></a>
+                    </form>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <form action="#" class="row" id="addToCartForm">
-                    <select class="form-select col-auto mb-4" id="modalItemID" name="id">
-                        {% for variant in product.variants %}
-
-                            {% if variant.available %}
-                                <option value="{{ variant.id }}">
-                                    {{ variant.title }}
-                                </option>
-                            {% else %}
-                                <option value="{{ variant.id }}" disabled="disabled">
-                                    {{ variant.title }}
-                                </option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                    <div class="d-flex align-items-center flex-row justify-content-center col-10">
-                        <span class="fw-bold">Qty</span>
-                        <input class="col-2 text-center mx-3 " id="modalItemQuantity" min="1" name="quantity" type="number" value="1">
-                        <!-- <button class="btn btn-success col-auto" type="submit">Add to cart</button> -->
-
-                        <button class="btn btn-large w-100 rust bg-transparent btn-add_to_cart" id="AddToCart" name="add" type="submit">Add To Cart</button>
-
-                    </div>
-                </form>
             </div>
         </div>
     </div>
