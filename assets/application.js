@@ -278,7 +278,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function update_cart() {
     fetch('/cart.js').then((res) => res.json()).then((data) => {
-        document.getElementById('numberOfCartItems').innerHTML = data.item_count;
+        const cartCount = document.getElementById('numberOfCartItems');
+        if (cartCount) {
+            cartCount.textContent = data.item_count;
+            cartCount.hidden = data.item_count === 0;
+        }
     }).catch((err) => console.err(err));
 }
 

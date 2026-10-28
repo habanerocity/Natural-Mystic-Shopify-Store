@@ -1,80 +1,75 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+<nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top site-header">
     <div class="container">
+        {%- comment -%} Mobile: menu button, logo, icons on one row; links and search drop down below. Desktop: logo, links, search, icons. {%- endcomment -%}
+        <button aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler order-0 me-2" data-bs-target="#navbarNav" data-bs-toggle="collapse" type="button">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
         {% for block in section.blocks %}
             {% if block.settings.store-logo != blank %}
-                <a class="navbar-brand p-0" href="{{ routes.root_url }}">
+                <a class="navbar-brand p-0 order-1 me-auto me-lg-4" href="{{ routes.root_url }}">
                     <img src="{{ block.settings.store-logo | img_url: '40x40' }}" alt="{{ shop.name | escape }}" class="p-0"/>
                 </a>
             {% endif %}
         {% endfor %}
-        <button aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-bs-target="#navbarNav" data-bs-toggle="collapse" type="button">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
+
+        <div class="header-icons order-2 order-lg-3 ms-lg-3">
+            <a class="header-icon" href="#swym-wishlist" aria-label="View wishlist" title="Wishlist">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
+            </a>
+
+            {% if shop.customer_accounts_enabled %}
+                <div class="dropdown">
+                    <button class="header-icon" type="button" id="headerAccountMenu" data-bs-toggle="dropdown" aria-expanded="false" aria-label="{% if customer %}Account menu{% else %}Log in or create an account{% endif %}" title="Account">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5"/></svg>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end header-dropdown" aria-labelledby="headerAccountMenu">
+                        {% if customer %}
+                            <li class="dropdown-header">Hi, {{ customer.first_name | default: 'there' | escape }}</li>
+                            <li><a class="dropdown-item" href="{{ routes.account_url }}">My account</a></li>
+                            <li><a class="dropdown-item" href="{{ routes.account_logout_url }}">Log out</a></li>
+                        {% else %}
+                            <li><a class="dropdown-item" href="{{ routes.account_login_url }}">Log in</a></li>
+                            <li><a class="dropdown-item" href="{{ routes.account_register_url }}">Create account</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            <a class="header-icon" href="{{ routes.cart_url }}" aria-label="Cart, {{ cart.item_count }} {{ cart.item_count | pluralize: 'item', 'items' }}" title="Cart">
+                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 8h14l-1.2 11.1a2 2 0 0 1-2 1.9H8.2a2 2 0 0 1-2-1.9z"/><path d="M9 8V6.5a3 3 0 0 1 6 0V8"/></svg>
+                <span class="header-icon__count" id="numberOfCartItems" aria-hidden="true" {% if cart.item_count == 0 %}hidden{% endif %}>{{ cart.item_count }}</span>
+            </a>
+        </div>
+
+        <div class="collapse navbar-collapse order-3 order-lg-2" id="navbarNav">
             <ul class="navbar-nav me-auto">
                 {% for link in linklists.main-menu.links %}
                     {% assign child_list_handle = link.title | handleize %}
                     {% if linklists[child_list_handle].links != blank %}
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ link.title }}</a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <!-- <li class="p-2">
-                                    <span>Collections</span>
-                                </li> -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink-{{ forloop.index }}" role="button" data-bs-toggle="dropdown" aria-expanded="false">{{ link.title }}</a>
+                            <ul class="dropdown-menu header-dropdown" aria-labelledby="navbarDropdownMenuLink-{{ forloop.index }}">
                                 {% for childlink in linklists[child_list_handle].links %}
-                                    <li >
-                                        <a class="dropdown-item" href="{{ childlink.url }}">{{childlink.title | escape}}</a>
+                                    <li>
+                                        <a class="dropdown-item" href="{{ childlink.url }}">{{ childlink.title | escape }}</a>
                                     </li>
                                 {% endfor %}
                             </ul>
                         </li>
-                        
                     {% else %}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ link.url }}">{{ link.title }}</a>
                         </li>
                     {% endif %}
                 {% endfor %}
-                <li class="nav-item">
-                    <a class="nav-link" href="/cart">
-                        Cart
-                        <span class="badge bg-danger rounded-pill" id="numberOfCartItems">0</span>
-                    </a>
-                </li>
-            </ul>
-            <ul class="navbar-nav login_register">
-                {% if shop.customer_accounts_enabled %}
-                    {% if customer %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="#swym-wishlist">Wishlist</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ routes.account_url }}">Account</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ routes.account_logout_url }}">Log out</a>
-                        </li>
-                    {% else %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="#swym-wishlist">Wishlist</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ routes.account_login_url }}">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ routes.account_register_url }}">Register</a>
-                        </li>
-                    {% endif %}
-                {% endif %}
-                <li class="nav-item"></li>
-
             </ul>
             <div class="search_box_container">
-                <form action="/search" method="GET" role="search">
+                <form action="{{ routes.search_url }}" method="GET" role="search">
                     <div class="search-box">
-                        <input id="searchInputField" name="q" placeholder="Search..." type="text">
-                        <button class="search_btn" type="submit">
-                            <img class="mag_glass " alt="search button" src="https://cdn.shopify.com/s/files/1/0768/5308/4250/files/gz-icon-search-cream.svg?v=1792546664"/>
+                        <input id="searchInputField" name="q" placeholder="Search..." type="text" aria-label="Search">
+                        <button class="search_btn" type="submit" aria-label="Search">
+                            <img class="mag_glass " alt="" src="https://cdn.shopify.com/s/files/1/0768/5308/4250/files/gz-icon-search-cream.svg?v=1792546664"/>
                         </button>
                     </div>
                 </form>

@@ -47,6 +47,34 @@
           "type": "quantity",
           "settings": {}
         },
+        "attribute_ggVBwk": {
+          "type": "attribute",
+          "settings": {
+            "text": "Focus, Energy, Motivation",
+            "icon": "bolt"
+          }
+        },
+        "attribute_cNpQWA": {
+          "type": "attribute",
+          "settings": {
+            "text": "Great Taste",
+            "icon": "mug"
+          }
+        },
+        "attribute_DhdG8g": {
+          "type": "attribute",
+          "settings": {
+            "text": "115mg Caffeine, 3 Patented Ingredients, 2480mg Powerful Nootropics",
+            "icon": "bowl"
+          }
+        },
+        "attribute_4nJ8b7": {
+          "type": "attribute",
+          "settings": {
+            "text": "All-Natural Ingredients",
+            "icon": "leaf"
+          }
+        },
         "checkoutButtons": {
           "type": "checkout_buttons",
           "settings": {}
@@ -56,6 +84,8 @@
           "settings": {
             "heading": "Description",
             "content_source": "product_description",
+            "content": "<p>Share details customers often ask about, like shipping times, ingredients, or how to use the product.</p>",
+            "page": "",
             "icon": "document",
             "open": true
           }
@@ -64,30 +94,33 @@
           "type": "accordion",
           "settings": {
             "heading": "Ingredients",
+            "content_source": "custom",
             "content": "<p>Share details customers often ask about, like shipping times, ingredients, or how to use the product.</p>",
-            "open": false,
+            "page": "",
             "icon": "leaf",
-            "content_source": "custom"
+            "open": false
           }
         },
         "accordion_zYF4Fg": {
           "type": "accordion",
           "settings": {
             "heading": "Measurements",
+            "content_source": "custom",
             "content": "<p>Share details customers often ask about, like shipping times, ingredients, or how to use the product.</p>",
-            "open": false,
+            "page": "",
             "icon": "ruler",
-            "content_source": "custom"
+            "open": false
           }
         },
         "accordion_YCwBGr": {
           "type": "accordion",
           "settings": {
             "heading": "Shipping & returns",
+            "content_source": "custom",
             "content": "<p>Share details customers often ask about, like shipping times, ingredients, or how to use the product.</p>",
-            "open": false,
+            "page": "",
             "icon": "truck",
-            "content_source": "custom"
+            "open": false
           }
         }
       },
@@ -99,6 +132,10 @@
         "purchaseOptions",
         "price",
         "quantity",
+        "attribute_ggVBwk",
+        "attribute_cNpQWA",
+        "attribute_DhdG8g",
+        "attribute_4nJ8b7",
         "checkoutButtons",
         "description",
         "accordion_whMtq7",
@@ -119,4 +156,3 @@
     "product-recommendation"
   ]
 }
-
