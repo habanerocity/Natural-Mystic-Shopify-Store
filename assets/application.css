@@ -364,10 +364,6 @@ input::placeholder {
     }
 }
 
-#productInfoAnchor{
-    cursor: pointer;
-}
-
 .rust {
     background-color: var(--color-primary);
     border-color: var(--color-primary);
@@ -1291,7 +1287,7 @@ input:focus {
 
 .quickview-trigger {
   display: block;
-  cursor: zoom-in;
+  cursor: pointer;
 }
 
 .quickview__dialog {
