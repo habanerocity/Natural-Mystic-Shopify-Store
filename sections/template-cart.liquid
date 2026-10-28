@@ -14,76 +14,80 @@
 <div class="container my-5">
     {% if cart.item_count > 0 %}
         <div class="my-5">
-            <form action="/cart" class="row" method="POST" novalidate>
-                <div class="col-12 col-md-8">
+            <form action="{{ routes.cart_url }}" class="row g-4" method="POST" novalidate>
+                <div class="col-12 col-lg-8">
                     <div class="card shadow">
                         <div class="card-body">
-                            <table class="table table-borderless">
-                                <thead>
-                                    <th></th>
-                                    <th>Product Name</th>
-                                    <th>Size</th>
-                                    <th>Price</th>
-                                    <th>Quantity</th>
-                                    <th>Total</th>
-                                </thead>
-                                <tbody>
-                                    {% for item in cart.items %}
-                                        <tr>
-                                            <td>
-                                                <a href="{{ item.url | within: collections.all }}">
-                                                    <img src="{{ item | img_url: 'small' }}" class="product_image" alt="{{ item.title | escape }}">
-                                                </a>
-                                            </td>
-                                            <td>
-                                                <a class="text-decoration-none dot" href="{{ item.url }}">{{ item.product.title }}</a>
-                                                <a href="/cart/change?line={{ forloop.index }}&amp;quantity=0"><img alt="delete item" class="trash" src="{{ section.settings.delete_icon | img_url: "small"}}" width="15" height="15"></img></a>
-                                            </td>
-                                            <td>
-                                                <p class="small">{{ item.variant.title }}</p>
-                                            </td>
-                                            <td>{{ item.price | money }}</td>
-                                            <td>
-                                                <input class="qty" type="number" name="updates[]" id="updates_{{ item.key }}" value="{{ item.quantity }}" min="0">
-                                            </td>
-                                            <td>
-                                                {% if item.original_line_price != item.line_price %}
-                                                    {{ item.original_line_price | money }}
+                            <div class="cart-lines">
+                                <div class="cart-lines__head" aria-hidden="true">
+                                    <span>Product</span>
+                                    <span>Quantity</span>
+                                    <span class="text-end">Total</span>
+                                </div>
+                                {% for item in cart.items %}
+                                    <div class="cart-line">
+                                        <a class="cart-line__image" href="{{ item.url }}">
+                                            {% if item.image %}
+                                                {% assign line_alt = item.image.alt | default: item.title | escape %}
+                                                {{ item.image | image_url: width: 200 | image_tag: loading: 'lazy', alt: line_alt }}
+                                            {% else %}
+                                                <span class="cart-line__image-empty"></span>
+                                            {% endif %}
+                                        </a>
+
+                                        <div class="cart-line__info">
+                                            <a class="cart-line__title text-decoration-none dot" href="{{ item.url }}">{{ item.product.title }}</a>
+                                            {% unless item.product.has_only_default_variant %}
+                                                <p class="cart-line__variant">{{ item.variant.title }}</p>
+                                            {% endunless %}
+                                            <p class="cart-line__price">{{ item.price | money }}</p>
+                                            <a class="cart-line__remove" href="{{ routes.cart_change_url }}?line={{ forloop.index }}&amp;quantity=0" aria-label="Remove {{ item.product.title | escape }} from cart">
+                                                {% if section.settings.delete_icon != blank %}
+                                                    <img alt="" class="trash" src="{{ section.settings.delete_icon | image_url: width: 48 }}" width="15" height="15">
+                                                {% else %}
+                                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 12a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2l1-12M9 7V4h6v3"/></svg>
                                                 {% endif %}
-                                                {{ item.line_price | money }}
-                                                {% for discount in item.discounts %}
-                                                    {{ discount.title }}
-                                                {% endfor %}
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                                                <span>Remove</span>
+                                            </a>
+                                        </div>
+
+                                        <div class="cart-line__qty">
+                                            <label class="visually-hidden" for="updates_{{ item.key }}">Quantity for {{ item.product.title | escape }}</label>
+                                            <input class="qty" type="number" name="updates[]" id="updates_{{ item.key }}" value="{{ item.quantity }}" min="0" inputmode="numeric">
+                                        </div>
+
+                                        <div class="cart-line__total">
+                                            {% if item.original_line_price != item.line_price %}
+                                                <s class="cart-line__was">{{ item.original_line_price | money }}</s>
+                                            {% endif %}
+                                            <span>{{ item.line_price | money }}</span>
+                                            {% for discount in item.discounts %}
+                                                <span class="cart-line__discount">{{ discount.title }}</span>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-12 col-md-4">
-
+                <div class="col-12 col-lg-4">
                     <div class="card shadow price_card">
                         <div class="card-body">
                             {% for block in section.blocks %}
                                 {% case block.type %}
                                     {% when "cart_total" %}
-                                        <div class="cart-total-block">
-                                            <p class="h3">Your total:
-                                            </p>
-                                            <p>{{ cart.total_price | money }}</p>
+                                        <div class="cart-total-block" {{ block.shopify_attributes }}>
+                                            <p class="h3">Your total:</p>
+                                            <p class="cart-total-block__amount">{{ cart.total_price | money }}</p>
                                         </div>
                                     {% when "cart_checkout_button" %}
-                                        <div class="cart-checkout-buttons d-grid gap-2">
+                                        <div class="cart-checkout-buttons d-grid gap-2" {{ block.shopify_attributes }}>
                                             <button class="btn rust bg-transparent btn-add_to_cart" name="update" type="submit">Update Cart</button>
                                             <button class="btn rust" name="checkout" type="submit">Checkout</button>
                                         </div>
-                                    {% else %}
-
                                 {% endcase %}
                             {% endfor %}
-
                         </div>
                     </div>
                 </div>
@@ -117,8 +121,182 @@
         }
         }
 
-        .trash{
-            transform: translate(10px, -2px);
+        /* Cart lines: a flexible grid instead of a wide table, so nothing overflows the card */
+        .cart-lines {
+            min-width: 0;
+        }
+
+        .cart-lines__head {
+            display: none;
+        }
+
+        .cart-line {
+            display: grid;
+            grid-template-columns: 4.5rem minmax(0, 1fr) auto;
+            grid-template-areas:
+                "image info info"
+                "image qty total";
+            gap: 0.75rem 1rem;
+            align-items: center;
+            padding: 1.1rem 0;
+            border-top: 1px solid #ececec;
+        }
+
+        .cart-lines__head + .cart-line {
+            border-top: 0;
+            padding-top: 0;
+        }
+
+        .cart-line:last-child {
+            padding-bottom: 0;
+        }
+
+        .cart-line__image {
+            grid-area: image;
+            align-self: start;
+            display: block;
+            aspect-ratio: 1 / 1;
+            border-radius: 8px;
+            background-color: #f6f5f3;
+            overflow: hidden;
+        }
+
+        .cart-line__image img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cart-line__info {
+            grid-area: info;
+            min-width: 0;
+        }
+
+        .cart-line__info p {
+            margin: 0;
+        }
+
+        .cart-line__title {
+            display: block;
+            font-weight: 600;
+            line-height: 1.3;
+            overflow-wrap: anywhere;
+        }
+
+        .cart-line__variant {
+            margin-top: 0.15rem !important;
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+
+        .cart-line__price {
+            margin-top: 0.25rem !important;
+            font-size: 0.9rem;
+        }
+
+        .cart-line__remove {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: #6c757d;
+            text-decoration: none;
+        }
+
+        .cart-line__remove:hover {
+            color: var(--bs-body-color);
+            text-decoration: underline;
+        }
+
+        .cart-line__qty {
+            grid-area: qty;
+        }
+
+        .cart-line__total {
+            grid-area: total;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .cart-line__was {
+            font-weight: 400;
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+
+        .cart-line__discount {
+            font-weight: 400;
+            font-size: 0.75rem;
+            color: var(--color-primary);
+            white-space: normal;
+            text-align: right;
+        }
+
+        .cart-line .qty {
+            width: 4.5rem;
+            padding: 0.4rem 0.5rem;
+            border: 1px solid #d6d6d6;
+            border-radius: 8px;
+        }
+
+        .cart-total-block p {
+            margin-bottom: 0.5rem;
+        }
+
+        .cart-total-block__amount {
+            font-size: 1.6rem;
+            font-weight: 600;
+            overflow-wrap: anywhere;
+        }
+
+        .price_card .cart-checkout-buttons {
+            margin-top: 1rem;
+        }
+
+        /* Tablet and up: one row per item with real columns */
+        @media screen and (min-width: 576px) {
+            .cart-lines__head,
+            .cart-line {
+                grid-template-columns: 5rem minmax(0, 1fr) 5.5rem 7rem;
+            }
+
+            .cart-line {
+                grid-template-areas: "image info qty total";
+                gap: 1rem 1.25rem;
+            }
+
+            .cart-lines__head {
+                display: grid;
+                grid-template-columns: 5rem minmax(0, 1fr) 5.5rem 7rem;
+                gap: 1rem 1.25rem;
+                padding-bottom: 0.75rem;
+                border-bottom: 1px solid #ececec;
+                font-size: 0.8rem;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                color: #6c757d;
+            }
+
+            .cart-lines__head span:first-child {
+                grid-column: 1 / 3;
+            }
+
+            .cart-lines__head + .cart-line {
+                padding-top: 1.1rem;
+            }
+        }
+
+        /* Keep the summary in view on wide screens while the list scrolls */
+        @media screen and (min-width: 992px) {
+            .price_card {
+                position: sticky;
+                top: 6rem;
+            }
         }
     </style>
 

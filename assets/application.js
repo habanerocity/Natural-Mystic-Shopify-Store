@@ -286,50 +286,166 @@ function update_cart() {
     }).catch((err) => console.err(err));
 }
 
-//initialize predictive search
+//predictive search: results drop down from the search bar
 
-let predictiveSearchInput = document.getElementById('searchInputField');
-let timer;
+(function () {
+    const container = document.querySelector('[data-predictive-search]');
+    const input = document.getElementById('searchInputField');
+    const panel = document.getElementById('predictiveSearchResults');
+    if (!container || !input || !panel) return;
 
-const offcanvasSearch = document.getElementById('offCanvasSearchResult');
-const bsOffcanvas = new bootstrap.Offcanvas(offcanvasSearch);
-if (predictiveSearchInput != null) {
-    predictiveSearchInput.addEventListener('input', function (e) {
+    const root = (window.Shopify && window.Shopify.routes && window.Shopify.routes.root) || '/';
+    const currency = window.Shopify && window.Shopify.currency && window.Shopify.currency.active;
+    const cache = {};
+    let timer;
+    let controller;
+    let activeIndex = -1;
 
-        clearTimeout(timer);
+    const escapeHTML = (value) => String(value == null ? '' : value)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 
-        if (predictiveSearchInput.value) {
-            timer = setTimeout(fetchPredictiveSearch, 3000);
+    const formatPrice = (amount) => {
+        const number = parseFloat(amount);
+        if (isNaN(number)) return '';
+        try {
+            if (currency) {
+                return new Intl.NumberFormat(document.documentElement.lang || undefined, { style: 'currency', currency: currency }).format(number);
+            }
+        } catch (e) { /* fall through */ }
+        return number.toFixed(2);
+    };
+
+    const searchUrl = (query) => root + 'search?type=product&q=' + encodeURIComponent(query);
+
+    const options = () => Array.from(panel.querySelectorAll('[role="option"]'));
+
+    function open() {
+        panel.hidden = false;
+        container.classList.add('is-open');
+        input.setAttribute('aria-expanded', 'true');
+    }
+
+    function close() {
+        panel.hidden = true;
+        container.classList.remove('is-open');
+        input.setAttribute('aria-expanded', 'false');
+        input.removeAttribute('aria-activedescendant');
+        activeIndex = -1;
+    }
+
+    function setActive(index) {
+        const items = options();
+        if (!items.length) return;
+        activeIndex = (index + items.length) % items.length;
+        items.forEach((item, i) => item.setAttribute('aria-selected', i === activeIndex ? 'true' : 'false'));
+        input.setAttribute('aria-activedescendant', items[activeIndex].id);
+        items[activeIndex].scrollIntoView({ block: 'nearest' });
+    }
+
+    function render(query, products) {
+        const safeQuery = escapeHTML(query);
+        let html;
+
+        if (!products.length) {
+            html = `<p class="search-results__empty">No products found for &ldquo;${safeQuery}&rdquo;</p>`;
+        } else {
+            html = '<ul class="search-results__list" role="listbox" aria-label="Product suggestions">' + products.map((product, i) => {
+                const image = product.featured_image && product.featured_image.url ? product.featured_image.url : product.image;
+                const sized = image ? image + (image.includes('?') ? '&' : '?') + 'width=120' : '';
+                const compare = parseFloat(product.compare_at_price_max) > parseFloat(product.price);
+                return `
+                    <li role="option" id="search-option-${i}" aria-selected="false">
+                        <a class="search-result" href="${escapeHTML(product.url)}" tabindex="-1">
+                            <span class="search-result__image">${sized ? `<img src="${escapeHTML(sized)}" alt="" loading="lazy" width="48" height="48">` : ''}</span>
+                            <span class="search-result__text">
+                                <span class="search-result__title">${escapeHTML(product.title)}</span>
+                                <span class="search-result__price">
+                                    ${compare ? `<s>${formatPrice(product.compare_at_price_max)}</s>` : ''}
+                                    ${formatPrice(product.price)}
+                                </span>
+                            </span>
+                        </a>
+                    </li>`;
+            }).join('') + '</ul>';
         }
 
-    })
-}
+        html += `<a class="search-results__all" href="${searchUrl(query)}">View all results for &ldquo;${safeQuery}&rdquo; <span aria-hidden="true">&rarr;</span></a>`;
+        panel.innerHTML = html;
+        activeIndex = -1;
+        open();
+    }
 
-function fetchPredictiveSearch() {
-    fetch(`/search/suggest.json?q=${predictiveSearchInput.value}&resources[type]=product`)
-        .then((res) => res.json())
-        .then((data) => {
+    function search(query) {
+        if (cache[query]) {
+            render(query, cache[query]);
+            return;
+        }
 
-            let products = data.resources.results.products;
+        if (controller) controller.abort();
+        controller = new AbortController();
 
-            document.getElementById('search_results_body').innerHTML = '';
+        panel.innerHTML = '<p class="search-results__status">Searching&hellip;</p>';
+        open();
 
-            products.forEach(function (product, index) {
-                document.getElementById('search_results_body').innerHTML += `
-                    <div class="card my-5" style="width: 19rem;">
-                    <a class="text-decoration-none" href="https://natural-mystic-foods.myshopify.com${product.url}"><img src="${product.image}" class="card-img-top"></a>
-                        <div class="card-body ">
-                            <a class="text-decoration-none" href="https://natural-mystic-foods.myshopify.com${product.url}"><h5 class="card-title dot">${product.title}</h5></a>
-                            <p class="card-text">$${product.price}</p>
-                        </div>
-                    </div>
-                `
+        const url = root + 'search/suggest.json?q=' + encodeURIComponent(query) +
+            '&resources[type]=product&resources[limit]=6&resources[options][unavailable_products]=last';
+
+        fetch(url, { signal: controller.signal })
+            .then((res) => res.json())
+            .then((data) => {
+                const products = (data.resources && data.resources.results && data.resources.results.products) || [];
+                cache[query] = products;
+                if (input.value.trim() === query) render(query, products);
             })
+            .catch((err) => {
+                if (err.name !== 'AbortError') {
+                    panel.innerHTML = '<p class="search-results__status">Search is unavailable right now.</p>';
+                }
+            });
+    }
 
-            bsOffcanvas.show();
-        });
+    input.addEventListener('input', () => {
+        clearTimeout(timer);
+        const query = input.value.trim();
+        if (query.length < 2) {
+            if (controller) controller.abort();
+            close();
+            return;
+        }
+        timer = setTimeout(() => search(query), 250);
+    });
 
-}
+    input.addEventListener('focus', () => {
+        const query = input.value.trim();
+        if (query.length >= 2 && cache[query]) render(query, cache[query]);
+    });
+
+    input.addEventListener('keydown', (e) => {
+        if (panel.hidden) return;
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            setActive(activeIndex + 1);
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            setActive(activeIndex - 1);
+        } else if (e.key === 'Enter' && activeIndex > -1) {
+            e.preventDefault();
+            const link = options()[activeIndex].querySelector('a');
+            if (link) window.location.href = link.href;
+        } else if (e.key === 'Escape') {
+            close();
+        }
+    });
+
+    // Close when clicking or tabbing away from the search area
+    document.addEventListener('click', (e) => {
+        if (!container.contains(e.target)) close();
+    });
+    container.addEventListener('focusout', (e) => {
+        if (!container.contains(e.relatedTarget)) close();
+    });
+})();
 
 //product recommendation
 

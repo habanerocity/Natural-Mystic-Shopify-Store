@@ -64,29 +64,23 @@
                     {% endif %}
                 {% endfor %}
             </ul>
-            <div class="search_box_container">
+            <div class="search_box_container" data-predictive-search>
                 <form action="{{ routes.search_url }}" method="GET" role="search">
+                    <input type="hidden" name="type" value="product">
                     <div class="search-box">
-                        <input id="searchInputField" name="q" placeholder="Search..." type="text" aria-label="Search">
+                        <input id="searchInputField" name="q" placeholder="Search..." type="search" autocomplete="off" aria-label="Search products" role="combobox" aria-expanded="false" aria-controls="predictiveSearchResults" aria-autocomplete="list">
                         <button class="search_btn" type="submit" aria-label="Search">
                             <img class="mag_glass " alt="" src="https://cdn.shopify.com/s/files/1/0768/5308/4250/files/gz-icon-search-cream.svg?v=1792546664"/>
                         </button>
                     </div>
                 </form>
+                <div class="search-results" id="predictiveSearchResults" hidden></div>
             </div>
         </div>
     </div>
 </nav>
 
-<div aria-labelledby="offcanvasLabel" class="offcanvas offcanvas-end" id="offCanvasSearchResult" tabindex="-1">
-    <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasLabel">Product Search Results</h5>
-        <button aria-label="Close" class="btn-close text-reset" data-bs-dismiss="offcanvas" type="button"></button>
-    </div>
-    <div class="offcanvas-body" id="search_results_body">
-        Content for the offcanvas goes here. You can place just about any Bootstrap component or custom elements here.
-    </div>
-</div>
+
 
 
 

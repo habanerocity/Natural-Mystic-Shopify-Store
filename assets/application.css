@@ -546,6 +546,132 @@ input::placeholder {
   transition: box-shadow .25s ease, border-color .25s ease;
 }
 
+/* Predictive search: results panel attached under the search bar */
+.search_box_container {
+  position: relative;
+}
+
+.search-box input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+
+.search-results {
+  position: absolute;
+  top: calc(100% + 0.4rem);
+  right: 0;
+  z-index: 1050;
+  width: max(100%, 24rem);
+  max-height: min(70vh, 32rem);
+  overflow-y: auto;
+  padding: 0.4rem;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 25%, #ececec);
+  border-radius: 16px;
+  background-color: #fff;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+  animation: search-results-in .18s ease;
+}
+
+@keyframes search-results-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .search-results { animation: none; }
+}
+
+.search-results__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.search-result {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.5rem 0.6rem;
+  border-radius: 10px;
+  color: var(--bs-body-color);
+  text-decoration: none;
+}
+
+.search-result:hover,
+[aria-selected="true"] > .search-result {
+  background-color: color-mix(in srgb, var(--color-primary) 7%, #fff);
+  color: var(--bs-body-color);
+}
+
+.search-result__image {
+  flex: 0 0 3rem;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 8px;
+  background-color: #f6f5f3;
+  overflow: hidden;
+}
+
+.search-result__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.search-result__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.search-result__title {
+  overflow: hidden;
+  font-weight: 500;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.search-result__price {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+.search-result__price s {
+  margin-right: 0.35rem;
+}
+
+.search-results__status,
+.search-results__empty {
+  margin: 0;
+  padding: 0.9rem 0.75rem;
+  color: #6c757d;
+  font-size: 0.9rem;
+}
+
+.search-results__all {
+  display: block;
+  margin-top: 0.25rem;
+  padding: 0.7rem 0.75rem;
+  border-top: 1px solid #ececec;
+  color: var(--color-primary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.search-results__all:hover {
+  text-decoration: underline;
+}
+
+/* On phones the search sits in the open menu at full width, so the panel matches it */
+@media (max-width: 991px) {
+  .search-results {
+    left: 0;
+    right: 0;
+    width: auto;
+  }
+}
+
 /* Flat at rest; lifts and picks up a soft brand-colored border when the search field (or its button) is focused */
 .search_box_container:focus-within {
   box-shadow: rgb(0 0 0 / 10%) 0px 4px 8px;
