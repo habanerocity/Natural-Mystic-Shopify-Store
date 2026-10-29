@@ -1,71 +1,139 @@
-{% paginate search.results by 10 %}
-    <div class="container my-5">
-        <div class="row">
-            <form action="/search" method="get" role="search">
-                <input class="form-control mb-4 rounded-0 form-control-lg" type="search" name="q" value="{{ search.terms | escape }}">
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" id="product_type" name="type" type="checkbox" value="product">
-                    <label class="form-check-label" for=" product_type">Product</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" id="product_type" name="type" type="checkbox" value="article">
-                    <label class="form-check-label" for=" product_type">Article</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" id="product_type" name="type" type="checkbox" value="page">
-                    <label class="form-check-label" for=" product_type">Page</label>
-                </div>
-                <button class="btn btn-primary rust__button" type="submit">Search</button>
-            </form>
-        </div>
-        <div class="row">
-            <h1 class="text-center">{{ search.results_count }}
-                search results</h1>
-        </div>
-        <div class="row row-cols-1 row-cols-xl-4 row-cols-lg-3 row-cols-md-3 row-cols-sm-2 g-2 my-5">
-            {% if search.performed %}
-                {% for item in search.results %}
-                    {% if item.object_type == 'product' %}
-                        <div class="col">
-                            <div class="card shadow">
-                                {% if item.featured_image %}
-                                    <a href="{{ item.url | within: collection }}" title="{{ item.title | escape }}">
-                                        {{ item.featured_image.src | img_url: 'medium' | img_tag: item.featured_image.alt, 'card-img-top pic' }}
-                                    </a>
-                                {% endif %}
-                            {% endif %}
-                            <div class="card-body">
-                                <h5 class="text-decoration-none">{{ item.title | link_to: item.url | replace: '<a', '<a class="text-decoration-none dot"' }}</h5>
-                                <p>{{ item.content | strip_html | truncatewords: 50 }}</p>
-                            </div>
-                        </div>
-                    </div>
-                {% else if item.object_type == 'article' %}
-                    <div class="col">
-                        <div class="card shadow">
-                            {% if item.image %}
-                                <a href="{{ item.url | within: collection }}" title="{{ item.title | escape }}">
-                                    {{ item.image.src | img_url: 'medium' | img_tag: item.image.alt, 'card-img-top pic
-                                    ' }}
-                                </a>
-                            {% endif %}
-                            <div class="card-body">
-                                <h5>{{ item.title | link_to: item.url }}</h5>
-                                <p>{{ item.content | strip_html | truncatewords: 50 }}</p>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            {% else %}
-                no results
+{%- paginate search.results by 24 -%}
+    {%- liquid
+        assign terms = search.terms
+        assign encoded_terms = terms | url_encode
+        assign current_sort = search.sort_by | default: search.default_sort_by
+        assign single_type = ''
+        if search.types.size == 1
+            assign single_type = search.types.first
+        endif
+        assign product_hits = 0
+        assign other_hits = 0
+        for item in search.results
+            if item.object_type == 'product'
+                assign product_hits = product_hits | plus: 1
+            else
+                assign other_hits = other_hits | plus: 1
+            endif
+        endfor
+    -%}
 
+    <div class="search-page">
+        <div class="search-hero">
+            <div class="container">
+                <p class="search-hero__eyebrow">Search</p>
+                <h1 class="search-hero__title">
+                    {%- if search.performed -%}
+                        Results for &ldquo;{{ terms | escape }}&rdquo;
+                    {%- else -%}
+                        What are you looking for?
+                    {%- endif -%}
+                </h1>
+
+                <form action="{{ routes.search_url }}" method="get" role="search" class="search-hero__form">
+                    {%- if single_type != '' -%}<input type="hidden" name="type" value="{{ single_type }}">{%- endif -%}
+                    <input type="hidden" name="options[prefix]" value="last">
+                    <label for="SearchPageInput" class="visually-hidden">Search the store</label>
+                    <div class="search-hero__field">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>
+                        <input id="SearchPageInput" type="search" name="q" value="{{ terms | escape }}" placeholder="Search products, articles and pages" autocomplete="off" {% unless search.performed %}autofocus{% endunless %}>
+                        <button type="submit" class="search-hero__submit">Search</button>
+                    </div>
+                </form>
             </div>
-        {% endif %}
+        </div>
+
+        <div class="container search-body">
+            {%- if search.performed -%}
+                <nav class="search-tabs" aria-label="Filter results by type">
+                    <a class="search-tab{% if single_type == '' %} is-active{% endif %}" href="{{ routes.search_url }}?q={{ encoded_terms }}&amp;options%5Bprefix%5D=last&amp;type=product%2Carticle%2Cpage" {% if single_type == '' %}aria-current="page"{% endif %}>All</a>
+                    <a class="search-tab{% if single_type == 'product' %} is-active{% endif %}" href="{{ routes.search_url }}?q={{ encoded_terms }}&amp;options%5Bprefix%5D=last&amp;type=product" {% if single_type == 'product' %}aria-current="page"{% endif %}>Products</a>
+                    <a class="search-tab{% if single_type == 'article' %} is-active{% endif %}" href="{{ routes.search_url }}?q={{ encoded_terms }}&amp;options%5Bprefix%5D=last&amp;type=article" {% if single_type == 'article' %}aria-current="page"{% endif %}>Articles</a>
+                    <a class="search-tab{% if single_type == 'page' %} is-active{% endif %}" href="{{ routes.search_url }}?q={{ encoded_terms }}&amp;options%5Bprefix%5D=last&amp;type=page" {% if single_type == 'page' %}aria-current="page"{% endif %}>Pages</a>
+                </nav>
+
+                {%- if search.results_count > 0 -%}
+                    <div class="collection-toolbar search-toolbar">
+                        <p class="collection-toolbar__count">{{ search.results_count }} {{ search.results_count | pluralize: 'result', 'results' }}</p>
+                        {%- if product_hits > 0 -%}
+                            <div class="collection-sort">
+                                <label for="sort_by" class="collection-toolbar__label">Sort by</label>
+                                <div class="collection-select">
+                                    <select id="sort_by" name="sort_by">
+                                        {%- for option in search.sort_options -%}
+                                            <option value="{{ option.value }}" {% if option.value == current_sort %}selected{% endif %}>{{ option.name }}</option>
+                                        {%- endfor -%}
+                                    </select>
+                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6"/></svg>
+                                </div>
+                            </div>
+                        {%- endif -%}
+                    </div>
+
+                    {%- if product_hits > 0 -%}
+                        <section class="search-section" aria-labelledby="SearchProductsHeading">
+                            <h2 class="search-section__title{% if other_hits == 0 %} visually-hidden{% endif %}" id="SearchProductsHeading">Products</h2>
+                            <div class="row g-3 product-grid">
+                                {%- for item in search.results -%}
+                                    {%- if item.object_type == 'product' -%}
+                                        <div class="col-6 col-sm-4 col-lg-3">
+                                            {% render 'product-card', product: item %}
+                                        </div>
+                                    {%- endif -%}
+                                {%- endfor -%}
+                            </div>
+                        </section>
+                    {%- endif -%}
+
+                    {%- if other_hits > 0 -%}
+                        <section class="search-section" aria-labelledby="SearchContentHeading">
+                            <h2 class="search-section__title{% if product_hits == 0 %} visually-hidden{% endif %}" id="SearchContentHeading">Articles &amp; pages</h2>
+                            <ul class="search-hits">
+                                {%- for item in search.results -%}
+                                    {%- unless item.object_type == 'product' -%}
+                                        <li>
+                                            <a class="search-hit" href="{{ item.url }}">
+                                                {%- if item.object_type == 'article' and item.image -%}
+                                                    <span class="search-hit__image">{{ item.image | image_url: width: 240 | image_tag: loading: 'lazy', alt: '' }}</span>
+                                                {%- else -%}
+                                                    <span class="search-hit__image search-hit__image--icon" aria-hidden="true">
+                                                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h6"/></svg>
+                                                    </span>
+                                                {%- endif -%}
+                                                <span class="search-hit__body">
+                                                    <span class="search-hit__meta">
+                                                        {%- if item.object_type == 'article' -%}
+                                                            Article &middot; {{ item.published_at | date: '%b %-d, %Y' }}
+                                                        {%- else -%}
+                                                            Page
+                                                        {%- endif -%}
+                                                    </span>
+                                                    <span class="search-hit__title">{{ item.title | escape | highlight: terms }}</span>
+                                                    <span class="search-hit__excerpt">{{ item.content | strip_html | truncatewords: 28 | highlight: terms }}</span>
+                                                </span>
+                                                <svg class="search-hit__arrow" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 6l6 6-6 6"/></svg>
+                                            </a>
+                                        </li>
+                                    {%- endunless -%}
+                                {%- endfor -%}
+                            </ul>
+                        </section>
+                    {%- endif -%}
+
+                    {% render 'pagination', paginate: paginate %}
+                {%- else -%}
+                    <div class="search-empty">
+                        <p class="search-empty__title">No results for &ldquo;{{ terms | escape }}&rdquo;</p>
+                        <p>Check the spelling, try a more general word, or switch to &ldquo;All&rdquo; above.</p>
+                        <a class="btn rust pdp-add search-empty__btn" href="{{ routes.all_products_collection_url }}">Browse all products</a>
+                    </div>
+                {%- endif -%}
+            {%- else -%}
+                <div class="search-empty">
+                    <p>Search by product name, ingredient or flavor.</p>
+                    <a class="btn rust pdp-add search-empty__btn" href="{{ routes.all_products_collection_url }}">Browse all products</a>
+                </div>
+            {%- endif -%}
+        </div>
     </div>
-
-    <div class="row">
-        {% render 'pagination', paginate: paginate %}
-    </div>
-
-
-{% endpaginate %}
+{%- endpaginate -%}
