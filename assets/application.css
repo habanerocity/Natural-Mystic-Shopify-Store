@@ -144,6 +144,91 @@ input::placeholder {
   color: var(--color-surface);
 }
 
+/* Page banners share one height at each screen size, with the text centered inside */
+.header_banner-blog,
+.header_banner-collection,
+.header_banner-shop,
+.header_banner-contact,
+.header_banner-about,
+.header_banner-cart {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 20rem !important;
+  padding: 2rem 1rem !important;
+  overflow: hidden;
+}
+
+.header_banner-blog > div,
+.header_banner-collection > div,
+.header_banner-shop > div,
+.header_banner-contact > div,
+.header_banner-about > div,
+.header_banner-cart > div {
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: 44rem;
+  margin: 0 auto !important;
+  padding: 0 !important;
+}
+
+.header_banner-blog h1,
+.header_banner-collection h1,
+.header_banner-shop h1,
+.header_banner-contact h1,
+.header_banner-about h1,
+.header_banner-cart h1 {
+  margin-bottom: 0.6rem;
+  font-size: clamp(2.25rem, 1.6rem + 2vw, 3.25rem);
+  line-height: 1.1;
+}
+
+.header_banner-blog p,
+.header_banner-collection p,
+.header_banner-shop p,
+.header_banner-contact p,
+.header_banner-about p,
+.header_banner-cart p {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  margin: 0;
+  overflow: hidden;
+}
+
+@media (max-width: 991px) {
+  .header_banner-blog,
+  .header_banner-collection,
+  .header_banner-shop,
+  .header_banner-contact,
+  .header_banner-about,
+  .header_banner-cart {
+    height: 17rem !important;
+  }
+}
+
+@media (max-width: 575px) {
+  .header_banner-blog,
+  .header_banner-collection,
+  .header_banner-shop,
+  .header_banner-contact,
+  .header_banner-about,
+  .header_banner-cart {
+    height: 15rem !important;
+  }
+
+  .header_banner-blog p,
+  .header_banner-collection p,
+  .header_banner-shop p,
+  .header_banner-contact p,
+  .header_banner-about p,
+  .header_banner-cart p {
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+}
+
 .header_banner {
   background-repeat: no-repeat;
   background-position: center center;
