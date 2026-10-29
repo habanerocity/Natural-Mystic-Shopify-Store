@@ -34,57 +34,101 @@
                 {% include 'breadcrumbs' %}
             {% endif %}
         </div>
-        <div class="row justify-content-center">
+        {%- assign active_filter_count = 0 -%}
+        {%- for filter in collection.filters -%}
+            {%- if filter.type == 'price_range' -%}
+                {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}
+                    {%- assign active_filter_count = active_filter_count | plus: 1 -%}
+                {%- endif -%}
+            {%- else -%}
+                {%- assign active_filter_count = active_filter_count | plus: filter.active_values.size -%}
+            {%- endif -%}
+        {%- endfor -%}
+        {%- assign current_sort = collection.sort_by | default: collection.default_sort_by -%}
+        {%- capture clear_filters_url -%}{{ collection.url }}?sort_by={{ current_sort }}{%- endcapture -%}
 
-
-            <div class="d-flex row justify-content-center align-items-center filter">
-                Sort by:&nbsp;
-                <select class="form-select form-select-sm w-25" id="sort_by" name="sorting">
-                    {% for option in collection.sort_options %}
-                        <option value="{{ option.value }}" {% if option.value == collection.sort_by %} selected {% endif %}>{{ option.name }}</option>
-                    {% endfor %}
-                </select>
+        <div class="collection-toolbar">
+            <div class="collection-toolbar__start">
+                {% if collection.filters.size > 0 %}
+                    <button type="button" class="collection-pill" data-bs-toggle="offcanvas" data-bs-target="#CollectionFilters" aria-controls="CollectionFilters">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 5h16l-6 7.5V19l-4 1.5v-8z"/></svg>
+                        <span>Filters</span>
+                        {% if active_filter_count > 0 %}<span class="collection-pill__count" aria-label="{{ active_filter_count }} active">{{ active_filter_count }}</span>{% endif %}
+                    </button>
+                {% endif %}
+                <p class="collection-toolbar__count">{{ collection.products_count }} {{ collection.products_count | pluralize: 'product', 'products' }}</p>
             </div>
-        </div>
 
-        <div class="row g-3 my-5 product-grid">
-            {% for product in collection.products %}
-                {% assign image = product.featured_media.preview_image %}
-                <div class="col-6 col-md-4 col-xl-3">
-                    <div class="product_card card h-100 product_item">
-                        {% if image != blank %}
-                            <a class="quickview-trigger" href="{{ product.url }}" data-quickview-handle="{{ product.handle }}" aria-label="Quick view: {{ product.title | escape }}">
-                                <img class="pic card-img-top lazyload" data-src="{{ image | img_url: 'medium' }}" alt="{{ product.title }}">
-                            </a>
-                        {% else %}
-                            {{ 'product-1' | placeholder_svg_tag: 'card-img-top'}}
-                        {% endif %}
-                        <div class="card-body">
-                            <div class="swym-button swym-add-to-wishlist heart__beat" data-with-epi="true" data-swaction="addToWishlist" data-product-id="{{ product.id }}" data-variant-id="{{ product.variants[0].id }}" data-product-url="{{ shop.url }}{{ product.url }}"></div>
-                            <div class="card-content_wrapper">
-                                {% if product.available %}
-                                    <div class="available-container d-flex justify-content-center align-items-center mb-2">
-                                        <h4 class="available mb-0">In Stock</h4>
-                                    </div>
-                                {% else %}
-                                    <div class="not_available-container d-flex justify-content-center align-items-center mb-2">
-                                        <h4 class="not_available mb-0">Out of Stock</h4>
-                                    </div>
-                                {% endif %}
-                                <h3 class="product_name">
-                                    <a class="dot text-decoration-none blog_link" href="{{ product.url }}">{{ product.title }}</a>
-                                </h3>
-                                <div>
-                                    <span class="text-decoration-line-through text-muted">{{ product.compare_at_price | money_without_trailing_zeros }}</span>
-                                    <span {% if product.compare_at_price %} class="text-danger" {% endif %}>{{ product.price | money_without_trailing_zeros }}</span>
-                                </div>
-                            </div>
-                        </div>
+            <div class="collection-toolbar__end">
+                <div class="collection-sort">
+                    <label for="sort_by" class="collection-toolbar__label">Sort by</label>
+                    <div class="collection-select">
+                        <select id="sort_by" name="sort_by">
+                            {% for option in collection.sort_options %}
+                                <option value="{{ option.value }}" {% if option.value == current_sort %}selected{% endif %}>{{ option.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6"/></svg>
                     </div>
                 </div>
 
+                <div class="collection-view" role="group" aria-label="Grid layout">
+                    <span class="collection-toolbar__label">View as</span>
+                    <button type="button" class="collection-view__btn" data-grid-view="large" aria-pressed="false" aria-label="Larger product cards" title="Larger cards">
+                        <svg class="collection-view__icon collection-view__icon--sm" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true" focusable="false"><rect x="3.00" y="3.00" width="18.00" height="8.00" rx="1.60"/><rect x="3.00" y="13.00" width="18.00" height="8.00" rx="1.60"/></svg><svg class="collection-view__icon collection-view__icon--md" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true" focusable="false"><rect x="3.00" y="3.00" width="8.00" height="8.00" rx="1.60"/><rect x="13.00" y="3.00" width="8.00" height="8.00" rx="1.60"/><rect x="3.00" y="13.00" width="8.00" height="8.00" rx="1.60"/><rect x="13.00" y="13.00" width="8.00" height="8.00" rx="1.60"/></svg><svg class="collection-view__icon collection-view__icon--lg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true" focusable="false"><rect x="3.00" y="6.33" width="4.67" height="4.67" rx="1.17"/><rect x="9.67" y="6.33" width="4.67" height="4.67" rx="1.17"/><rect x="16.33" y="6.33" width="4.67" height="4.67" rx="1.17"/><rect x="3.00" y="13.00" width="4.67" height="4.67" rx="1.17"/><rect x="9.67" y="13.00" width="4.67" height="4.67" rx="1.17"/><rect x="16.33" y="13.00" width="4.67" height="4.67" rx="1.17"/></svg>
+                    </button>
+                    <button type="button" class="collection-view__btn" data-grid-view="compact" aria-pressed="true" aria-label="More products per row" title="More per row">
+                        <svg class="collection-view__icon collection-view__icon--sm" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true" focusable="false"><rect x="3.00" y="3.00" width="8.00" height="8.00" rx="1.60"/><rect x="13.00" y="3.00" width="8.00" height="8.00" rx="1.60"/><rect x="3.00" y="13.00" width="8.00" height="8.00" rx="1.60"/><rect x="13.00" y="13.00" width="8.00" height="8.00" rx="1.60"/></svg><svg class="collection-view__icon collection-view__icon--md" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true" focusable="false"><rect x="3.00" y="6.33" width="4.67" height="4.67" rx="1.17"/><rect x="9.67" y="6.33" width="4.67" height="4.67" rx="1.17"/><rect x="16.33" y="6.33" width="4.67" height="4.67" rx="1.17"/><rect x="3.00" y="13.00" width="4.67" height="4.67" rx="1.17"/><rect x="9.67" y="13.00" width="4.67" height="4.67" rx="1.17"/><rect x="16.33" y="13.00" width="4.67" height="4.67" rx="1.17"/></svg><svg class="collection-view__icon collection-view__icon--lg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true" focusable="false"><rect x="3.00" y="7.90" width="3.30" height="3.30" rx="0.82"/><rect x="7.90" y="7.90" width="3.30" height="3.30" rx="0.82"/><rect x="12.80" y="7.90" width="3.30" height="3.30" rx="0.82"/><rect x="17.70" y="7.90" width="3.30" height="3.30" rx="0.82"/><rect x="3.00" y="12.80" width="3.30" height="3.30" rx="0.82"/><rect x="7.90" y="12.80" width="3.30" height="3.30" rx="0.82"/><rect x="12.80" y="12.80" width="3.30" height="3.30" rx="0.82"/><rect x="17.70" y="12.80" width="3.30" height="3.30" rx="0.82"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        {% if active_filter_count > 0 %}
+            <div class="collection-active-filters" aria-label="Active filters">
+                {% for filter in collection.filters %}
+                    {% if filter.type == 'price_range' %}
+                        {% if filter.min_value.value != nil or filter.max_value.value != nil %}
+                            <a class="collection-chip" href="{{ filter.url_to_remove }}" aria-label="Remove price filter">
+                                {{ filter.min_value.value | default: 0 | money }} &ndash; {{ filter.max_value.value | default: filter.range_max | money }}
+                                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"/></svg>
+                            </a>
+                        {% endif %}
+                    {% else %}
+                        {% for value in filter.active_values %}
+                            <a class="collection-chip" href="{{ value.url_to_remove }}" aria-label="Remove filter: {{ filter.label | escape }} {{ value.label | escape }}">
+                                {{ value.label }}
+                                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"/></svg>
+                            </a>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+                <a class="collection-clear" href="{{ clear_filters_url }}">Clear all</a>
+            </div>
+        {% endif %}
+
+        <div class="row g-3 product-grid collection-grid" id="ProductGrid" data-view="compact">
+            <script>
+                try {
+                    var savedView = localStorage.getItem('collectionGridView');
+                    if (savedView === 'large' || savedView === 'compact') document.getElementById('ProductGrid').setAttribute('data-view', savedView);
+                } catch (e) {}
+            </script>
+            {% for product in collection.products %}
+                <div class="col-6 col-sm-4 col-lg-3">
+                    {% render 'product-card', product: product %}
+                </div>
+
             {% else %}
-                <p>no matches</p>
+                <div class="col-12 collection-empty">
+                    {% if active_filter_count > 0 %}
+                        <p class="collection-empty__title">No products match these filters</p>
+                        <p>Try removing a filter or two.</p>
+                        <a class="btn rust pdp-add collection-empty__btn" href="{{ clear_filters_url }}">Clear all filters</a>
+                    {% else %}
+                        <p class="collection-empty__title">This collection is empty</p>
+                    {% endif %}
+                </div>
             {% endfor %}
         </div>
 
@@ -93,6 +137,76 @@
 
     {% endpaginate %}
 </div>
+
+{% if collection.filters.size > 0 %}
+    {%- assign drawer_sort = collection.sort_by | default: collection.default_sort_by -%}
+    <div class="offcanvas offcanvas-start collection-filters" tabindex="-1" id="CollectionFilters" aria-labelledby="CollectionFiltersLabel">
+        <form action="{{ collection.url }}" method="get" class="collection-filters__form" data-collection-filters>
+            <input type="hidden" name="sort_by" value="{{ drawer_sort }}">
+            <div class="collection-filters__header">
+                <h2 class="collection-filters__title" id="CollectionFiltersLabel">Filters</h2>
+                <button type="button" class="quickview__close collection-filters__close" data-bs-dismiss="offcanvas" aria-label="Close filters">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18"/></svg>
+                </button>
+            </div>
+
+            <div class="collection-filters__body">
+                {% for filter in collection.filters %}
+                    {%- assign group_active = filter.active_values.size -%}
+                    {%- if filter.type == 'price_range' -%}
+                        {%- if filter.min_value.value != nil or filter.max_value.value != nil -%}{%- assign group_active = 1 -%}{%- endif -%}
+                    {%- endif -%}
+                    <details class="collection-filter" {% if group_active > 0 or forloop.index <= 2 %}open{% endif %}>
+                        <summary>
+                            <span>{{ filter.label }}{% if group_active > 0 and filter.type != 'price_range' %} <span class="collection-filter__badge">{{ group_active }}</span>{% endif %}</span>
+                            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6"/></svg>
+                        </summary>
+
+                        {% if filter.type == 'price_range' %}
+                            <div class="collection-price">
+                                <label class="collection-price__field">
+                                    <span class="collection-price__label">From</span>
+                                    <span class="collection-price__input">
+                                        <span aria-hidden="true">{{ cart.currency.symbol }}</span>
+                                        <input type="number" name="{{ filter.min_value.param_name }}" inputmode="decimal" min="0" max="{{ filter.range_max | money_without_currency | remove: ',' }}" step="0.01" placeholder="0" {% if filter.min_value.value != nil %}value="{{ filter.min_value.value | money_without_currency | remove: ',' }}"{% endif %}>
+                                    </span>
+                                </label>
+                                <label class="collection-price__field">
+                                    <span class="collection-price__label">To</span>
+                                    <span class="collection-price__input">
+                                        <span aria-hidden="true">{{ cart.currency.symbol }}</span>
+                                        <input type="number" name="{{ filter.max_value.param_name }}" inputmode="decimal" min="0" max="{{ filter.range_max | money_without_currency | remove: ',' }}" step="0.01" placeholder="{{ filter.range_max | money_without_currency | remove: ',' }}" {% if filter.max_value.value != nil %}value="{{ filter.max_value.value | money_without_currency | remove: ',' }}"{% endif %}>
+                                    </span>
+                                </label>
+                            </div>
+                            <p class="collection-filter__hint">The highest price is {{ filter.range_max | money }}</p>
+                        {% else %}
+                            <ul class="collection-filter__list">
+                                {% for value in filter.values %}
+                                    {%- assign is_empty = false -%}
+                                    {%- if value.count == 0 and value.active == false -%}{%- assign is_empty = true -%}{%- endif -%}
+                                    <li>
+                                        <label class="collection-check{% if is_empty %} is-disabled{% endif %}">
+                                            <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}" {% if value.active %}checked{% endif %} {% if is_empty %}disabled{% endif %}>
+                                            <span class="collection-check__box" aria-hidden="true"></span>
+                                            <span class="collection-check__label">{{ value.label }}</span>
+                                            <span class="collection-check__count">{{ value.count }}</span>
+                                        </label>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </details>
+                {% endfor %}
+            </div>
+
+            <div class="collection-filters__footer">
+                <a class="collection-clear" href="{{ collection.url }}?sort_by={{ drawer_sort }}">Clear all</a>
+                <button type="submit" class="btn rust pdp-add collection-filters__apply">Show results</button>
+            </div>
+        </form>
+    </div>
+{% endif %}
 
 <div class="modal fade quickview" id="productInfoModal" tabindex="-1" aria-labelledby="quickviewTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable quickview__dialog">

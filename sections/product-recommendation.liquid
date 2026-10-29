@@ -1,52 +1,55 @@
-<!-- {%- capture flickity_options -%}
-    {
-                                      "prevNextButtons": true,
-                                      "autoPlay": 5000,
-                                      "contain": true,
-                                      "pageDots": true,
-                                      "contain": true,
-                                      "cellAlign": "left",
-                                      "groupCells": false,
-                                      "arrowShape": {"x0": 20, "x1": 60, "y1": 40, "x2": 60, "y2": 35, "x3": 25}
-                                    }
-{%- endcapture -%} -->
-<div class="container">
-    <section class="row justify-content-center my-5" id="product_recommendation">
-        <div>
-            <h1 class="text-center">
-                Related Items
-            </h1>
-            <!-- <div class="products-carousel js-flickity" data-flickity='{{ flickity_options }}'> -->
-            <div class="row g-3 text-left product-grid" id="product_recommendation_body"></div>
-            <!-- </div> -->
-        </div>
-    </section>
+{%- comment -%}
+  Related items. Shopify fills `recommendations` when this section is requested through
+  /recommendations/products, so the page fetches it after load and swaps the result in.
+{%- endcomment -%}
+<div class="container product-recommendations" data-recommendations-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.products_to_show }}">
+    {%- if recommendations.performed and recommendations.products_count > 0 -%}
+        <section class="product-recommendations__inner">
+            <h2 class="product-recommendations__title">{{ section.settings.heading }}</h2>
+            <div class="row g-3 product-grid">
+                {%- for recommendation in recommendations.products -%}
+                    <div class="col-6 col-lg-3">
+                        {% render 'product-card', product: recommendation %}
+                    </div>
+                {%- endfor -%}
+            </div>
+        </section>
+    {%- endif -%}
 </div>
 
 <script>
-    let productRecommendationBody = document.getElementById("product_recommendation_body");
-
-    fetch("/recommendations/products.json?product_id={{ product.id }}").then((res) => res.json()).then(({products}) => {
-        console.log(products);
-
-        if (products.length > 0) {
-            products.forEach(function (product, index) {
-                let card;
-
-                card = "<div class=\"col-6 col-md-4 col-xl-3\">";
-                card += "<div class=\"card product_item h-100\">";
-                if (product.images.length > 0) {
-                    card += "<a class=\"dot text-decoration-none blog_link\" href=\"" + product.url + "\"><img class=\"card-img-top card-img-size\" alt=\"" + product.title + "\" src=\"" + product.images[1] + "\"></a>";
-                }
-                card += "<div class=\"card-body\">";
-                card += "<h3><a class=\"dot text-decoration-none blog_link\" href=\"" + product.url + "\">" + product.title + "</a>" + "</h3>";
-                card += "<p>" + `$${
-                    (product.price / 100).toFixed(2)
-                }` + "</p>";
-                card += "</div></div>";
-
-                productRecommendationBody.innerHTML += card;
+    (function () {
+        var holder = document.currentScript.previousElementSibling;
+        if (!holder || !holder.dataset.recommendationsUrl) return;
+        fetch(holder.dataset.recommendationsUrl)
+            .then(function (res) { return res.text(); })
+            .then(function (html) {
+                var fresh = new DOMParser().parseFromString(html, 'text/html').querySelector('.product-recommendations');
+                if (fresh && fresh.innerHTML.trim()) holder.innerHTML = fresh.innerHTML;
             })
-        }
-    });
+            .catch(function () {});
+    })();
 </script>
+
+{% schema %}
+{
+    "name": "Related items",
+    "settings": [
+        {
+            "type": "text",
+            "id": "heading",
+            "label": "Heading",
+            "default": "Related Items"
+        },
+        {
+            "type": "range",
+            "id": "products_to_show",
+            "label": "Products to show",
+            "min": 2,
+            "max": 8,
+            "step": 1,
+            "default": 4
+        }
+    ]
+}
+{% endschema %}

@@ -1,0 +1,83 @@
+{%- comment -%}
+  Product card used in collection grids, related items and featured collections.
+  Params: product
+  - Rating shows only when a reviews app fills Shopify's standard reviews.rating metafields.
+  - The tag shows the product type, when one is set.
+  - Single-variant products add straight to the cart; products with options open quick view (or the product page).
+{%- endcomment -%}
+{%- liquid
+  assign card_variant = product.selected_or_first_available_variant
+  assign on_sale = false
+  if product.compare_at_price > product.price
+    assign on_sale = true
+  endif
+  assign rating = product.metafields.reviews.rating.value
+  assign rating_count = product.metafields.reviews.rating_count.value | default: 0 | plus: 0
+  assign card_image = product.featured_media.preview_image
+  assign card_alt = card_image.alt | default: product.title | escape
+-%}
+<div class="product-card product_card">
+    <div class="product-card__media">
+        <a class="product-card__image-link quickview-trigger" href="{{ product.url }}" data-quickview-handle="{{ product.handle }}" aria-label="Quick view: {{ product.title | escape }}">
+            {%- if card_image -%}
+                {{ card_image | image_url: width: 800 | image_tag:
+                    widths: '300, 450, 600, 800',
+                    sizes: '(min-width: 992px) 25vw, (min-width: 576px) 33vw, 50vw',
+                    loading: 'lazy',
+                    alt: card_alt,
+                    class: 'product-card__image'
+                }}
+            {%- else -%}
+                {{ 'product-1' | placeholder_svg_tag: 'product-card__image product-card__placeholder' }}
+            {%- endif -%}
+        </a>
+
+        {%- if product.available == false -%}
+            <span class="product-card__badge product-card__badge--muted">Sold out</span>
+        {%- elsif on_sale -%}
+            <span class="product-card__badge">Sale</span>
+        {%- endif -%}
+
+        <div class="product-card__wishlist" role="button" tabindex="0" aria-pressed="false" aria-label="Add {{ product.title | escape }} to wishlist" data-wishlist-proxy>
+            <div class="swym-button swym-add-to-wishlist heart__beat" data-with-epi="true" data-swaction="addToWishlist" data-product-id="{{ product.id }}" data-variant-id="{{ card_variant.id }}" data-product-url="{{ shop.url }}{{ product.url }}"></div>
+        </div>
+    </div>
+
+    <div class="product-card__info">
+        <div class="product-card__heading">
+            <h3 class="product-card__title">
+                <a href="{{ product.url }}">{{ product.title }}</a>
+            </h3>
+            {%- if rating != blank and rating_count > 0 -%}
+                <span class="product-card__rating">
+                    <span class="product-card__star" aria-hidden="true">&#9733;</span>
+                    <span aria-hidden="true">{{ rating.rating | round: 1 }}</span>
+                    <span class="visually-hidden">Rated {{ rating.rating | round: 1 }} out of {{ rating.scale_max }} from {{ rating_count }} reviews</span>
+                </span>
+            {%- endif -%}
+        </div>
+
+        {%- if product.type != blank -%}
+            <span class="product-card__tag">{{ product.type }}</span>
+        {%- endif -%}
+
+        <div class="product-card__footer">
+            <div class="product-card__price">
+                {%- if on_sale -%}<s>{{ product.compare_at_price | money }}</s>{%- endif -%}
+                <span{% if on_sale %} class="is-sale"{% endif %}>{% if product.price_varies %}From {% endif %}{{ product.price | money }}</span>
+            </div>
+
+            {%- if product.available == false -%}
+                <button type="button" class="product-card__button" disabled>Sold out</button>
+            {%- elsif product.has_only_default_variant or product.variants.size == 1 -%}
+                <form action="{{ routes.cart_add_url }}" method="post" class="product-card__form" data-card-add-form>
+                    <input type="hidden" name="id" value="{{ card_variant.id }}">
+                    <input type="hidden" name="quantity" value="1">
+                    <button type="submit" class="product-card__button">Add to cart</button>
+                </form>
+            {%- else -%}
+                <a class="product-card__button" href="{{ product.url }}" data-quickview-handle="{{ product.handle }}">Choose options</a>
+            {%- endif -%}
+        </div>
+    </div>
+</div>

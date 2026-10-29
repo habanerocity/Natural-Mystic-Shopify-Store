@@ -99,15 +99,48 @@ gsap.from(".blog_card", {
     stagger: 0.75
 })
 
-// sort products 
+// sort products (keeps active filters, goes back to page 1)
 if (document.getElementById('sort_by') != null) {
     document.querySelector('#sort_by').addEventListener('change', (e) => {
         const url = new URL(window.location.href);
         url.searchParams.set('sort_by', e.currentTarget.value);
+        url.searchParams.delete('page');
 
         window.location = url.href;
     });
 }
+
+// collection grid view toggle (large / compact), remembered per browser
+(function () {
+    const grid = document.getElementById('ProductGrid');
+    const buttons = document.querySelectorAll('[data-grid-view]');
+    if (!grid || !buttons.length) return;
+
+    const apply = (view) => {
+        grid.setAttribute('data-view', view);
+        buttons.forEach((btn) => btn.setAttribute('aria-pressed', btn.dataset.gridView === view ? 'true' : 'false'));
+    };
+
+    apply(grid.getAttribute('data-view') || 'compact');
+
+    buttons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+            apply(btn.dataset.gridView);
+            try { localStorage.setItem('collectionGridView', btn.dataset.gridView); } catch (e) {}
+        });
+    });
+})();
+
+// collection filters: leave empty price fields out of the URL so they don't count as filters
+(function () {
+    const form = document.querySelector('[data-collection-filters]');
+    if (!form) return;
+    form.addEventListener('submit', () => {
+        form.querySelectorAll('input[type="number"]').forEach((input) => {
+            if (input.value.trim() === '') input.disabled = true;
+        });
+    });
+})();
 
 //forgot password script
 
@@ -420,6 +453,50 @@ if (document.getElementById('forgotPassword') != null) {
             .catch(() => { window.location.href = trigger.href; });
     });
 })();
+
+// product cards: add single-variant products to the cart without leaving the page
+document.addEventListener('submit', (e) => {
+    const form = e.target.closest('[data-card-add-form]');
+    if (!form) return;
+    e.preventDefault();
+
+    const button = form.querySelector('button[type="submit"]');
+    const label = button.textContent;
+    button.disabled = true;
+    button.textContent = 'Adding…';
+
+    const root = (window.Shopify && window.Shopify.routes && window.Shopify.routes.root) || '/';
+    fetch(root + 'cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ items: [{ id: form.querySelector('[name="id"]').value, quantity: 1 }] })
+    })
+        .then((res) => res.json().then((data) => ({ ok: res.ok, data })))
+        .then(({ ok, data }) => {
+            if (!ok) throw new Error(data.description || 'Unavailable');
+            button.textContent = 'Added ✓';
+            if (typeof update_cart === 'function') update_cart();
+        })
+        .catch(() => { button.textContent = 'Unavailable'; })
+        .finally(() => {
+            setTimeout(() => { button.disabled = false; button.textContent = label; }, 1600);
+        });
+});
+
+// wishlist buttons that wrap the Swym heart: pass clicks/keys on the larger button through to the heart
+document.addEventListener('click', (e) => {
+    const proxy = e.target.closest('[data-wishlist-proxy]');
+    if (!proxy) return;
+    const heart = proxy.querySelector('.swym-button');
+    if (heart && !heart.contains(e.target)) heart.click();
+});
+document.addEventListener('keydown', (e) => {
+    const proxy = e.target.closest && e.target.closest('[data-wishlist-proxy]');
+    if (!proxy || (e.key !== 'Enter' && e.key !== ' ')) return;
+    e.preventDefault();
+    const heart = proxy.querySelector('.swym-button');
+    if (heart) heart.click();
+});
 
 //update cart
 
