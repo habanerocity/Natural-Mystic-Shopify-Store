@@ -1,4 +1,4 @@
-{% unless template == 'index' or template == 'cart' or template == 'list-collections' or template == '404' %}
+{% unless template == 'index' or template == 'cart' or template == '404' %}
 
     {% assign t = template | split: '.' | first %}
 
@@ -27,6 +27,12 @@
 
                     <li>
                         <a href="{{ product.url }}" aria-current="page">{{ product.title | escape }}</a>
+                    </li>
+
+                {% when 'list-collections' %}
+
+                    <li>
+                        <a href="{{ routes.collections_url }}" aria-current="page">Collections</a>
                     </li>
 
                 {% when 'collection' %}

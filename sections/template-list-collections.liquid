@@ -1,30 +1,171 @@
-<div class="container my-5">
-    {% for collection in collections %}
-        {% if collection.handle != 'frontpage' %}
-            {% assign collection_title = collection.title | escape %}
-            <div class="row my-3">
-                <h1 class="text-center">{{ collection_title }}</h1>
-            </div>
-            <div class="row justify-content-center my-4">
-                {% for product in collection.products limit: 5 %}
-                    {% assign image = product.featured_media.preview_image %}
-                    <div class="col-3 g-2">
-                        <div class="card" style="width: 12rem;">
-                            <img class="card-img-top" src="{{ image | img_url: 'medium'}}" alt="{{ product.title }}">
-                            <div class="card-body">
-                                <h3>
-                                    <a href="{{ product.url }}">{{ product.title }}</a>
-                                </h3>
-                                <p>{{ product.price | money_without_trailing_zeros }}</p>
-                            </div>
-                        </div>
+{%- comment -%}
+  /collections: banner, breadcrumbs and a grid of collection cards.
+  Shows the collections picked in the editor (in that order), or every collection
+  except the hidden home page one, skipping empty collections.
+{%- endcomment -%}
+{%- liquid
+  if section.settings.collections != blank
+    assign collection_list = section.settings.collections
+  else
+    assign collection_list = collections
+  endif
+
+  assign shown_count = 0
+  for c in collection_list
+    if c.handle != 'frontpage' and c.products_count > 0
+      assign shown_count = shown_count | plus: 1
+    endif
+  endfor
+-%}
+
+<div class="header_banner-collections position-relative text-center">
+    <div>
+        <h1 class="display-4 turmeric">{{ section.settings.banner_heading | default: 'Collections' | escape }}</h1>
+        {%- if section.settings.banner_subheading != blank -%}
+            <p class="lead text-light">{{ section.settings.banner_subheading | escape }}</p>
+        {%- endif -%}
+    </div>
+</div>
+
+<div class="container collections-index">
+    {% if settings.show_breadcrumb_nav %}
+        {% include 'breadcrumbs' %}
+    {% endif %}
+
+    {%- if shown_count == 0 -%}
+        <div class="collections-empty">
+            <h2 class="collections-empty__title">No collections yet</h2>
+            <p>Check back soon, or browse everything we carry.</p>
+            <a class="collection-card__more" href="{{ routes.all_products_collection_url }}">Shop all products <span aria-hidden="true">&rarr;</span></a>
+        </div>
+    {%- else -%}
+        <div class="collections-grid collections-grid--{{ section.settings.columns }}">
+            {%- for c in collection_list -%}
+                {%- if c.handle == 'frontpage' or c.products_count == 0 -%}{%- continue -%}{%- endif -%}
+                {%- liquid
+                  assign card_image = c.image
+                  if card_image == blank
+                    assign card_image = c.products.first.featured_media.preview_image
+                  endif
+                  assign card_text = c.description | strip_html | strip
+                -%}
+                <article class="collection-card">
+                    <div class="collection-card__media">
+                        {%- if card_image != blank -%}
+                            {{ card_image | image_url: width: 1200 | image_tag:
+                                class: 'collection-card__image',
+                                loading: 'lazy',
+                                widths: '400, 600, 800, 1200',
+                                sizes: '(min-width: 992px) 33vw, (min-width: 576px) 50vw, 100vw',
+                                alt: card_image.alt | default: c.title
+                            }}
+                        {%- else -%}
+                            {{ 'collection-1' | placeholder_svg_tag: 'collection-card__placeholder' }}
+                        {%- endif -%}
                     </div>
-                {% endfor %}
-                <div class="row my-3">
-                    <a href="{{ collection.url }}" class="btn btn-primary btn-lg">More
-                        {{ collection_title }}</a>
-                </div>
-            </div>
-        {% endif %}
-    {% endfor %}
-</div> 
+                    <div class="collection-card__body">
+                        <h2 class="collection-card__title">
+                            <a class="collection-card__link" href="{{ c.url }}">{{ c.title | escape }}</a>
+                        </h2>
+                        {%- if section.settings.show_count -%}
+                            <p class="collection-card__count">{{ c.products_count }} {{ c.products_count | pluralize: 'product', 'products' }}</p>
+                        {%- endif -%}
+                        {%- if section.settings.show_description and card_text != blank -%}
+                            <p class="collection-card__text">{{ card_text | truncatewords: 24 | escape }}</p>
+                        {%- endif -%}
+                        <span class="collection-card__more" aria-hidden="true">Shop collection <span class="collection-card__arrow">&rarr;</span></span>
+                    </div>
+                </article>
+            {%- endfor -%}
+        </div>
+    {%- endif -%}
+</div>
+
+<style>
+    .header_banner-collections {
+        {%- if section.settings.banner_image != blank %}
+        background: var(--banner-overlay), url({{ section.settings.banner_image | image_url: width: 2400 }});
+        {%- else %}
+        /* No image picked yet: solid brand color so the white heading stays readable */
+        background: var(--color-primary-dark);
+        {%- endif %}
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: cover;
+        width: 100%;
+    }
+
+    {%- if section.settings.banner_image-mobile != blank %}
+    @media screen and (max-width: 600px) {
+        .header_banner-collections {
+            background-image: var(--banner-overlay), url({{ section.settings.banner_image-mobile | image_url: width: 1200 }});
+        }
+    }
+    {%- endif %}
+</style>
+
+{% schema %}
+{
+    "name": "Collections list",
+    "tag": "section",
+    "settings": [
+        {
+            "type": "image_picker",
+            "id": "banner_image",
+            "label": "Heading Background Image"
+        },
+        {
+            "type": "image_picker",
+            "id": "banner_image-mobile",
+            "label": "Mobile Heading Background Image"
+        },
+        {
+            "type": "text",
+            "id": "banner_heading",
+            "label": "Heading",
+            "default": "Our Collections"
+        },
+        {
+            "type": "text",
+            "id": "banner_subheading",
+            "label": "Subheading",
+            "info": "Leave blank to hide.",
+            "default": "Find the right blend for every part of your day."
+        },
+        {
+            "type": "header",
+            "content": "Collections"
+        },
+        {
+            "type": "collection_list",
+            "id": "collections",
+            "label": "Collections to show",
+            "info": "Pick and order the collections to feature. Leave empty to show all of them. Empty collections are always hidden."
+        },
+        {
+            "type": "select",
+            "id": "columns",
+            "label": "Columns on desktop",
+            "options": [
+                { "value": "2", "label": "2" },
+                { "value": "3", "label": "3" },
+                { "value": "4", "label": "4" }
+            ],
+            "default": "3"
+        },
+        {
+            "type": "checkbox",
+            "id": "show_count",
+            "label": "Show product count",
+            "default": true
+        },
+        {
+            "type": "checkbox",
+            "id": "show_description",
+            "label": "Show collection description",
+            "info": "Uses the description from Products > Collections.",
+            "default": true
+        }
+    ]
+}
+{% endschema %}

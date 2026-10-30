@@ -54,7 +54,7 @@
             "type": "link_list",
             "settings": {
               "title": "Collections",
-              "menu": ""
+              "menu": "footer-collections"
             }
           },
           "28021cab-1fff-4a71-a996-15d50cdb36b3": {
