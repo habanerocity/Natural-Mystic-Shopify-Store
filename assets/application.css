@@ -991,7 +991,9 @@ input:focus {
 
 @media screen and (max-width: 991px){
 
-  .dropdown-menu{
+  /* Submenus inside the collapsed mobile nav blend into the menu. Scoped so the
+     account dropdown (outside .navbar-collapse) keeps its white card look. */
+  .navbar-collapse .dropdown-menu{
     border: none;
     background-color: transparent;
   }

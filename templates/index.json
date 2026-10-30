@@ -36,7 +36,7 @@
       "type": "collection-slider",
       "settings": {
         "title": "Best Sellers",
-        "collection": "frontpage",
+        "collection": "best-sellers",
         "product_count": 8
       }
     },
@@ -70,6 +70,8 @@
       "type": "browse-blog",
       "settings": {
         "title": "The Latest From Our Blog",
+        "source": "latest",
+        "blog": "",
         "hover_title_1": "Layover in Taiwan",
         "hover_title_2": "Mojito Mint",
         "hover_title_3": "Breakfast in Manila",

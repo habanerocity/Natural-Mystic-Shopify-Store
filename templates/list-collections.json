@@ -11,7 +11,15 @@
   "sections": {
     "template": {
       "type": "template-list-collections",
-      "settings": {}
+      "settings": {
+        "banner_image": "shopify://shop_images/herbal-teas-medicinal-mushrooms-focal-point.png",
+        "banner_heading": "Our Collections",
+        "banner_subheading": "Find the right blend for every part of your day.",
+        "collections": [],
+        "columns": "3",
+        "show_count": true,
+        "show_description": true
+      }
     }
   },
   "order": [
