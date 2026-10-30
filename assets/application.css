@@ -1300,6 +1300,12 @@ input:focus {
     gap: 0.75rem;
 }
 
+.pdp-add,
+.cart-checkout {
+    padding-block: 0.85rem;
+    letter-spacing: 0.04em;
+}
+
 .pdp-add {
     flex: 1 1 auto;
     padding-block: 0.85rem;
@@ -1337,7 +1343,8 @@ input:focus {
 
 /* Pill, like the product card buttons, so every action button shares one shape.
    !important is needed to beat the 4px radius on .rust */
-.pdp-add.rust {
+.pdp-add.rust,
+.cart-checkout.rust {
     border-radius: 999px !important;
     background-color: var(--color-cta);
     border-color: var(--color-cta);
@@ -1347,7 +1354,8 @@ input:focus {
 }
 
 /* Hover deepens to the full primary color */
-.pdp-add.rust:hover {
+.pdp-add.rust:hover,
+.cart-checkout.rust:hover {
     background-color: var(--color-primary) !important;
     border-color: var(--color-primary) !important;
 }

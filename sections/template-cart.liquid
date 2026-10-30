@@ -14,9 +14,9 @@
 <div class="container my-5">
     {% if cart.item_count > 0 %}
         <div class="my-5">
-            <form action="{{ routes.cart_url }}" class="row g-4" method="POST" novalidate>
+            <form action="{{ routes.cart_url }}" class="row g-4" method="POST" novalidate data-cart-form>
                 <div class="col-12 col-lg-8">
-                    <div class="card shadow">
+                    <div class="card cart-card">
                         <div class="card-body">
                             <div class="cart-lines">
                                 <div class="cart-lines__head" aria-hidden="true">
@@ -25,7 +25,7 @@
                                     <span class="text-end">Total</span>
                                 </div>
                                 {% for item in cart.items %}
-                                    <div class="cart-line">
+                                    <div class="cart-line" data-cart-line="{{ forloop.index }}">
                                         <a class="cart-line__image" href="{{ item.url }}">
                                             {% if item.image %}
                                                 {% assign line_alt = item.image.alt | default: item.title | escape %}
@@ -53,7 +53,12 @@
 
                                         <div class="cart-line__qty">
                                             <label class="visually-hidden" for="updates_{{ item.key }}">Quantity for {{ item.product.title | escape }}</label>
-                                            <input class="qty" type="number" name="updates[]" id="updates_{{ item.key }}" value="{{ item.quantity }}" min="0" inputmode="numeric">
+                                            {%- comment -%} Same pill stepper as the product page; changes save automatically (script below) {%- endcomment -%}
+                                            <div class="pdp-qty cart-qty">
+                                                <button type="button" class="pdp-qty__btn" data-cart-step="-1" aria-label="Decrease quantity of {{ item.product.title | escape }}">&minus;</button>
+                                                <input class="pdp-qty__input" type="number" name="updates[]" id="updates_{{ item.key }}" value="{{ item.quantity }}" min="0" inputmode="numeric" data-cart-qty>
+                                                <button type="button" class="pdp-qty__btn" data-cart-step="1" aria-label="Increase quantity of {{ item.product.title | escape }}">+</button>
+                                            </div>
                                         </div>
 
                                         <div class="cart-line__total">
@@ -72,7 +77,7 @@
                     </div>
                 </div>
                 <div class="col-12 col-lg-4">
-                    <div class="card shadow price_card">
+                    <div class="card cart-card price_card">
                         <div class="card-body">
                             {% for block in section.blocks %}
                                 {% case block.type %}
@@ -83,8 +88,13 @@
                                         </div>
                                     {% when "cart_checkout_button" %}
                                         <div class="cart-checkout-buttons d-grid gap-2" {{ block.shopify_attributes }}>
-                                            <button class="btn rust bg-transparent btn-add_to_cart" name="update" type="submit">Update Cart</button>
-                                            <button class="btn rust" name="checkout" type="submit">Checkout</button>
+                                            <button class="btn rust cart-checkout" name="checkout" type="submit">Checkout</button>
+                                            {%- if additional_checkout_buttons -%}
+                                                <div class="cart-dynamic">{{ content_for_additional_checkout_buttons }}</div>
+                                            {%- endif -%}
+                                            {%- comment -%} Fallback for when the auto-update script can't run; the script hides it {%- endcomment -%}
+                                            <button class="cart-update-link" name="update" type="submit" data-cart-update>Update cart</button>
+                                            <p class="cart-status" role="status" aria-live="polite" data-cart-status></p>
                                         </div>
                                 {% endcase %}
                             {% endfor %}
@@ -99,6 +109,113 @@
         </div>
     {% endif %}
 </div>
+
+<script>
+  (function () {
+    // Quantity changes save on their own: the line is changed through Shopify's cart API, then this
+    // section is re-rendered from the server so prices, discounts and totals are always Shopify's.
+    // The "Update cart" button stays as a fallback and is hidden once this script runs.
+    if (window.__gzCartInit) return;
+    window.__gzCartInit = true;
+
+    var sectionId = '{{ section.id }}';
+    var root = (window.Shopify && window.Shopify.routes && window.Shopify.routes.root) || '/';
+    var queue = Promise.resolve();
+    var timers = {};
+
+    function section() { return document.getElementById('shopify-section-' + sectionId); }
+
+    function prepare() {
+      var el = section();
+      if (!el) return;
+      el.querySelectorAll('[data-cart-update]').forEach(function (b) { b.hidden = true; });
+    }
+
+    function setStatus(text, isError) {
+      var status = section() && section().querySelector('[data-cart-status]');
+      if (!status) return;
+      status.textContent = text;
+      status.classList.toggle('is-error', !!isError);
+    }
+
+    function render(focus) {
+      return fetch(window.location.pathname + '?sections=' + sectionId)
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          var html = new DOMParser().parseFromString(data[sectionId], 'text/html');
+          var fresh = html.getElementById('shopify-section-' + sectionId);
+          if (fresh) section().innerHTML = fresh.innerHTML;
+          prepare();
+          // Put focus back on the same control so keyboard users don't lose their place
+          if (focus) {
+            var target = section().querySelector('[data-cart-line="' + focus.line + '"] ' + focus.selector);
+            if (target) target.focus();
+          }
+          if (typeof update_cart === 'function') update_cart();
+        });
+    }
+
+    function save(line, quantity, focus) {
+      queue = queue.then(function () {
+        var row = section().querySelector('[data-cart-line="' + line + '"]');
+        if (row) row.setAttribute('aria-busy', 'true');
+        return fetch(root + 'cart/change.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ line: line, quantity: quantity })
+        })
+          .then(function (res) { return res.json().then(function (data) { return { ok: res.ok, data: data }; }); })
+          .then(function (result) {
+            return render(focus).then(function () {
+              if (result.ok) setStatus('Cart updated');
+              else setStatus(result.data.description || result.data.message || 'That quantity isn’t available.', true);
+            });
+          })
+          .catch(function () {
+            // Network trouble: fall back to the regular form so nothing is lost
+            var update = section().querySelector('[data-cart-update]');
+            if (update) { update.hidden = false; }
+            setStatus('Couldn’t update the cart. Use “Update cart” to try again.', true);
+          });
+      });
+    }
+
+    // Wait briefly so several quick taps on + or - become one update
+    function schedule(input, focusSelector) {
+      var row = input.closest('[data-cart-line]');
+      if (!row) return;
+      var line = parseInt(row.getAttribute('data-cart-line'), 10);
+      var quantity = Math.max(0, parseInt(input.value, 10) || 0);
+      clearTimeout(timers[line]);
+      timers[line] = setTimeout(function () { save(line, quantity, { line: line, selector: focusSelector }); }, 400);
+    }
+
+    document.addEventListener('click', function (e) {
+      var step = e.target.closest('[data-cart-step]');
+      if (!step || !section() || !section().contains(step)) return;
+      var input = step.parentElement.querySelector('[data-cart-qty]');
+      var next = Math.max(0, (parseInt(input.value, 10) || 0) + parseInt(step.getAttribute('data-cart-step'), 10));
+      input.value = next;
+      schedule(input, '[data-cart-step="' + step.getAttribute('data-cart-step') + '"]');
+    });
+
+    document.addEventListener('change', function (e) {
+      var input = e.target.closest('[data-cart-qty]');
+      if (!input || !section() || !section().contains(input)) return;
+      schedule(input, '[data-cart-qty]');
+    });
+
+    // Enter in a quantity box saves that line instead of submitting the whole form
+    document.addEventListener('keydown', function (e) {
+      var input = e.target.closest && e.target.closest('[data-cart-qty]');
+      if (!input || e.key !== 'Enter') return;
+      e.preventDefault();
+      schedule(input, '[data-cart-qty]');
+    });
+
+    prepare();
+  })();
+</script>
 
 <style>
         .header_banner-cart {
@@ -237,11 +354,82 @@
             text-align: right;
         }
 
-        .cart-line .qty {
-            width: 4.5rem;
-            padding: 0.4rem 0.5rem;
-            border: 1px solid #d6d6d6;
-            border-radius: 8px;
+        /* Compact version of the product page's pill stepper */
+        .cart-qty .pdp-qty__btn,
+        .cart-qty .pdp-qty__input {
+            height: 2.25rem;
+        }
+
+        .cart-qty .pdp-qty__btn {
+            width: 2.25rem;
+            font-size: 1.1rem;
+        }
+
+        .cart-qty .pdp-qty__input {
+            width: 2.5rem;
+            padding: 0;
+        }
+
+        /* Phones: full 44px tap targets */
+        @media screen and (max-width: 575px) {
+            .cart-qty .pdp-qty__btn,
+            .cart-qty .pdp-qty__input {
+                height: 2.75rem;
+            }
+
+            .cart-qty .pdp-qty__btn {
+                width: 2.75rem;
+            }
+        }
+
+        /* While a quantity change is saving */
+        .cart-line[aria-busy="true"] {
+            opacity: 0.55;
+            transition: opacity .15s;
+        }
+
+        /* Light border and rounded corners like the product and collection cards, no heavy shadow */
+        .cart-card {
+            border: 1px solid #ececec;
+            border-radius: 16px;
+            box-shadow: none;
+        }
+
+        .cart-card > .card-body {
+            padding: 1.5rem;
+        }
+
+        /* Shopify's express checkout buttons as pills, the same height as Checkout */
+        .cart-dynamic {
+            --shopify-accelerated-checkout-button-border-radius: 999px;
+            --shopify-accelerated-checkout-button-block-size: 55px;
+        }
+
+        /* Only visible if the auto-update script can't run */
+        .cart-update-link {
+            justify-self: center;
+            padding: 0.25rem;
+            border: 0;
+            background: none;
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+            text-decoration: underline;
+            text-underline-offset: 0.2em;
+        }
+
+        .cart-status {
+            margin: 0;
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+            text-align: center;
+        }
+
+        .cart-status:empty {
+            display: none;
+        }
+
+        .cart-status.is-error {
+            color: var(--color-alert);
         }
 
         .cart-total-block p {
@@ -262,7 +450,7 @@
         @media screen and (min-width: 576px) {
             .cart-lines__head,
             .cart-line {
-                grid-template-columns: 5rem minmax(0, 1fr) 5.5rem 7rem;
+                grid-template-columns: 5rem minmax(0, 1fr) 7.5rem 7rem;
             }
 
             .cart-line {
@@ -272,7 +460,7 @@
 
             .cart-lines__head {
                 display: grid;
-                grid-template-columns: 5rem minmax(0, 1fr) 5.5rem 7rem;
+                grid-template-columns: 5rem minmax(0, 1fr) 7.5rem 7rem;
                 gap: 1rem 1.25rem;
                 padding-bottom: 0.75rem;
                 border-bottom: 1px solid #ececec;

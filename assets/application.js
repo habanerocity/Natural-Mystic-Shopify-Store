@@ -511,7 +511,7 @@ function update_cart() {
             cartCount.textContent = data.item_count;
             cartCount.hidden = data.item_count === 0;
         }
-    }).catch((err) => console.err(err));
+    }).catch((err) => console.error(err));
 }
 
 //predictive search: results drop down from the search bar
