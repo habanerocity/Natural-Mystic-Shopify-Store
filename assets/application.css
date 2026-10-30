@@ -85,7 +85,8 @@ input::placeholder {
 
 .features_grid {
   display: grid;
-  height: 200px;
+  /* min-height, not height: when the tiles stack on phones the section must grow with them */
+  min-height: 200px;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, 1fr);
   grid-column-gap: 7px;
@@ -1086,7 +1087,7 @@ input:focus {
   .features_grid{
     display: flex;
     flex-direction: column;
-    margin-bottom: 16rem;
+    gap: 7px;
   }
 
   .w-sm-60{
