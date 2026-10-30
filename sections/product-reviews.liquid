@@ -23,14 +23,6 @@
         border-top: 1px solid #ececec;
     }
 
-    .product-reviews__title {
-        margin: 0 0 1.5rem;
-        font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
-        font-weight: 600;
-        line-height: 1.15;
-        color: var(--color-primary);
-    }
-
     .product-reviews__empty {
         padding: 1.5rem;
         border: 1px dashed #c9c9c9;
@@ -47,14 +39,7 @@
         margin-inline: 0 !important;
     }
 
-    /* Judge.me's own "Customer Reviews" title, in the theme's heading style */
-    .product-reviews .jm-review-widget-minimal-header__title {
-        font-family: var(--font-heading-family);
-        font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
-        font-weight: 600;
-        line-height: 1.15;
-        color: var(--color-primary);
-    }
+    /* The widget's own "Customer Reviews" title is styled with the other section headings in application.css */
 
     /* With no widget added, nothing shows to shoppers: hide the whole area */
     .product-reviews:not(:has(*:not(h2))) { display: none; }
