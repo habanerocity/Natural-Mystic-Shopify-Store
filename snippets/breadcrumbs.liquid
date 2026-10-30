@@ -12,25 +12,29 @@
                 {% when 'page' %}
 
                     <li>
-                        <a href="{{ page.url }}" aria-current="page">{{ page.title }}</a>
+                        <a href="{{ page.url }}" aria-current="page">{{ page.title | escape }}</a>
                     </li>
 
                 {% when 'product' %}
 
+                    <li><a href="{{ routes.collections_url }}">Collections</a></li>
+
                     {% if collection.url %}
                         <li>
-                            {{ collection.title | link_to: collection.url }}
+                            {{ collection.title | escape | link_to: collection.url }}
                         </li>
                     {% endif %}
 
                     <li>
-                        <a href="{{ product.url }}" aria-current="page">{{ product.title }}</a>
+                        <a href="{{ product.url }}" aria-current="page">{{ product.title | escape }}</a>
                     </li>
 
                 {% when 'collection' %}
 
+                    <li><a href="{{ routes.collections_url }}">Collections</a></li>
+
                     {% if current_tags %}
-                        <li>{{ collection.title | link_to: collection.url }}</li>
+                        <li>{{ collection.title | escape | link_to: collection.url }}</li>
                         <li>
                             {% capture tag_url %}
                                 {{ collection.url }}/{{ current_tags | join: "+"}}
@@ -39,7 +43,7 @@
                         </li>
                     {% else %}
                         <li>
-                            <a href="{{ collection.url }}" aria-current="page">{{ collection.title }}</a>
+                            <a href="{{ collection.url }}" aria-current="page">{{ collection.title | escape }}</a>
                         </li>
                     {% endif %}
 
@@ -61,9 +65,9 @@
 
                 {% when 'article' %}
 
-                    <li>{{ blog.title | link_to: blog.url }}</li>
+                    <li>{{ blog.title | escape | link_to: blog.url }}</li>
                     <li>
-                        <a href="{{ article.url }}" aria-current="page">{{ article.title }}</a>
+                        <a href="{{ article.url }}" aria-current="page">{{ article.title | escape }}</a>
                     </li>
 
                 {% else %}

@@ -11,6 +11,10 @@
 {% endcapture %}
 
 
+{% if settings.show_breadcrumb_nav %}
+    {% include 'breadcrumbs' %}
+{% endif %}
+
 <article itemscope itemtype="https://schema.org/BlogPosting">
     {% for block in section.blocks %}
         {% case block.type %}
