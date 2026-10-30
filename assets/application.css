@@ -3116,29 +3116,59 @@ a.theme-pagination__link:focus-visible {
   height: 100%;
 }
 
-.product-slider .flickity-prev-next-button {
-  top: 40%;
+/* Header row: title left, arrows right, with clear space before the cards */
+.product-slider__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.product-slider__title {
+  margin: 0;
+  font-size: clamp(2rem, 1.4rem + 2vw, 3rem); /* 32px phones to 48px desktop */
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.product-slider__nav {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  margin-left: auto; /* stays right even when the title is blank */
+}
+
+/* 44px touch targets */
+.product-slider__arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 2.75rem;
   height: 2.75rem;
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-  color: var(--bs-body-color);
-  transition: background-color .2s, color .2s;
-}
-
-.product-slider .flickity-prev-next-button:hover {
-  background: #fff;
+  padding: 0;
+  border: 1px solid color-mix(in srgb, var(--color-primary) 35%, transparent);
+  border-radius: 50%;
+  background: transparent;
   color: var(--color-primary);
+  transition: background-color .2s, color .2s, border-color .2s, opacity .2s;
 }
 
-.product-slider .flickity-prev-next-button:focus-visible {
+.product-slider__arrow:hover:not(:disabled) {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
+.product-slider__arrow:focus-visible {
   outline: 2px solid var(--color-primary);
   outline-offset: 2px;
-  box-shadow: none;
 }
 
-.product-slider .flickity-prev-next-button.previous { left: 1.25rem; }
-.product-slider .flickity-prev-next-button.next { right: 1.25rem; }
+.product-slider__arrow:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
 
 /* Cards per view by viewport: 4 desktop, 3 tablet landscape, 2 tablet, 1 phone.
    Widths divide the row exactly, so the slider only ever shows whole cards and
@@ -3151,12 +3181,12 @@ a.theme-pagination__link:focus-visible {
   .featured-collection-slider .product-slider__cell { width: 50%; }
 }
 
-/* Page dots are the swipe hint on phones, where the arrows are hidden */
+/* Page dots on phones only: with one card in view they show the position and hint at swiping */
 .product-slider .flickity-page-dots { display: none; }
 
 @media (max-width: 575px) {
   .featured-collection-slider .product-slider__cell { width: 100%; }
-  .product-slider .flickity-prev-next-button { display: none; }
+  .product-slider__header { margin-bottom: 1.25rem; }
 
   .product-slider .flickity-page-dots {
     display: block;

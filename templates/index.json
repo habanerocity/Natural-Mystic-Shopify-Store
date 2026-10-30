@@ -44,6 +44,7 @@
       "type": "spice-banner",
       "settings": {
         "image_1": "shopify://shop_images/hibiscus-tea.jpg",
+        "image_2": "shopify://shop_images/assorted-hot-beverages-tea-matcha-coffee.jpg",
         "title": "Our First Pour",
         "subheading_title": "15% off your first order to celebrate our launch",
         "description": "<p>Mushroom coffee and herbal teas for slow mornings and easy evenings. Use code FIRSTPOUR by [date].</p>",

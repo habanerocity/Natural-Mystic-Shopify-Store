@@ -1,22 +1,30 @@
 {%- capture flickity_options -%}
     {
-        "prevNextButtons": true,
+        "prevNextButtons": false,
         "autoPlay": 5000,
         "pauseAutoPlayOnHover": true,
         "contain": true,
         "pageDots": true,
         "cellAlign": "left",
-        "groupCells": false,
-        "arrowShape": {"x0": 20, "x1": 60, "y1": 40, "x2": 60, "y2": 35, "x3": 25}
+        "groupCells": false
     }
 {%- endcapture -%}
 <section class="container slider-container py-5">
     <div class="featured-collection-slider page-width">
-        {% if section.settings.title != blank %}
-            <div class="section-header text-center">
-                <h1 class="dot display-6">{{ section.settings.title | escape }}</h1>
+        {%- comment -%} Title left, arrows right: one control row above the cards at every screen size {%- endcomment -%}
+        <div class="product-slider__header">
+            {% if section.settings.title != blank %}
+                <h1 class="dot product-slider__title">{{ section.settings.title | escape }}</h1>
+            {% endif %}
+            <div class="product-slider__nav" id="ProductSliderNav-{{ section.id }}" hidden>
+                <button type="button" class="product-slider__arrow" data-dir="prev" aria-label="Previous products" aria-controls="ProductSlider-{{ section.id }}">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7"/></svg>
+                </button>
+                <button type="button" class="product-slider__arrow" data-dir="next" aria-label="Next products" aria-controls="ProductSlider-{{ section.id }}">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9 5l7 7-7 7"/></svg>
+                </button>
             </div>
-        {% endif %}
+        </div>
 
         {%- assign collection = collections[section.settings.collection] -%}
         {%- assign product_limit = section.settings.product_count -%}
@@ -37,7 +45,8 @@
   (function () {
     // Every move is exactly one card: cards align left, and the repeated end
     // positions that "contain" leaves behind are merged, so next/prev never
-    // stalls. When there are too few cards to fill the row, they're centered.
+    // stalls. Cards always start at the container's left edge, even when there
+    // are too few to fill the row, so the slider lines up with the heading above.
     function setup() {
       var el = document.getElementById('ProductSlider-{{ section.id }}');
       if (!el || typeof Flickity === 'undefined') return;
@@ -59,17 +68,29 @@
         this.slides = kept;
       };
 
-      function fitAlign() {
-        var cellsWidth = flkty.cells.reduce(function (sum, cell) { return sum + cell.size.outerWidth; }, 0);
-        var align = cellsWidth > flkty.size.innerWidth + 1 ? 'left' : 'center';
-        flkty.options.cellAlign = align;
-        flkty.getSize();
+      // Re-run the slide layout so the merge above applies to the initial render
+      function relayout() {
         flkty.reloadCells();
         flkty.select(Math.min(flkty.selectedIndex, flkty.slides.length - 1), false, true);
+        if (flkty.pageDots) flkty.updatePageDots();
+        updateNav();
       }
 
-      fitAlign();
-      flkty.on('resize', fitAlign);
+      // Header arrows: hidden when everything fits, disabled at either end
+      var nav = document.getElementById('ProductSliderNav-{{ section.id }}');
+      var prevBtn = nav.querySelector('[data-dir="prev"]');
+      var nextBtn = nav.querySelector('[data-dir="next"]');
+      function updateNav() {
+        nav.hidden = flkty.slides.length < 2;
+        prevBtn.disabled = flkty.selectedIndex === 0;
+        nextBtn.disabled = flkty.selectedIndex >= flkty.slides.length - 1;
+      }
+      prevBtn.addEventListener('click', function () { flkty.previous(); flkty.stopPlayer(); });
+      nextBtn.addEventListener('click', function () { flkty.next(); flkty.stopPlayer(); });
+      flkty.on('select', updateNav);
+
+      relayout();
+      flkty.on('resize', updateNav);
     }
 
     if (document.readyState === 'loading') {
