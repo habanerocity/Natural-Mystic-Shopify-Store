@@ -87,6 +87,18 @@
     ]
   },
   {
+    "name": "Wishlist",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_wishlist",
+        "label": "Enable wishlist",
+        "info": "Shows the wishlist hearts on products, the wishlist icon in the header, and loads the Swym wishlist scripts. Turn on only when a compatible wishlist app is installed. When off, none of it is shown or loaded.",
+        "default": false
+      }
+    ]
+  },
+  {
     "name": "Favicon",
     "settings": [
       {

@@ -270,9 +270,11 @@
 
                         <div class="pdp-buy">
                             <button class="btn rust pdp-add" id="AddToCart" name="add" type="submit" data-quickview-add>Add to cart</button>
+                            {%- if settings.enable_wishlist -%}
                             <div class="pdp-wishlist" role="button" tabindex="0" aria-pressed="false" aria-label="Add to wishlist" data-quickview-wishlist>
                                 <div class="swym-button swym-add-to-wishlist heart__beat" data-with-epi="true" data-swaction="addToWishlist" data-product-id="" data-variant-id="" data-product-url=""></div>
                             </div>
+                            {%- endif -%}
                         </div>
 
                         <p class="quickview__status" role="status" aria-live="polite" data-quickview-status></p>
