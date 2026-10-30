@@ -1,4 +1,4 @@
-{% paginate blog.articles by 5 %}
+{% paginate blog.articles by section.settings.posts_per_page %}
 
 {% for block in section.blocks %}
     {% case block.type %}
@@ -12,44 +12,90 @@
                     </div>
             </div>
         {% when 'blog_grid' %}
-            <div class="container my-5 p-2">
-                <div class="my-3">
-                        {% if settings.show_breadcrumb_nav %}
-                            {% include 'breadcrumbs' %}
-                        {% endif %}
-                </div>
-                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3 py-5">
-                    {% for article in blog.articles %}
-                        <div class="col">
-                            <div class="blog_card card hover-card">
-                                {% if article.image.src != null %}
-                                    <img data-src="{{ article.image.src | img_url: '500x1000' }}" class="card-img-top lazyload" alt="{{ article.image.alt }}"></img>
-                                {% else %}
-                                    {{ 'image' | placeholder_svg_tag: 'card-img-top'}}
-                                {% endif %}
-                                <div class="card-body">
-                                    <h2>
-                                        <a class="text-decoration-none dot blog_link" href="{{ article.url }}">{{ article.title }}</a>
-                                    </h2>
-                                    <h5> By: {{ article.author }}
-                                            |
-                                            {{ article.published_at | date: "%b %d, %Y" }}</h5>
-                                  
-                                    <p class="card-text">
-                                        {% if article.excerpt.size > 0 %}
-                                            {{ article.excerpt }}
-                                        {% else %}
-                                            <p>{{ article.content | strip_html | truncatewords: 100 }}</p>
-                                        {% endif %}
+            <div class="container blog-index" {{ block.shopify_attributes }}>
+                {% if settings.show_breadcrumb_nav %}
+                    <div class="blog-index__breadcrumbs">
+                        {% include 'breadcrumbs' %}
+                    </div>
+                {% endif %}
+
+                {%- if section.settings.show_tags and blog.all_tags.size > 0 -%}
+                    <nav class="blog-tags" aria-label="Filter articles by topic">
+                        <a class="blog-tags__chip{% if current_tags == blank %} is-active{% endif %}" href="{{ blog.url }}"{% if current_tags == blank %} aria-current="page"{% endif %}>All</a>
+                        {%- for tag in blog.all_tags -%}
+                            {%- assign tag_active = false -%}
+                            {%- if current_tags contains tag -%}{%- assign tag_active = true -%}{%- endif -%}
+                            <a class="blog-tags__chip{% if tag_active %} is-active{% endif %}" href="{{ blog.url }}/tagged/{{ tag | handle }}"{% if tag_active %} aria-current="page"{% endif %}>{{ tag | escape }}</a>
+                        {%- endfor -%}
+                    </nav>
+                {%- endif -%}
+
+                {%- if blog.articles.size == 0 -%}
+                    <div class="blog-empty">
+                        <h2 class="blog-empty__title">No articles yet</h2>
+                        <p>{% if current_tags != blank %}Nothing is tagged with that topic yet.{% else %}Check back soon for new stories.{% endif %}</p>
+                        {% if current_tags != blank %}<a class="blog-card__more" href="{{ blog.url }}">See all articles</a>{% endif %}
+                    </div>
+                {%- else -%}
+                    {%- assign feature_first = false -%}
+                    {%- if section.settings.feature_latest and paginate.current_page == 1 and current_tags == blank -%}
+                        {%- assign feature_first = true -%}
+                    {%- endif -%}
+
+                    <div class="blog-grid">
+                        {%- for article in blog.articles -%}
+                            {%- assign words = article.content | strip_html | split: ' ' | size -%}
+                            {%- assign read_minutes = words | divided_by: 200.0 | ceil -%}
+                            {%- if read_minutes < 1 -%}{%- assign read_minutes = 1 -%}{%- endif -%}
+                            {%- assign is_featured = false -%}
+                            {%- if feature_first and forloop.first -%}{%- assign is_featured = true -%}{%- endif -%}
+
+                            <article class="blog-card{% if is_featured %} blog-card--featured{% endif %}">
+                                <div class="blog-card__media">
+                                    {%- if article.image != blank -%}
+                                        {%- if is_featured -%}
+                                            {%- assign img_sizes = '(min-width: 992px) 60vw, 100vw' -%}
+                                        {%- else -%}
+                                            {%- assign img_sizes = '(min-width: 992px) 33vw, (min-width: 768px) 50vw, 100vw' -%}
+                                        {%- endif -%}
+                                        {{ article.image | image_url: width: 1600 | image_tag: class: 'blog-card__image', loading: 'lazy', widths: '400, 600, 800, 1200, 1600', sizes: img_sizes, alt: article.image.alt | default: article.title }}
+                                    {%- else -%}
+                                        {{ 'image' | placeholder_svg_tag: 'blog-card__placeholder' }}
+                                    {%- endif -%}
+                                    {%- if article.tags.size > 0 -%}
+                                        <span class="blog-card__tag">{{ article.tags.first | escape }}</span>
+                                    {%- endif -%}
+                                </div>
+                                <div class="blog-card__body">
+                                    <p class="blog-card__meta">
+                                        <time datetime="{{ article.published_at | date: '%Y-%m-%d' }}">{{ article.published_at | date: '%b %d, %Y' }}</time>
+                                        <span aria-hidden="true">&middot;</span>
+                                        <span>{{ read_minutes }} min read</span>
                                     </p>
-                                </div>          
-                            </div>
-                        </div>
-                    {% endfor %}
-                </div>
+                                    <h2 class="blog-card__title">
+                                        <a class="blog-card__link" href="{{ article.url }}">{{ article.title | escape }}</a>
+                                    </h2>
+                                    <p class="blog-card__excerpt">
+                                        {%- if article.excerpt != blank -%}
+                                            {{ article.excerpt | strip_html | truncatewords: 40 }}
+                                        {%- else -%}
+                                            {{ article.content | strip_html | truncatewords: 40 }}
+                                        {%- endif -%}
+                                    </p>
+                                    <div class="blog-card__footer">
+                                        {%- if section.settings.show_author and article.author != blank -%}
+                                            <span class="blog-card__author">By {{ article.author | escape }}</span>
+                                        {%- endif -%}
+                                        <span class="blog-card__more" aria-hidden="true">Read article <span class="blog-card__arrow">&rarr;</span></span>
+                                    </div>
+                                </div>
+                            </article>
+                        {%- endfor -%}
+                    </div>
+                {%- endif -%}
             </div>
         {% when 'blog_pagination' %}
-            <div class="container my-2">
+            <div class="container blog-index__pagination" {{ block.shopify_attributes }}>
                 {% render 'pagination', paginate: paginate %}
             </div>   
             {% else %}
@@ -128,6 +174,39 @@
 "label": "Subheading",
 "info": "Leave blank to hide.",
 "default": "Read our latest articles"
+},
+{
+"type": "header",
+"content": "Article list"
+},
+{
+"type": "range",
+"id": "posts_per_page",
+"label": "Articles per page",
+"min": 3,
+"max": 24,
+"step": 3,
+"default": 9
+},
+{
+"type": "checkbox",
+"id": "feature_latest",
+"label": "Feature the latest article",
+"info": "Shows the newest article as a large card on the first page.",
+"default": true
+},
+{
+"type": "checkbox",
+"id": "show_tags",
+"label": "Show topic filters",
+"info": "Uses the tags on your blog posts.",
+"default": true
+},
+{
+"type": "checkbox",
+"id": "show_author",
+"label": "Show author",
+"default": true
 }
     ]
 }

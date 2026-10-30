@@ -22,14 +22,14 @@
     "43f1f6c2-8c22-41be-8ad7-bf3e3915cd21": {
       "type": "features-grid",
       "settings": {
-        "grid_item_title_1": "Super Fast and Reliable Delivery",
-        "grid_item_title_2": "Contactless Shipping",
-        "grid_item_title_3": "Money-Back Guarantee",
-        "grid_item_title_4": "Super Secure Payment System",
-        "grid_image_1": "shopify://shop_images/icons8-shipping-50.png",
-        "grid_image_2": "shopify://shop_images/icons8-verified-50.png",
-        "grid_image_3": "shopify://shop_images/icons8-money-50.png",
-        "grid_image_4": "shopify://shop_images/icons8-credit-card-50.png"
+        "grid_item_title_1": "Lab-tested",
+        "grid_item_title_2": "Chosen with care",
+        "grid_item_title_3": "Love it or your money back",
+        "grid_item_title_4": "Ships from the USA",
+        "grid_image_1": "shopify://shop_images/gz-icon-lab-tested.svg",
+        "grid_image_2": "shopify://shop_images/gz-icon-money-back.svg",
+        "grid_image_3": "shopify://shop_images/gz-icon-family-owned.svg",
+        "grid_image_4": "shopify://shop_images/gz-icon-ships-usa.svg"
       }
     },
     "1664559826d79da4ed": {
@@ -69,7 +69,7 @@
     "1664760159a4388479": {
       "type": "browse-blog",
       "settings": {
-        "title": "Follow Our Blog For New Recipes and Travel Stories",
+        "title": "The Latest From Our Blog",
         "hover_title_1": "Layover in Taiwan",
         "hover_title_2": "Mojito Mint",
         "hover_title_3": "Breakfast in Manila",

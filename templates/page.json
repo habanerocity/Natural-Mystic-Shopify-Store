@@ -32,8 +32,9 @@
       ],
       "settings": {
         "container": "container",
-        "banner_image": "shopify://shop_images/spices_market-sm_4.webp",
-        "banner_image-mobile": "shopify://shop_images/spices_market-sm_1.webp",
+        "banner_image": "shopify://shop_images/Gemini_Generated_Image_x4ghxyx4ghxyx4gh.jpg",
+        "banner_heading": "Our Story",
+        "banner_subheading": "From Our Family to Your Cup",
         "show_publish_date": true
       }
     }
