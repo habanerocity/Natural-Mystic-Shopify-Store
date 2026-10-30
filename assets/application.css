@@ -592,40 +592,14 @@ input::placeholder {
   transform: translateY(-3px);
 }
 
-/* slider */
-.featured-collection-slider{
-    margin: 0 auto;
-  }
-  .featured-collection-slider .carousel-cell{
-    width:25%;
-    padding: 0 15px;
-    display: block;
-  }
-
+/* Slider sizing lives in the "Collection slider" block further down. The old
+   .carousel-cell widths and the 15px side padding below 920px were removed: that
+   padding pushed the slider 15px in from the other homepage sections. */
   .img-explore {
       height: 10rem;
   }
   .flickity-button:disabled{
     pointer-events: all!important;
-  }
-
-  @media screen and (max-width: 920px){
-    .featured-collection-slider{
-      padding-left: 15px;
-      padding-right: 15px;
-    }
-
-    .featured-collection-slider .carousel-cell{
-      width:50%;
-    }
-
-  }
-
-  @media screen and (max-width: 767px){
-    .featured-collection-slider .carousel-cell{
-      width:100%;
-    }
-
   }
 
   @media screen and (max-width: 575px){
@@ -3095,6 +3069,10 @@ a.theme-pagination__link:focus-visible {
 /* ------------------------------------------------------------
    Collection slider (homepage Flickity carousel) using the shared product card
    ------------------------------------------------------------ */
+
+.featured-collection-slider {
+  margin: 0 auto;
+}
 
 /* Negative margin + cell padding keeps the outer card edges flush with the container */
 .product-slider {
