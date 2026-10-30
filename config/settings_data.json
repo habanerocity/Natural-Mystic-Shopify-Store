@@ -9,7 +9,14 @@
  */
 {
   "current": {
-    "show_breadcrumb_nav": false,
+    "show_breadcrumb_nav": true,
+    "color_primary": "#2F4A3A",
+    "color_primary_dark": "#1E3328",
+    "color_accent": "#5A2E1F",
+    "color_highlight": "#E8C27A",
+    "color_alert": "#A8432A",
+    "color_surface": "#F4EEE1",
+    "use_brand_fonts": true,
     "favicon": "shopify://shop_images/shopify-icon-2.png",
     "header_text_font": "rajdhani_n6",
     "body_text_font": "chong_modern_n4",
@@ -24,7 +31,7 @@
           "eeb1f426-e7f2-476c-9d52-a8417e1dcce1": {
             "type": "image",
             "settings": {
-              "store-logo": "shopify://shop_images/NM._4.svg"
+              "store-logo": "shopify://shop_images/gz-badge.svg"
             }
           }
         },
@@ -47,20 +54,20 @@
             "type": "link_list",
             "settings": {
               "title": "Collections",
-              "menu": "collections"
+              "menu": ""
             }
           },
           "28021cab-1fff-4a71-a996-15d50cdb36b3": {
             "type": "link_list",
             "settings": {
               "title": "Account",
-              "menu": "social-media-links"
+              "menu": ""
             }
           },
           "ab70c76d-c7aa-4718-9a87-ce8cddbe254b": {
             "type": "text",
             "settings": {
-              "logo": "shopify://shop_images/NM._6_-cropped.svg",
+              "logo": "shopify://shop_images/gz-badge.svg",
               "title": "Store information",
               "description": "<p>1288 Baldwin Park Ave</p><p>El Monte, CA 91733</p><p>info@nm.com</p><p>626.544.4366</p>"
             }

@@ -12,11 +12,10 @@
     "hero": {
       "type": "hero",
       "settings": {
-        "image": "shopify://shop_images/spices2.webp",
-        "image_mobile": "shopify://shop_images/spices2-300w_e9905ca3-136e-4f49-b92c-cec8f7d2ac8f.webp",
-        "title": "Discover Over 50+ Spices",
-        "description": "<p class=\"mb-0\">Flavors With Character</p>",
-        "button_label": "Shop Now",
+        "image": "shopify://shop_images/Gemini_Generated_Image_fvolzsfvolzsfvol.jpg",
+        "title": "A Calmer Cup For Every Morning",
+        "description": "Mushroom coffee and herbal teas for slow mornings and easy evenings",
+        "button_label": "Find Your Blend",
         "button_link": "https://natural-mystic-foods.myshopify.com/collections/all"
       }
     },
@@ -44,24 +43,23 @@
     "16645937410ba2e856": {
       "type": "spice-banner",
       "settings": {
-        "image_1": "shopify://shop_images/spiceswoodbanner.webp",
-        "image_2": "shopify://shop_images/assorted-cooking-spices-in-spoons.jpg",
-        "title": "New Flavors",
-        "subheading_title": "Get up to 30% off all warm spices & warm spice blends",
-        "description": "<p>Discover the warmth and richness of our carefully curated warm spices and blends, all now at an unbeatable 30% discount. Embrace the changing seasons with the comforting flavors of cinnamon, nutmeg, and more. Elevate your dishes with these aromatic ingredients, sourced from around the world.</p>",
-        "button_label": "View Sale",
+        "image_1": "shopify://shop_images/hibiscus-tea.jpg",
+        "title": "Our First Pour",
+        "subheading_title": "15% off your first order to celebrate our launch",
+        "description": "<p>Mushroom coffee and herbal teas for slow mornings and easy evenings. Use code FIRSTPOUR by [date].</p>",
+        "button_label": "Shop the Launch",
         "button_link": "shopify://collections/warm-spices"
       }
     },
     "16646624727567becb": {
       "type": "browse-categories",
       "settings": {
-        "heading_title": "Our Collections",
-        "subheading_title": "Discover & Browse",
-        "category_label_a": "Best Sellers",
-        "category_label_b": "Warm Spices",
-        "category_label_c": "cooling spices",
-        "category_label_d": "herbs",
+        "heading_title": "Find Your Cup",
+        "subheading_title": "Shop by Moment",
+        "category_label_a": "Morning",
+        "category_label_b": "Evening",
+        "category_label_c": "The Ritual Set",
+        "category_label_d": "Shop All",
         "category_link_a": "shopify://collections/frontpage",
         "category_link_b": "shopify://collections/warm-spices",
         "category_link_c": "shopify://collections/cooling-spices",
@@ -81,9 +79,9 @@
         "hover_link_1": "shopify://blogs/news/another-blog-post",
         "hover_link_2": "shopify://blogs/news/bumpers",
         "hover_link_3": "shopify://blogs/news/nicky",
-        "image_1": "shopify://shop_images/taiwan.jpg",
-        "image_2": "shopify://shop_images/20180405_161629.jpg",
-        "image_3": "shopify://shop_images/bangus-2.jpg"
+        "image_1": "shopify://shop_images/assorted-hot-beverages-tea-matcha-coffee.jpg",
+        "image_2": "shopify://shop_images/cup-of-tea-cookie.jpg",
+        "image_3": "shopify://shop_images/welcome-to-my-business.jpg"
       }
     }
   },

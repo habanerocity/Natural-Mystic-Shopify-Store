@@ -26,9 +26,9 @@
         "cart_checkout_button"
       ],
       "settings": {
-        "banner_image": "shopify://shop_images/peppercorns-overlaypng_1.webp",
-        "banner_image-mobile": "shopify://shop_images/peppercorns-overlaypng.webp",
-        "delete_icon": "shopify://shop_images/trash-can.png"
+        "banner_image": "shopify://shop_images/gold-spoons-in-a-row-filled-with-loose-leaf-tea.jpg",
+        "banner_heading": "",
+        "banner_subheading": "Online Checkout"
       }
     }
   },

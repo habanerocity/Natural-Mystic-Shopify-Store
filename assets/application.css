@@ -965,18 +965,6 @@ input:focus {
   }
 }
 
-@media screen and (max-width: 1399px){
-  .blog_grid{
-    grid-row-gap: 29px!important;
-  }
-}
-
-@media screen and (max-width: 1199px){
-  .blog_grid{
-    grid-row-gap: 22px!important;
-  }
-}
-
 @media screen and (max-width: 1150px){
   .spice_banner{
     background-position: right !important;
@@ -984,9 +972,6 @@ input:focus {
 }
 
 @media screen and (max-width: 991px){
-  .blog_grid{
-    grid-row-gap: 12px!important;
-  }
 
   .dropdown-menu{
     border: none;
@@ -1024,10 +1009,6 @@ input:focus {
     grid-row-gap: 20px;
   }
 
-  .blog_grid{
-    grid-row-gap: 5px!important;
-  }
-
   .price_card{
     margin-top: 3rem!important;
   }
@@ -1063,10 +1044,6 @@ input:focus {
 }
 
 @media screen and (max-width: 545px){
-  .blog_grid{
-    display: block!important;
-  }
-
   .not_available-container{
     width: 40%;
   }
