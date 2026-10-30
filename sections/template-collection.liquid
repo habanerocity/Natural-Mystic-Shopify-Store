@@ -13,21 +13,39 @@
     </div> -->
                                                         
                                                         <!-- <section class="overlay"> -->
-    {% if collection.image != blank %}
-        <div class="header_banner-collection position-relative text-center p-3 p-md-5">
-            <div class="col-md-5 p-lg-5 mx-auto my-5">
-                <h1 class="display-4 turmeric">{{ section.settings.banner_heading | default: collection.title }}</h1>
-                <p class="lead text-light">{{ section.settings.banner_subheading | default: collection.description }}</p>
-            </div>
+    {%- comment -%}
+      Every collection shares this template, so the editor's heading/subheading only apply to the
+      All products page (/collections/all). Other collections use their own title and description.
+    {%- endcomment -%}
+    {%- liquid
+      assign is_catalog = false
+      if collection.handle == 'all'
+        assign is_catalog = true
+      endif
+
+      assign banner_title = collection.title
+      if is_catalog and section.settings.banner_heading != blank
+        assign banner_title = section.settings.banner_heading
+      endif
+
+      assign banner_text = collection.description | strip_html | strip
+      if is_catalog and section.settings.banner_subheading != blank
+        assign banner_text = section.settings.banner_subheading
+      endif
+
+      assign banner_class = 'header_banner-shop'
+      if collection.image != blank
+        assign banner_class = 'header_banner-collection'
+      endif
+    -%}
+    <div class="{{ banner_class }} position-relative text-center p-3 p-md-5">
+        <div class="col-md-5 p-lg-5 mx-auto my-5">
+            <h1 class="display-4 turmeric">{{ banner_title | escape }}</h1>
+            {%- if banner_text != blank -%}
+                <p class="lead text-light">{{ banner_text | escape }}</p>
+            {%- endif -%}
         </div>
-    {% else %}
-        <div class="position-relative header_banner-shop text-center bg-light p-3 p-md-5">
-            <div class="col-md-5 p-lg-5 mx-auto my-5">
-                <h1 class="display-4 turmeric">{{ section.settings.banner_heading | default: collection.title }}</h1>
-                <p class="lead text-white">{{ section.settings.banner_subheading | default: "Browse Our Curated Selection of the World's Finest Spices" }}</p>
-            </div>
-        </div>
-    {% endif %}
+    </div>
     <div class="container">
         <div class="my-3">
             {% if settings.show_breadcrumb_nav %}
@@ -315,7 +333,8 @@
                 {
                     "type": "image_picker",
                     "id": "banner_image",
-                    "label": "Heading Background Image"
+                    "label": "Heading Background Image",
+                    "info": "Used when a collection has no image of its own. Set a collection image under Products > Collections."
                 },
                 {
                     "type": "image_picker",
@@ -325,14 +344,14 @@
 {
 "type": "text",
 "id": "banner_heading",
-"label": "Heading",
-"info": "Leave blank to use the collection title."
+"label": "All products heading",
+"info": "Only used on the All products page (/collections/all). Other collections show their own title."
 },
 {
 "type": "text",
 "id": "banner_subheading",
-"label": "Subheading",
-"info": "Leave blank to use the collection description (or the default text on the all-products page)."
+"label": "All products subheading",
+"info": "Only used on the All products page. Other collections show their own description (Products > Collections), or nothing if it's empty."
 }
                 ]
             }
