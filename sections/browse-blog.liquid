@@ -3,12 +3,10 @@
   if section.settings.source == 'latest'
     assign use_latest = true
     assign source_blog = section.settings.blog
+    # Shopify's blogs object can only be looked up by handle, not looped over,
+    # so with no blog picked fall back to the default "news" blog.
     if source_blog == blank
-      for b in blogs
-        if forloop.first
-          assign source_blog = b
-        endif
-      endfor
+      assign source_blog = blogs['news']
     endif
     assign posts = source_blog.articles
   endif
@@ -286,7 +284,7 @@ figure.snip0015:hover figcaption::before {
       "type": "blog",
       "id": "blog",
       "label": "Blog",
-      "info": "Used by automatic mode. Leave empty to use your first blog."
+      "info": "Used by automatic mode. Leave empty to use the default News blog."
     },
     {
       "type": "header",
