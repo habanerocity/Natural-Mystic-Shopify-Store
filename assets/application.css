@@ -1300,14 +1300,14 @@ input:focus {
     letter-spacing: 0.04em;
 }
 
-/* Square outlined wishlist button next to Add to cart */
+/* Round outlined wishlist button next to the pill Add to cart */
 .pdp-wishlist {
     flex: 0 0 3.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
     border: 0;
-    border-radius: 4px;
+    border-radius: 999px;
     cursor: pointer;
     transition: background-color .2s;
 }
@@ -1329,10 +1329,14 @@ input:focus {
     flex: 0 0 auto;
 }
 
+/* Pill, like the product card buttons, so every action button shares one shape.
+   !important is needed to beat the 4px radius on .rust */
 .pdp-add.rust {
+    border-radius: 999px !important;
     background-color: var(--color-cta);
     border-color: var(--color-cta);
     color: #fff !important;
+    font-weight: 500;
     transition: background-color .25s, border-color .25s;
 }
 
@@ -3412,4 +3416,30 @@ a.theme-pagination__link:focus-visible {
 .pdp-rating--placeholder {
   opacity: 0.55;
   font-style: italic;
+}
+
+/* Judge.me's primary buttons (Write a review, Submit) in the theme's small pill button style,
+   matching .product-card__button. Extra classes beat Judge.me's own stylesheet, which loads later. */
+.product-reviews .jm-review-widget .jm-button.jm-button--primary {
+  padding: 0.5rem 1.1rem;
+  border: 0;
+  border-radius: 999px;
+  background-color: var(--color-cta);
+  color: #fff;
+  font-family: var(--font-body-family, inherit);
+  font-size: 0.85rem;
+  font-weight: 500;
+  line-height: 1.5;
+  transition: background-color .2s;
+}
+
+.product-reviews .jm-review-widget .jm-button.jm-button--primary:hover {
+  background-color: var(--color-primary);
+}
+
+/* Shopify's dynamic checkout buttons (Buy with Shop, etc.) as pills the same height as Add to cart.
+   Shopify reads these variables inside its own button components. */
+.pdp-dynamic {
+  --shopify-accelerated-checkout-button-border-radius: 999px;
+  --shopify-accelerated-checkout-button-block-size: 55px;
 }
