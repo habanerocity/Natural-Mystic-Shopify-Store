@@ -492,6 +492,17 @@ input::placeholder {
 
 .footer-logo{
   width: 10rem;
+  height: auto;
+}
+
+.footer-logo-link {
+  line-height: 0; /* the link hugs the image, so the focus ring and click area match it */
+  border-radius: 6px;
+}
+
+.footer-logo-link:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 4px;
 }
 
 .rust__button{

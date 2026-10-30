@@ -17,7 +17,13 @@
                     </div>
                 {% elsif block.type == "text" %}
                     <div class="col">
-                        <img src="{{ item.logo | img_url: '75x75' }}" class="mb-5 footer-logo" alt="footer logo">
+                        {%- if item.logo != blank -%}
+                            {%- comment -%} The image's alt text becomes the link's accessible name {%- endcomment -%}
+                            {%- assign logo_alt = shop.name | append: ' home' -%}
+                            <a href="{{ routes.root_url }}" class="d-inline-block mb-5 footer-logo-link">
+                                {{ item.logo | image_url: width: 320 | image_tag: class: 'footer-logo', width: 160, loading: 'lazy', alt: logo_alt }}
+                            </a>
+                        {%- endif -%}
                         <h2 class="footer-section__title">{{ item.title }}</h2>
                         <div class="footer-section__text">{{ item.description }}</div>
                     </div>

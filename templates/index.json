@@ -61,10 +61,10 @@
         "category_label_b": "Evening",
         "category_label_c": "The Ritual Set",
         "category_label_d": "Shop All",
-        "category_link_a": "shopify://collections/frontpage",
-        "category_link_b": "shopify://collections/warm-spices",
-        "category_link_c": "shopify://collections/cooling-spices",
-        "category_link_d": "shopify://collections/herbs"
+        "category_link_a": "shopify://collections/morning",
+        "category_link_b": "shopify://collections/evening",
+        "category_link_c": "shopify://collections/the-ritual-set",
+        "category_link_d": "shopify://collections"
       }
     },
     "1664760159a4388479": {
