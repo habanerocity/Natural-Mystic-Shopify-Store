@@ -220,7 +220,11 @@ figure.snip0015 p {
   transition: opacity 0.35s,-webkit-transform 0.35s,-moz-transform 0.35s,-o-transform 0.35s,transform 0.35s;
 }
 figure.snip0015 h2 {
-  word-spacing: -0.15em;
+  /* Cormorant's default numerals are old-style (a "10" sits small and low next to capitals),
+     so use lining figures. The old negative word-spacing also squeezed the gaps shut. */
+  font-variant-numeric: lining-nums;
+  word-spacing: 0.08em;
+  letter-spacing: 0.02em;
   font-weight: 300;
   text-transform: uppercase;
   -webkit-transform: translate3d(0%, 50%, 0);
