@@ -31,8 +31,9 @@
         "blog_pagination"
       ],
       "settings": {
-        "banner_image": "shopify://shop_images/paddy-o_1.webp",
-        "banner_image-mobile": "shopify://shop_images/paddy-o.webp"
+        "banner_image": "shopify://shop_images/Gemini_Generated_Image_el136yel136yel13.jpg",
+        "banner_heading": "Blog",
+        "banner_subheading": "Read our latest articles"
       }
     }
   },
