@@ -149,10 +149,17 @@
     "product-recommendation": {
       "type": "product-recommendation",
       "settings": {}
+    },
+    "reviews": {
+      "type": "product-reviews",
+      "settings": {
+        "heading": "Customer reviews"
+      }
     }
   },
   "order": [
     "template",
+    "reviews",
     "product-recommendation"
   ]
 }
