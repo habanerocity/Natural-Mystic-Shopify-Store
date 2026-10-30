@@ -1,0 +1,9 @@
+{%- comment -%}
+  Browser tab icon, set in the theme editor under Theme settings > Favicon.
+  Cropped square so a non-square upload isn't squashed.
+{%- endcomment -%}
+{%- if settings.favicon != blank -%}
+    <link rel="icon" type="image/png" sizes="48x48" href="{{ settings.favicon | image_url: width: 48, height: 48, crop: 'center' }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ settings.favicon | image_url: width: 32, height: 32, crop: 'center' }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ settings.favicon | image_url: width: 180, height: 180, crop: 'center' }}">
+{%- endif -%}

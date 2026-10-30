@@ -87,16 +87,22 @@
     ]
   },
   {
+    "name": "Favicon",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon image",
+        "info": "The small icon shown in browser tabs and bookmarks. Upload a square PNG, at least 48 x 48 px (180 x 180 px or larger is best)."
+      }
+    ]
+  },
+  {
     "name": "Typography",
     "settings": [
       {
         "type": "header",
         "content": "Heading Font Styles"
-      },
-      {
-        "type": "image_picker",
-        "id": "favicon",
-        "label": "favicon"
       },
       {
         "type": "font_picker",
