@@ -1,5 +1,7 @@
 <div class="container py-3">
-    <h1 class="dot text-center mb-5">Follow Our Blog For New Recipes and Travel Stories</h1>
+    {%- if section.settings.title != blank -%}
+        <h1 class="dot text-center mb-5">{{ section.settings.title | escape }}</h1>
+    {%- endif -%}
     <div class="blog_grid">
         {% for article in blog.articles %}{% endfor %}
         <div class="blog_grid_child-1">
@@ -264,7 +266,7 @@ figure.snip0015:hover figcaption::before {
       "type": "text",
       "id": "title",
       "label": "Heading Title",
-      "default": "The Latest From Our Blog"
+      "default": "Follow Our Blog For New Recipes and Travel Stories"
     },
     {
         "type": "text",
