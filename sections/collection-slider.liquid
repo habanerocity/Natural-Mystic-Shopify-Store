@@ -5,7 +5,7 @@
         "pauseAutoPlayOnHover": true,
         "contain": true,
         "pageDots": false,
-        "cellAlign": "center",
+        "cellAlign": "left",
         "groupCells": false,
         "arrowShape": {"x0": 20, "x1": 60, "y1": 40, "x2": 60, "y2": 35, "x3": 25}
     }
@@ -22,7 +22,7 @@
         {%- assign product_limit = section.settings.product_count -%}
 
 
-        <div class="products-carousel product-slider js-flickity" data-flickity='{{ flickity_options }}'>
+        <div class="products-carousel product-slider js-flickity" id="ProductSlider-{{ section.id }}" data-flickity='{{ flickity_options }}'>
 
             {% for product in collection.products limit: product_limit %}
                 <div class="carousel-cell product-slider__cell">
@@ -32,6 +32,53 @@
         </div>
     </div>
 </section>
+
+<script>
+  (function () {
+    // Every move is exactly one card: cards align left, and the repeated end
+    // positions that "contain" leaves behind are merged, so next/prev never
+    // stalls. When there are too few cards to fill the row, they're centered.
+    function setup() {
+      var el = document.getElementById('ProductSlider-{{ section.id }}');
+      if (!el || typeof Flickity === 'undefined') return;
+      // The theme editor re-inserts sections after page load, when Flickity's auto-init has already run
+      var flkty = Flickity.data(el) || new Flickity(el, JSON.parse(el.getAttribute('data-flickity')));
+
+      var containSlides = flkty._containSlides;
+      flkty._containSlides = function () {
+        containSlides.call(this);
+        var kept = [];
+        this.slides.forEach(function (slide) {
+          var prev = kept[kept.length - 1];
+          if (prev && Math.abs(slide.target - prev.target) < 1) {
+            prev.cells = prev.cells.concat(slide.cells);
+          } else {
+            kept.push(slide);
+          }
+        });
+        this.slides = kept;
+      };
+
+      function fitAlign() {
+        var cellsWidth = flkty.cells.reduce(function (sum, cell) { return sum + cell.size.outerWidth; }, 0);
+        var align = cellsWidth > flkty.size.innerWidth + 1 ? 'left' : 'center';
+        flkty.options.cellAlign = align;
+        flkty.getSize();
+        flkty.reloadCells();
+        flkty.select(Math.min(flkty.selectedIndex, flkty.slides.length - 1), false, true);
+      }
+
+      fitAlign();
+      flkty.on('resize', fitAlign);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', setup);
+    } else {
+      setup();
+    }
+  })();
+</script>
 
 {% schema %}
 {
