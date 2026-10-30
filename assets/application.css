@@ -3080,3 +3080,65 @@ a.theme-pagination__link:focus-visible {
   .blog-card:hover .blog-card__image,
   .blog-card:hover .blog-card__arrow { transform: none; }
 }
+
+/* ------------------------------------------------------------
+   Collection slider (homepage Flickity carousel) using the shared product card
+   ------------------------------------------------------------ */
+
+/* Negative margin + cell padding keeps the outer card edges flush with the container */
+.product-slider {
+  margin-inline: -0.75rem;
+}
+
+.featured-collection-slider .product-slider__cell {
+  width: 25%;
+  padding: 0 0.75rem 0.5rem;
+}
+
+/* Equal-height cards: Flickity adds .flickity-resize while it measures, so the
+   tallest card sets the height and the rest stretch to match */
+.product-slider.flickity-resize .product-slider__cell {
+  min-height: 100%;
+}
+
+.product-slider__cell .product-card {
+  height: 100%;
+}
+
+.product-slider .flickity-prev-next-button {
+  top: 40%;
+  width: 2.75rem;
+  height: 2.75rem;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  color: var(--bs-body-color);
+  transition: background-color .2s, color .2s;
+}
+
+.product-slider .flickity-prev-next-button:hover {
+  background: #fff;
+  color: var(--color-primary);
+}
+
+.product-slider .flickity-prev-next-button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+.product-slider .flickity-prev-next-button.previous { left: 1.25rem; }
+.product-slider .flickity-prev-next-button.next { right: 1.25rem; }
+
+@media (max-width: 991px) {
+  .featured-collection-slider .product-slider__cell { width: 33.333%; }
+}
+
+@media (max-width: 767px) {
+  .featured-collection-slider .product-slider__cell { width: 50%; }
+}
+
+/* Phones: show most of one card with the next one peeking in, as a swipe hint */
+@media (max-width: 575px) {
+  .featured-collection-slider .product-slider__cell { width: 82%; }
+  .product-slider .flickity-prev-next-button { display: none; }
+}

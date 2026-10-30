@@ -1,14 +1,14 @@
 {%- capture flickity_options -%}
     {
-                                                                                  "prevNextButtons": true,
-                                                                                  "autoPlay": 5000,
-                                                                                  "contain": true,
-                                                                                  "pageDots": false,
-                                                                                  "contain": true,
-                                                                                  "cellAlign": "left",
-                                                                                  "groupCells": false,
-                                                                                  "arrowShape": {"x0": 20, "x1": 60, "y1": 40, "x2": 60, "y2": 35, "x3": 25}
-                                                                                }
+        "prevNextButtons": true,
+        "autoPlay": 5000,
+        "pauseAutoPlayOnHover": true,
+        "contain": true,
+        "pageDots": false,
+        "cellAlign": "left",
+        "groupCells": false,
+        "arrowShape": {"x0": 20, "x1": 60, "y1": 40, "x2": 60, "y2": 35, "x3": 25}
+    }
 {%- endcapture -%}
 <section class="container slider-container py-5">
     <div class="featured-collection-slider page-width">
@@ -22,57 +22,11 @@
         {%- assign product_limit = section.settings.product_count -%}
 
 
-        <div class="products-carousel js-flickity" data-flickity='{{ flickity_options }}'>
+        <div class="products-carousel product-slider js-flickity" data-flickity='{{ flickity_options }}'>
 
             {% for product in collection.products limit: product_limit %}
-                {% assign image = product.featured_media.preview_image %}
-                <!-- <div class="carousel-cell">
-                <a href="{{ product.url | within: collection }}">
-                    <img class="img-explore" src="{{ product.featured_image | img_url: 'master'}}">
-                    <h4>{{ product.title }}</h4>
-                    <p>{{ product.price | money }}</p>
-                </a>
-            </div> -->
-                <div class="card mx-4 product_item">
-                    {% if image != blank %}
-                        <img class="card-img-top pic lazyload" data-src="{{ image | img_url: 'large' }}" alt="{{ product.title }}">
-                    {% else %}
-                        {{ 'product-1' | placeholder_svg_tag: 'card-img-top'}}
-                    {% endif %}
-                    <div class="card-body">
-                        <div class="swym-button swym-add-to-wishlist heart__beat" data-with-epi="true" data-swaction="addToWishlist" data-product-id="{{ product.id }}" data-variant-id="{{ product.variants[0].id }}" data-product-url="{{ shop.url }}{{ product.url }}"></div>
-                        {% if product.available %}
-                            <div class="available-container d-flex justify-content-center align-items-center mb-2">
-                                <h4 class="available mb-0">In Stock</h4>
-                            </div>
-                        {% else %}
-                            <div class="not_available-container d-flex justify-content-center align-items-center mb-2">
-                                <h5 class="not_available mb-0">Out of Stock</h5>
-                            </div>
-                        {% endif %}
-                        <h5>
-                            <a class="product-link" href="{{ product.url }}">{{ product.title }}</a>
-                        </h5>
-
-                        <div>
-                            {% if product.selected_or_first_available_variant.compare_at_price %}
-                                <span class="text-decoration-line-through text-muted">{{ product.compare_at_price | money}}</span>
-                            {% endif %}
-                            <span {% if product.selected_or_first_available_variant.compare_at_price %} class="text-danger" {% endif %}>{{ product.price | money }}</span>
-                        </div>
-
-                        <p class="small-font">
-                            <!-- <i class="fa-solid fa-truck-fast"></i> -->
-                            <span class="pckg">📦&nbsp;&nbsp;</span>Free shipping with $25+ order
-                        </p>
-                        {% if product.available %}
-                            <a href="{{ product.url }}">
-                                <button class="btn btn-sm rust">Shop Now</button>
-                            </a>
-                        {% else %}
-                            <a class="btn btn-sm rust" href="{{ product.url }}">View Product</a>
-                        {% endif %}
-                    </div>
+                <div class="carousel-cell product-slider__cell">
+                    {% render 'product-card', product: product %}
                 </div>
             {% endfor %}
         </div>
