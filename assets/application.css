@@ -1,3 +1,11 @@
+/* Stacking order. Bootstrap owns the big layers: dropdowns 1000, sticky-top 1020,
+   offcanvas backdrop 1040, offcanvas 1045, modal 1055. The only global layer we add
+   is the header, one step above sticky-top so it (and its search results) cover
+   sticky page content such as the article sidebar. Everything else is a local 1 or 2. */
+:root {
+  --z-header: 1021;
+}
+
 html, body {
     padding: 0;
     margin: 0;
@@ -82,10 +90,6 @@ input::placeholder {
   grid-template-rows: repeat(2, 1fr);
   grid-column-gap: 7px;
   grid-row-gap: 7px;
-}
-
-.offcanvas {
-  z-index: 10000;
 }
 
 .horizontal_grid_item{
@@ -361,7 +365,7 @@ input::placeholder {
 }
 
 .hero-btn_link{
-  z-index: 999;
+  z-index: 2;
 }
 
 .pic {
@@ -640,13 +644,19 @@ input::placeholder {
   -webkit-appearance: none;
 }
 
+/* Both the header and the article sidebar use Bootstrap's .sticky-top (1020); on a tie the
+   later element wins, so the header takes one step more. */
+.site-header {
+  z-index: var(--z-header);
+}
+
 .search-results {
   position: absolute;
   top: calc(100% + 0.4rem);
   /* -1px lines the panel up with the search bar's outer border edges, so the two are exactly the same width */
   left: -1px;
   right: -1px;
-  z-index: 1050;
+  z-index: 1; /* local: the header is its own stacking context */
   max-height: min(70vh, 32rem);
   overflow-y: auto;
   padding: 0.4rem;
@@ -902,7 +912,7 @@ input:focus {
     top: 266px;
     right: 20px;
     animation: unliked .35s ease; 
-    z-index: 100;
+    z-index: 2;
     
     &::after {
         background:inherit;
