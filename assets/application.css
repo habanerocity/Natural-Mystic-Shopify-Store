@@ -3140,6 +3140,9 @@ a.theme-pagination__link:focus-visible {
 .product-slider .flickity-prev-next-button.previous { left: 1.25rem; }
 .product-slider .flickity-prev-next-button.next { right: 1.25rem; }
 
+/* Cards per view by viewport: 4 desktop, 3 tablet landscape, 2 tablet, 1 phone.
+   Widths divide the row exactly, so the slider only ever shows whole cards and
+   each move shifts by one card. */
 @media (max-width: 991px) {
   .featured-collection-slider .product-slider__cell { width: 33.333%; }
 }
@@ -3148,10 +3151,28 @@ a.theme-pagination__link:focus-visible {
   .featured-collection-slider .product-slider__cell { width: 50%; }
 }
 
-/* Phones: show most of one card with the next one peeking in, as a swipe hint */
+/* Page dots are the swipe hint on phones, where the arrows are hidden */
+.product-slider .flickity-page-dots { display: none; }
+
 @media (max-width: 575px) {
-  .featured-collection-slider .product-slider__cell { width: 82%; }
+  .featured-collection-slider .product-slider__cell { width: 100%; }
   .product-slider .flickity-prev-next-button { display: none; }
+
+  .product-slider .flickity-page-dots {
+    display: block;
+    position: static;
+    margin-top: 1rem;
+  }
+
+  .product-slider .flickity-page-dots .dot {
+    width: 8px;
+    height: 8px;
+    margin: 0 5px;
+    background: var(--color-primary);
+    opacity: 0.25;
+  }
+
+  .product-slider .flickity-page-dots .dot.is-selected { opacity: 1; }
 }
 
 /* ------------------------------------------------------------
