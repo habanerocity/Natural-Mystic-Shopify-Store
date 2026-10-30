@@ -1301,7 +1301,8 @@ input:focus {
 }
 
 .pdp-add,
-.cart-checkout {
+.cart-checkout,
+.btn-cta {
     padding-block: 0.85rem;
     letter-spacing: 0.04em;
 }
@@ -1344,7 +1345,8 @@ input:focus {
 /* Pill, like the product card buttons, so every action button shares one shape.
    !important is needed to beat the 4px radius on .rust */
 .pdp-add.rust,
-.cart-checkout.rust {
+.cart-checkout.rust,
+.btn-cta.rust {
     border-radius: 999px !important;
     background-color: var(--color-cta);
     border-color: var(--color-cta);
@@ -1355,7 +1357,8 @@ input:focus {
 
 /* Hover deepens to the full primary color */
 .pdp-add.rust:hover,
-.cart-checkout.rust:hover {
+.cart-checkout.rust:hover,
+.btn-cta.rust:hover {
     background-color: var(--color-primary) !important;
     border-color: var(--color-primary) !important;
 }
@@ -3450,4 +3453,115 @@ a.theme-pagination__link:focus-visible {
 .pdp-dynamic {
   --shopify-accelerated-checkout-button-border-radius: 999px;
   --shopify-accelerated-checkout-button-block-size: 55px;
+}
+
+/* ------------------------------------------------------------
+   Contact page
+   ------------------------------------------------------------ */
+.contact-page {
+  max-width: 46rem;
+  padding-block: 3rem 4rem;
+}
+
+.contact-page__intro {
+  margin: 0 auto 2rem;
+  max-width: 36rem;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+/* Same card as the cart page */
+.contact-card {
+  padding: clamp(1.25rem, 3vw, 2.25rem);
+  border: 1px solid #ececec;
+  border-radius: 16px;
+  background-color: #fff;
+}
+
+.contact-form__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.contact-field--full {
+  grid-column: 1 / -1;
+}
+
+.contact-field__optional {
+  letter-spacing: 0.04em;
+  text-transform: none;
+}
+
+.contact-input {
+  display: block;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.6rem 1rem;
+  border: 1px solid #d6d6d6;
+  border-radius: 12px;
+  background-color: #fff;
+  font-size: 1rem;
+  transition: border-color .2s, box-shadow .2s;
+}
+
+.contact-input:hover {
+  border-color: color-mix(in srgb, var(--color-primary) 50%, #d6d6d6);
+}
+
+.contact-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 18%, transparent);
+}
+
+.contact-input[aria-invalid="true"] {
+  border-color: var(--color-alert);
+}
+
+.contact-input--textarea {
+  min-height: 10rem;
+  resize: vertical;
+}
+
+.contact-form__submit {
+  width: 100%;
+  margin-top: 1.75rem;
+}
+
+.contact-notice {
+  margin-bottom: 1.5rem;
+  padding: 0.9rem 1.1rem;
+  border-radius: 12px;
+  font-size: 0.95rem;
+}
+
+.contact-notice--success {
+  background-color: color-mix(in srgb, var(--color-cta) 14%, #fff);
+  border: 1px solid color-mix(in srgb, var(--color-cta) 40%, #fff);
+  color: var(--color-primary-dark);
+}
+
+.contact-notice--error {
+  background-color: color-mix(in srgb, var(--color-alert) 7%, #fff);
+  border: 1px solid color-mix(in srgb, var(--color-alert) 35%, #fff);
+  color: var(--color-alert);
+}
+
+.contact-notice p,
+.contact-notice ul {
+  margin: 0;
+}
+
+.contact-notice ul {
+  margin-top: 0.35rem;
+  padding-left: 1.1rem;
+}
+
+@media (max-width: 575px) {
+  .contact-form__grid {
+    grid-template-columns: 1fr;
+  }
 }

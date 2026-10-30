@@ -6,41 +6,60 @@
 {% endif %}
     </div>
 </div>
-<div class="container my-5">
+<div class="container contact-page">
     {% if section.settings.form_heading != blank %}
-        <h4 class="text-center">{{ section.settings.form_heading }}</h4>
+        <p class="contact-page__intro">{{ section.settings.form_heading }}</p>
     {% endif %}
-    <div class="row">
-        {% form 'contact' %}
-            {% if form.posted_successfully? %}
-                <div class="alert alert-success">
-                    Thank you for your inquiry, we will get back to you promptly
+
+    <div class="contact-card">
+        {% form 'contact', class: 'contact-form' %}
+            {%- if form.posted_successfully? -%}
+                <div class="contact-notice contact-notice--success" role="status" tabindex="-1" autofocus>
+                    Thanks for your message. We'll get back to you within one business day.
                 </div>
-            {% endif %}
-            {{ form.errors | default_errors }}
-            <div class="row">
-                <div class="col-12 col-md-6">
-                    <label for="ContactFormName">Name</label>
-                    <input class="form-control" id="ContactFormName" name="contact[name]" type="text">
+            {%- endif -%}
+
+            {%- if form.errors -%}
+                <div class="contact-notice contact-notice--error" role="alert" id="ContactFormErrors">
+                    <p>Please check the following:</p>
+                    <ul>
+                        {%- for field in form.errors -%}
+                            <li>
+                                {%- if field == 'form' -%}
+                                    {{ form.errors.messages[field] }}
+                                {%- else -%}
+                                    {{ form.errors.translated_fields[field] | capitalize }} {{ form.errors.messages[field] }}
+                                {%- endif -%}
+                            </li>
+                        {%- endfor -%}
+                    </ul>
                 </div>
-                <div class="col-12 col-md-6">
-                    <label for="ContactFormEmail">Email</label>
-                    <input class="form-control" id="ContactFormEmail" name="contact[email]" type="email">
+            {%- endif -%}
+
+            <div class="contact-form__grid">
+                <div class="contact-field">
+                    <label class="pdp-label" for="ContactFormName">Name</label>
+                    <input class="contact-input" id="ContactFormName" name="contact[name]" type="text" autocomplete="name" required value="{{ form.name | escape }}">
+                </div>
+                <div class="contact-field">
+                    <label class="pdp-label" for="ContactFormEmail">Email</label>
+                    <input class="contact-input" id="ContactFormEmail" name="contact[email]" type="email" autocomplete="email" spellcheck="false" autocapitalize="off" required value="{{ form.email | escape }}"{% if form.errors contains 'email' %} aria-invalid="true" aria-describedby="ContactFormErrors"{% endif %}>
+                </div>
+                <div class="contact-field">
+                    <label class="pdp-label" for="ContactFormOrderNumber">Order # <span class="contact-field__optional">(optional)</span></label>
+                    <input class="contact-input" id="ContactFormOrderNumber" name="contact[order_number]" type="text" autocomplete="off">
+                </div>
+                <div class="contact-field">
+                    <label class="pdp-label" for="ContactFormPhone">Phone <span class="contact-field__optional">(optional)</span></label>
+                    <input class="contact-input" id="ContactFormPhone" name="contact[phone]" type="tel" autocomplete="tel" value="{{ form.phone | escape }}">
+                </div>
+                <div class="contact-field contact-field--full">
+                    <label class="pdp-label" for="ContactFormMessage">Message</label>
+                    <textarea class="contact-input contact-input--textarea" id="ContactFormMessage" name="contact[body]" rows="7" required{% if form.errors contains 'body' %} aria-invalid="true" aria-describedby="ContactFormErrors"{% endif %}>{{ form.body | escape }}</textarea>
                 </div>
             </div>
-            <div class="col-12 my-3">
-                <label for="ContactFormOrderNumber">Order #</label>
-                <input class="form-control" id="ContactFormOrderNumber" name="contact[order_number]" type="text">
-            </div>
-            <div class="col-12 my-3">
-                <label for="ContactFormPhone">Phone</label>
-                <input class="form-control" id="ContactFormPhone" name="contact[phone]" type="tel">
-            </div>
-            <div class="col-12 my-3">
-                <label for="ContactFormMessage">Message</label>
-                <textarea class="form-control" id="ContactFormMessage" name="contact[body]" rows="10"></textarea>
-            </div>
-            <input class="btn rust w-100 mt-2" type="submit" value="Submit">
+
+            <button class="btn rust btn-cta contact-form__submit" type="submit">Send message</button>
         {% endform %}
     </div>
 </div>
