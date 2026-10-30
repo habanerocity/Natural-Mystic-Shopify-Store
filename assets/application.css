@@ -989,11 +989,21 @@ input:focus {
   /* } */
 }
 
+/* Launch banner button: starts at the left edge with the text on desktop, and follows the
+   centered text on tablets and phones (the 787px rule below centers the wrapper's content) */
+.spice_banner-button {
+  align-self: flex-start;
+}
+
 @media screen and (max-width: 787px){
 
   .spice_banner-wrapper{
     align-items:center;
     text-align: center;
+  }
+
+  .spice_banner-button {
+    align-self: center;
   }
 
   .horizontal_grid_item{
