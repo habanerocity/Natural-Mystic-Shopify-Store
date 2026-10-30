@@ -39,6 +39,23 @@
         text-align: center;
     }
 
+    /* Judge.me caps its widget at 1200px with 48px side margins (max 1200 in its block
+       settings), which centers it inside the container. Let it fill the container instead,
+       so its edges line up with the rest of the page. */
+    .product-reviews .jdgm-widget {
+        max-width: none !important;
+        margin-inline: 0 !important;
+    }
+
+    /* Judge.me's own "Customer Reviews" title, in the theme's heading style */
+    .product-reviews .jm-review-widget-minimal-header__title {
+        font-family: var(--font-heading-family);
+        font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+        font-weight: 600;
+        line-height: 1.15;
+        color: var(--color-primary);
+    }
+
     /* With no widget added, nothing shows to shoppers: hide the whole area */
     .product-reviews:not(:has(*:not(h2))) { display: none; }
 </style>
@@ -52,7 +69,8 @@
             "type": "text",
             "id": "heading",
             "label": "Heading",
-            "default": "Customer reviews"
+            "default": "Customer reviews",
+            "info": "Leave blank when your reviews app shows its own title (Judge.me does)."
         }
     ],
     "blocks": [
