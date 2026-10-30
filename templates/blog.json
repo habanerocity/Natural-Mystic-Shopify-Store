@@ -31,9 +31,13 @@
         "blog_pagination"
       ],
       "settings": {
-        "banner_image": "shopify://shop_images/Gemini_Generated_Image_el136yel136yel13.jpg",
+        "banner_image": "shopify://shop_images/guilin-mountains-top-half.png",
         "banner_heading": "Blog",
-        "banner_subheading": "Read our latest articles"
+        "banner_subheading": "Read our latest articles",
+        "posts_per_page": 9,
+        "feature_latest": true,
+        "show_tags": true,
+        "show_author": true
       }
     }
   },

@@ -15,13 +15,13 @@
                             {% endfor %}
                         </ul>
                     </div>
-                {% else if block.type == "text" %}
+                {% elsif block.type == "text" %}
                     <div class="col">
                         <img src="{{ item.logo | img_url: '75x75' }}" class="mb-5 footer-logo" alt="footer logo">
                         <h5>{{ item.title }}</h5>
                         <p>{{ item.description }}</p>
                     </div>
-                {% else if block.type == "link" %}
+                {% elsif block.type == "link" %}
                     <div class="col">
                         <ul class="list-unstyled text-small">
                             <li>
