@@ -135,6 +135,12 @@
                                     <span aria-hidden="true">{{ rating_value | round: 1 }} &middot; {{ count_label }} {% if rating_count == 1 %}review{% else %}reviews{% endif %}</span>
                                     <span class="visually-hidden">Rated {{ rating_value | round: 1 }} out of {{ rating.scale_max }}, {{ rating_count }} reviews</span>
                                 </div>
+                            {% elsif request.design_mode %}
+                                {%- comment -%} Editor only: shoppers see nothing until the product has a review {%- endcomment -%}
+                                <div class="pdp-rating pdp-rating--placeholder" {{ block.shopify_attributes }}>
+                                    <span class="pdp-rating__stars" style="--rating: 0%;" aria-hidden="true"></span>
+                                    <span>No reviews yet (only visible in the theme editor)</span>
+                                </div>
                             {% endif %}
 
                         {% when "subtitle" %}

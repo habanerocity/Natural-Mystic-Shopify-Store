@@ -3397,3 +3397,9 @@ a.theme-pagination__link:focus-visible {
     margin-top: 2rem;
   }
 }
+
+/* Rating block in the theme editor before the product has reviews */
+.pdp-rating--placeholder {
+  opacity: 0.55;
+  font-style: italic;
+}
