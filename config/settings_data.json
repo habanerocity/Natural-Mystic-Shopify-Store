@@ -61,7 +61,7 @@
             "type": "link_list",
             "settings": {
               "title": "Account",
-              "menu": ""
+              "menu": "footer-account"
             }
           },
           "ab70c76d-c7aa-4718-9a87-ce8cddbe254b": {
