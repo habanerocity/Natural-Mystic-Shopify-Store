@@ -3341,3 +3341,48 @@ a.theme-pagination__link:focus-visible {
   .collection-card:hover .collection-card__image,
   .collection-card:hover .collection-card__arrow { transform: none; }
 }
+
+/* ------------------------------------------------------------
+   Footer column headings: a clear step above the links beneath them
+   ------------------------------------------------------------ */
+.footer-section__title {
+  position: relative;
+  margin: 0 0 1.5rem;
+  padding-bottom: 0.75rem;
+  font-size: clamp(1.5rem, 1.25rem + 0.8vw, 1.875rem); /* 24px phones to 30px desktop */
+  font-weight: 600;
+  line-height: 1.15;
+  color: var(--color-primary);
+}
+
+/* Short accent rule under each heading */
+.footer-section__title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 2.5rem;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--color-highlight);
+}
+
+.footer-section__links li + li {
+  margin-top: 0.6rem;
+}
+
+.footer-section__links a,
+.footer-section__text {
+  font-size: 1rem;
+}
+
+.footer-section__text > :last-child {
+  margin-bottom: 0;
+}
+
+/* Stacked columns on phones need room between groups */
+@media (max-width: 767px) {
+  .footer-section .row > .col + .col {
+    margin-top: 2rem;
+  }
+}

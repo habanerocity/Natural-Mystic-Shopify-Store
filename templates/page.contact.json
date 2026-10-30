@@ -12,7 +12,8 @@
     "template": {
       "type": "template-page-contact",
       "settings": {
-        "banner_image": "shopify://shop_images/afternoon-tea.jpg",
+        "banner_image": "shopify://shop_images/a-plethora-of-loose-herbal-tea-on-a-modern-countertop.png",
+        "banner_image-mobile": "shopify://shop_images/afternoon-tea.jpg",
         "banner_heading": "",
         "banner_subheading": "You'll hear back from us within one business day",
         "form_heading": "Questions about an order, a blend, or brewing? Send us a note and we’ll reply within one business day."

@@ -27,6 +27,7 @@
       ],
       "settings": {
         "banner_image": "shopify://shop_images/gold-spoons-in-a-row-filled-with-loose-leaf-tea.jpg",
+        "banner_image-mobile": "shopify://shop_images/gold-spoons-in-a-row-filled-with-loose-leaf-tea.jpg",
         "banner_heading": "",
         "banner_subheading": "Online Checkout"
       }

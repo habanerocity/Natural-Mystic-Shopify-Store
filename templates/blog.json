@@ -32,6 +32,7 @@
       ],
       "settings": {
         "banner_image": "shopify://shop_images/guilin-mountains-top-half.png",
+        "banner_image-mobile": "shopify://shop_images/guilin-mountains-top-half.png",
         "banner_heading": "Blog",
         "banner_subheading": "Read our latest articles",
         "posts_per_page": 6,

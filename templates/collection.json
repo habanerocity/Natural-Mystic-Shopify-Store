@@ -13,6 +13,7 @@
       "type": "template-collection",
       "settings": {
         "banner_image": "shopify://shop_images/hand-holds-a-spoon-and-adds-loose-leaf-tea-to-a-mug.jpg",
+        "banner_image-mobile": "shopify://shop_images/cup-of-hot-mushroom-coffee.png",
         "banner_heading": "Mushroom Coffee & Herbal Tea",
         "banner_subheading": "Everything for your morning cup and your evening wind-down, in one place."
       }

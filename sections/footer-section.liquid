@@ -5,9 +5,9 @@
                 {% assign item = block.settings %}
                 {% if block.type == "link_list" %}
                     <div class="col">
-                        <h5>{{ item.title }}</h5>
+                        <h2 class="footer-section__title">{{ item.title }}</h2>
                         {% assign footer_linklist = item.menu %}
-                        <ul class="list-unstyled text-small">
+                        <ul class="list-unstyled text-small footer-section__links">
                             {% for link in linklists[footer_linklist].links %}
                                 <li>
                                     <a class="text-decoration-none dot" href="{{ link.url }}">{{ link.title | escape }}</a>
@@ -18,8 +18,8 @@
                 {% elsif block.type == "text" %}
                     <div class="col">
                         <img src="{{ item.logo | img_url: '75x75' }}" class="mb-5 footer-logo" alt="footer logo">
-                        <h5>{{ item.title }}</h5>
-                        <p>{{ item.description }}</p>
+                        <h2 class="footer-section__title">{{ item.title }}</h2>
+                        <div class="footer-section__text">{{ item.description }}</div>
                     </div>
                 {% elsif block.type == "link" %}
                     <div class="col">
