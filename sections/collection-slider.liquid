@@ -89,8 +89,25 @@
       nextBtn.addEventListener('click', function () { flkty.next(); flkty.stopPlayer(); });
       flkty.on('select', updateNav);
 
+      // Equal-height cards: measure each card at its natural height, then give every cell the
+      // tallest height. Re-run after the window settles from a resize and once images have loaded.
+      function equalize() {
+        flkty.cells.forEach(function (cell) { cell.element.style.minHeight = ''; });
+        var tallest = flkty.cells.reduce(function (max, cell) { return Math.max(max, cell.element.offsetHeight); }, 0);
+        flkty.cells.forEach(function (cell) { cell.element.style.minHeight = tallest + 'px'; });
+        flkty.resize();
+      }
+
       relayout();
+      equalize();
       flkty.on('resize', updateNav);
+
+      var resizeTimer;
+      window.addEventListener('resize', function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(equalize, 200);
+      });
+      window.addEventListener('load', equalize);
     }
 
     if (document.readyState === 'loading') {

@@ -53,7 +53,7 @@
                             <figcaption class="d-flex flex-column justify-content-center align-items-center">
                                 <h2>{{ slot_title | escape }}</h2>
                                 <p>{{ slot_text | escape }}</p>
-                                <p class="blog-grid__cta rounded mt-2">View Here</p>
+                                <p class="blog-grid__cta mt-2">View Here</p>
                             </figcaption>
                         </figure>
                     </a>
@@ -71,16 +71,19 @@
         padding: .3rem;
     }
 
-    /* "View Here" pill shown on image hover: theme primary color, darker when the pill itself is hovered */
-    .blog-grid__cta {
-        padding: .3rem .75rem;
-        background-color: var(--color-primary);
+    /* "View Here" shown on image hover: the small pill used by the product card buttons */
+    figure.snip0015 .blog-grid__cta {
+        padding: .5rem 1.1rem;
+        border-radius: 999px;
+        background-color: var(--color-cta);
         color: #fff;
-        transition: background-color .2s ease;
+        font-size: .85rem;
+        font-weight: 500;
+        transition: background-color .2s ease, opacity 0.35s;
     }
 
     figure.snip0015 .blog-grid__cta:hover {
-        background-color: var(--color-primary-dark);
+        background-color: var(--color-primary);
     }
 
     /* Fixed-shape grid: one tall image left, two stacked right. Images crop to fill

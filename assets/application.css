@@ -1307,6 +1307,16 @@ input:focus {
     letter-spacing: 0.04em;
 }
 
+/* Buttons sized to their label (hero, banners) get side padding; large size for page-level calls to action */
+.btn-cta {
+    padding-inline: 2rem;
+}
+
+.btn-cta--lg {
+    padding: 0.95rem 2.5rem;
+    font-size: 1.05rem;
+}
+
 .pdp-add {
     flex: 1 1 auto;
     padding-block: 0.85rem;
@@ -3120,10 +3130,15 @@ a.theme-pagination__link:focus-visible {
   padding: 0 0.75rem 0.5rem;
 }
 
-/* Equal-height cards: Flickity adds .flickity-resize while it measures, so the
-   tallest card sets the height and the rest stretch to match */
-.product-slider.flickity-resize .product-slider__cell {
-  min-height: 100%;
+/* Equal-height cards: the slider script gives every cell the tallest cell's height, and the
+   card stretches to fill it, so the price and button rows line up across the row */
+.product-slider__cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-slider__cell > .product-card {
+  flex: 1 1 auto;
 }
 
 .product-slider__cell .product-card {
