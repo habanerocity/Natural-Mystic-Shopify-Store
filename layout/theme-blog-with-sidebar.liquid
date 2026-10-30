@@ -43,6 +43,9 @@
         {% include 'swymSnippet' %}
         {% include 'swym-event_layer' %}
         {% section 'footer-section' %}
+        {%- comment -%} Site scripts live in the layout (not the footer section) so they load exactly once, after GSAP {%- endcomment -%}
+        <script crossorigin="anonymous" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+        {{ 'application.js' | asset_url | script_tag }}
 
     </body>
 </html>

@@ -53,7 +53,7 @@
                             <figcaption class="d-flex flex-column justify-content-center align-items-center">
                                 <h2>{{ slot_title | escape }}</h2>
                                 <p>{{ slot_text | escape }}</p>
-                                <p class="p-1-half rounded bg-danger text-light mt-2">View Here</p>
+                                <p class="blog-grid__cta rounded mt-2">View Here</p>
                             </figcaption>
                         </figure>
                     </a>
@@ -69,6 +69,18 @@
 
     .p-1-half {
         padding: .3rem;
+    }
+
+    /* "View Here" pill shown on image hover: theme primary color, darker when the pill itself is hovered */
+    .blog-grid__cta {
+        padding: .3rem .75rem;
+        background-color: var(--color-primary);
+        color: #fff;
+        transition: background-color .2s ease;
+    }
+
+    figure.snip0015 .blog-grid__cta:hover {
+        background-color: var(--color-primary-dark);
     }
 
     /* Fixed-shape grid: one tall image left, two stacked right. Images crop to fill

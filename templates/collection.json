@@ -16,18 +16,9 @@
         "banner_heading": "Mushroom Coffee & Herbal Tea",
         "banner_subheading": "Everything for your morning cup and your evening wind-down, in one place."
       }
-    },
-    "footer_section_GrafRq": {
-      "type": "footer-section",
-      "name": "Links",
-      "settings": {
-        "col_num": 3,
-        "enable_payment_type_icons": true
-      }
     }
   },
   "order": [
-    "template",
-    "footer_section_GrafRq"
+    "template"
   ]
 }
